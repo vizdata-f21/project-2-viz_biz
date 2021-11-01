@@ -74,9 +74,16 @@ and can be easily navigated by users.
 Finalizing writeup and creating the slides and preparing for the
 presentation on Friday.
 
-The final organization of your project repository. This means describing
-the project organization in your proposal as well as implementing that
-organization in your repo. Create any folders needed and place a
-README.md in each folder explaining what goes in there.
-
 ## Project Organization
+
+Within our project, we will have seven different folders. The first
+folder will be the proposal, which will include a README.md that
+explains the goals and plan of our project. Then, the four of us will
+each have a folder with our shiny app in it, in which we will work on
+recreating the chosen art piece. The README.md for each of these folders
+with have the name of the artwork we are recreating and 150-250 words
+summary and methodology of how we recreated the artwork.We will have a
+folder with the final shiny app, in which we will combine all of our
+individual work. The README.md for this will contain the final 1000-2000
+word write-up. Finally, we will have our presentation folder, which will
+contain our slides and code for our final project presentation.

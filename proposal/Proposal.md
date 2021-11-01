@@ -4,6 +4,34 @@ Viz Biz
 
 ## Goals
 
+We strive to create a convenient website where non-R users and the
+general public can navigate to and customize the several famous art
+pieces recreated in ggplot. Users will have the ability to adjust and
+modify some of the artwork aesthetics to make the masterworks their own.
+
+Our goal is to promote digital extensions of modern, abstract paintings
+and encourage users to play with and modify pieces with significance and
+status in the art world. Wealthy collectors, curators, and gallery
+owners have historically had a massive amount of power in determining
+what is considered “good art” and what sells. We see our project as part
+of the move to question empty status designations and push back against
+institutional art gatekeeping. We will do this by creating a convenient
+website where users can access several examples of recreated art pieces
+and adjust their aesthetics based on one’s personal preference and
+download them for their personal use.
+
+In addition, our motivation is also to increase public appreciation and
+awareness on the advent of using digital techniques to recreate modern
+or postmodern artworks and help spark the tech community’s interest in
+contributing to R by developing and creating more R packages (especially
+in generative art and ggplot). We hope that our work will contribute
+positively to widen up the usage of R not only to statisticians and data
+scientists, but also to digital designers and professionals outside of
+the field of statistics/data.
+
+We are going to use fake datasets, mathematical functions, and
+“ready-to-use” packages to recreate art pieces in ggplot.
+
 ## Plan of Attack
 
 ## Project Organization

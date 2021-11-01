@@ -34,4 +34,49 @@ We are going to use fake datasets, mathematical functions, and
 
 ## Plan of Attack
 
+**Week of Mon, Nov 1:**
+
+Each member will select one generative art piece that they would like to
+make (total = 4).
+
+As a team, we will draft and finalize the initial project proposal.
+
+**Week of Mon, Nov 8:**
+
+Each member will make an individual prototype ggplot object and ShinyR
+website to ensure that users can modify aesthetics (such as shapes,
+sizes, colors, and positions of objects as well as any text content) in
+their digital art.
+
+**Week of Mon, Nov 15:**
+
+Gather feedback from teammates to improve each individual work. Every
+team member should draft a 150-250 (total = 600-1000) word summary of
+their artwork methodology for the write-up. Put the summary on each one
+designated folder’s README.md..
+
+Once done, each member can proceed as soon as possible to their task in
+the Week of Mon, Nov 22 (since it will be Thanksgiving week).
+
+**Week of Mon, Nov 22:**
+
+Sana + Eli: Start drafting on the writeup (introduction, conclusion) and
+combine 4 mini-summaries from each of the artwork from the previous
+week). This final write up will be on the README.md of the final
+combined Shiny App folder.
+
+Lillian + Phillip: Combine everyone’s individual Shiny app into a single
+comprehensive Shiny app. Try to code an app that is simple, aesthetic,
+and can be easily navigated by users.
+
+**Week of Mon, Nov 29:**
+
+Finalizing writeup and creating the slides and preparing for the
+presentation on Friday.
+
+The final organization of your project repository. This means describing
+the project organization in your proposal as well as implementing that
+organization in your repo. Create any folders needed and place a
+README.md in each folder explaining what goes in there.
+
 ## Project Organization

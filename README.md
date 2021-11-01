@@ -2,7 +2,7 @@
 
 *Author: Eli Feder, Lillian Clark, Phillip Harmadi, Sana Prashankar*
 
-This repository will contain 5 main folders:
+**TABLE OF CONTENTS:**
 1. Proposal
 2. Eli's Artwork *(Artwork name)* (**150-250 words summary and methodology** of the artwork will be on this folder's README.md)
 4. Lilly's Artwork *(Artwork name)* (**150-250 words summary and methodology** of the artwork will be on this folder's README.md)

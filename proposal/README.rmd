@@ -20,16 +20,20 @@ We are going to use fake datasets, mathematical functions, and â€œready-to-useâ€
 
 We plan to recreate and make customizable the following four images:
 
-Frank Stella, *Lettre sur les sourds et muets II* (1974)^1
+#### Frank Stella, *Lettre sur les sourds et muets II* (1974)
+
 ![](images/stella.jpg)
 
-Barbara Kruger, *Untitled (Your body is a battleground)* (1989)^2
+#### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
+
 ![](images/kruger.jpeg)
 
-Wassily Kandinsky, *Composition 8* (1923)^3
+#### Wassily Kandinsky, *Composition 8* (1923)
+
 ![](images/kandinsky.jpeg)
 
-Piet Mondrian, *Trafalgar Square* (1939-1943)^4
+#### Piet Mondrian, *Trafalgar Square* (1939-1943)
+
 ![](images/mondrian.jpg)
 
 

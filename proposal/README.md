@@ -32,6 +32,24 @@ the field of statistics/data.
 We are going to use fake datasets, mathematical functions, and
 “ready-to-use” packages to recreate art pieces in ggplot.
 
+We plan to recreate and make customizable the following four images:
+
+#### Frank Stella, *Lettre sur les sourds et muets II* (1974)
+
+![](images/stella.jpg)
+
+#### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
+
+![](images/kruger.jpeg)
+
+#### Wassily Kandinsky, *Composition 8* (1923)
+
+![](images/kandinsky.jpeg)
+
+#### Piet Mondrian, *Trafalgar Square* (1939-1943)
+
+![](images/mondrian.jpg)
+
 ## Plan of Attack
 
 **Week of Mon, Nov 1:**

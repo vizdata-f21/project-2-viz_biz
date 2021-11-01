@@ -1,1 +1,3 @@
-# project-2
+# Project 2 (Viz Biz)
+
+Author: 

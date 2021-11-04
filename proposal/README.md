@@ -2,12 +2,14 @@ Project Proposal
 ================
 Viz Biz
 
-## Goals
+## High-Level Goal
 
 We strive to create a convenient website where non-R users and the
 general public can navigate to and customize the several famous art
 pieces recreated in ggplot. Users will have the ability to adjust and
 modify some of the artwork aesthetics to make the masterworks their own.
+
+## Motivation + Focus
 
 Our goal is to promote digital extensions of modern, abstract paintings
 and encourage users to play with and modify pieces with significance and
@@ -94,17 +96,20 @@ presentation on Friday.
 
 ## Project Organization
 
-Within our project, we will have seven different folders. The first
+Within our project, we will have seven different folders. One
 folder will be the proposal, which will include a README.md that
-explains the goals and plan of our project. Then, the four of us will
-each have a folder with our shiny app in it, in which we will work on
-recreating the chosen art piece. The README.md for each of these folders
+explains the goals and plan of our project, along with the images of the
+art pieces we will be recreating. Then, the four of us will each have a 
+folder with our shiny app in it, in which we will work on recreating the 
+chosen art piece. The final README.md for each of these folders
 with have the name of the artwork we are recreating and 150-250 words
 summary and methodology of how we recreated the artwork.We will have a
 folder with the final shiny app, in which we will combine all of our
-individual work. The README.md for this will contain the final 1000-2000
+individual work. The final README.md for this will contain the final 1000-2000
 word write-up. Finally, we will have our presentation folder, which will
 contain our slides and code for our final project presentation.
+
+These are the following art pieces we will be recreating within ggplot: 
 
 [1] NSU Art Museum,
 <https://nsuartmuseum.org/exhibition/frank-stella-experiment-and-change/>

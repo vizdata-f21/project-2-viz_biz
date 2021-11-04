@@ -32,6 +32,24 @@ the field of statistics/data.
 We are going to use fake datasets, mathematical functions, and
 “ready-to-use” packages to recreate art pieces in ggplot.
 
+We plan to recreate and make customizable the following four images:
+
+#### Frank Stella, *Lettre sur les sourds et muets II* (1974) [1]
+
+<img src="images/stella.jpg" style="width:80.0%" />
+
+#### Barbara Kruger, *Untitled (Your body is a battleground)* (1989) [2]
+
+<img src="images/kruger.jpeg" style="width:80.0%" />
+
+#### Wassily Kandinsky, *Composition 8* (1923) [3]
+
+<img src="images/kandinsky.jpeg" style="width:80.0%" />
+
+#### Piet Mondrian, *Trafalgar Square* (1939-1943) [4]
+
+<img src="images/mondrian.jpg" style="width:80.0%" />
+
 ## Plan of Attack
 
 **Week of Mon, Nov 1:**
@@ -87,3 +105,14 @@ folder with the final shiny app, in which we will combine all of our
 individual work. The README.md for this will contain the final 1000-2000
 word write-up. Finally, we will have our presentation folder, which will
 contain our slides and code for our final project presentation.
+
+[1] NSU Art Museum,
+<https://nsuartmuseum.org/exhibition/frank-stella-experiment-and-change/>
+
+[2] The Broad,
+<https://www.thebroad.org/art/barbara-kruger/untitled-your-body-battleground>
+
+[3] Guggenheim, <https://www.guggenheim.org/artwork/1924>
+
+[4] Wikiart,
+<https://www.wikiart.org/en/piet-mondrian/trafalgar-square-1943>

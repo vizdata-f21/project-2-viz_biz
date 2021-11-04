@@ -36,19 +36,19 @@ We plan to recreate and make customizable the following four images:
 
 #### Frank Stella, *Lettre sur les sourds et muets II* (1974) [1]
 
-<img src="images/stella.jpg" style="width:50.0%" />
+<img src="images/stella.jpg" style="width:40.0%" />
 
 #### Barbara Kruger, *Untitled (Your body is a battleground)* (1989) [2]
 
-<img src="images/kruger.jpeg" style="width:50.0%" />
+<img src="images/kruger.jpeg" style="width:30.0%" />
 
 #### Wassily Kandinsky, *Composition 8* (1923) [3]
 
-<img src="images/kandinsky.jpeg" style="width:50.0%" />
+<img src="images/kandinsky.jpeg" style="width:40.0%" />
 
 #### Piet Mondrian, *Trafalgar Square* (1939-1943) [4]
 
-<img src="images/mondrian.jpg" style="width:50.0%" />
+<img src="images/mondrian.jpg" style="width:25.0%" />
 
 ## Plan of Attack
 

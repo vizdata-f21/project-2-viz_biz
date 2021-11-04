@@ -1,6 +1,6 @@
 Project Proposal
 ================
-**Team Viz Biz** *(Authors: Eli Feder, Lillian Clark, Phillip Harmadi, Sana Prashankar)*
+**Team Viz Biz** *(Authors: Eli Feder, Lillian Clark, Phillip Harmadi, Sana Pashankar)*
 
 ## High-Level Goal
 

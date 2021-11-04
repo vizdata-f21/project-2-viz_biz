@@ -2,6 +2,8 @@ Project Proposal
 ================
 Viz Biz
 
+*Authors: Eli Feder, Lillian Clark, Phillip Harmadi, Sana Prashankar*
+
 ## High-Level Goal
 
 We strive to create a convenient website where non-R users and the

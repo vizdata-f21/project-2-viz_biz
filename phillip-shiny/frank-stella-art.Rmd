@@ -1,0 +1,272 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+```
+
+```{r geom_rect, fig.asp = 1}
+
+n <- 31
+k <- floor(n/2) * 2
+df <- data.frame(xmin = c(0:(k-1)), 
+                 xmax = c((k-1):0), 
+                 ymin = c(0:(k-1)), 
+                 ymax = c((k-1):0)
+                 ) 
+
+palette1 = colorRampPalette(brewer.pal(9, "Blues"))(k/2)
+palette2 = colorRampPalette(brewer.pal(9, "Greys"))(k)[1:(k/2)]
+# display.brewer.all()
+
+df <- df %>%
+  mutate(fill = c(rbind(palette1, palette2)))
+
+ggplot(data = df, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+                      color = "#FFFFFF",
+                      fill = factor(xmin))) + 
+  geom_rect(alpha = 0.25, size = 10, color = "#FFFFFF") +
+  scale_fill_manual(values = df$fill) +
+  theme_void() +
+  theme(legend.position = "none")
+```
+
+```{r geom_polygon, fig.height = 10, fig.width = 10, fig.asp = 1}
+library(tidyverse)
+library(ggpolypath)
+
+size <- 21
+n <- size * 2
+
+# OUTER
+
+x_lower_left <- c(1:(n/2)) # 1, 2, 3, 4
+y_lower_left <- c(1:(n/2)) # 1, 2, 3, 4
+x_upper_left <- c(1:(n/2)) # 1, 2, 3, 4
+y_upper_left <- c(n:(n/2 + 1)) # 8, 7, 6, 5
+x_lower_right <- c(n:(n/2 + 1)) # 8, 7, 6, 5
+y_lower_right <- c(1:(n/2)) # 1, 2, 3, 4
+x_upper_right <- c(n:(n/2 + 1)) # 8, 7, 6, 5
+y_upper_right <- c(n:(n/2 + 1)) # 8, 7, 6, 5
+
+x_outer <- c(x_lower_left, x_upper_left, x_lower_right, x_upper_right)
+y_outer <- c(y_lower_left, y_upper_left, y_lower_right, y_upper_right)
+id_outer <- rep(c(1:(n/2)), times = 4)
+
+df_outer <- data.frame(x_outer, y_outer, id_outer) %>%
+  rename(x = x_outer, y = y_outer, id = id_outer)
+
+# INNER
+
+x_lower_left <- c(2:(n/2), (n+1)/2)
+y_lower_left <- c(2:(n/2), (n+1)/2)
+x_upper_left <- c(2:(n/2), (n+1)/2)
+y_upper_left <- c((n-1):(n/2 + 1), (n+1)/2)
+x_lower_right <- c((n-1):(n/2 + 1), (n+1)/2)
+y_lower_right <- c(2:(n/2), (n+1)/2)
+x_upper_right <- c((n-1):(n/2 + 1), (n+1)/2)
+y_upper_right <- c((n-1):(n/2 + 1), (n+1)/2)
+
+x_inner <- c(x_lower_left, x_upper_left, x_lower_right, x_upper_right)
+y_inner <- c(y_lower_left, y_upper_left, y_lower_right, y_upper_right)
+id_inner <- rep(c(1:(n/2)), times = 4)
+
+df_inner <- data.frame(x_inner, y_inner, id_inner) %>%
+  rename(x = x_inner, y = y_inner, id = id_inner)
+
+# FINAL
+
+df <- rbind(df_outer, df_inner) %>% 
+  arrange(id) %>%
+  mutate(subid = rep(rep(c(1L, 2L), each = 4), size)) %>%
+  mutate(order = rep(c(1, 2, 4, 3), times = size * 2)) %>%
+  arrange(id, subid, x, order) 
+df
+
+df_extra <- df[seq(1, 4 * size + 1, by = 4),] %>% 
+  mutate(order = 5)
+
+df_final <- rbind(df, df_extra) %>%
+  arrange(id, subid, order)
+
+df_final
+
+palette1 = colorRampPalette(brewer.pal(8, "Reds"))(size/2) %>% rev()
+palette2 = colorRampPalette(brewer.pal(8, "Greys"))(size/2) 
+palette3 = rep(c("#FFFFFF"), times = size/2)
+palette <- c(rbind(palette1, palette2)) 
+
+ggplot(df_final, aes(x = x, y = y, group = id, subgroup = subid)) + 
+  geom_polygon(aes(fill = factor(id)), color = "white", size = 0.5) +
+  scale_fill_manual(values = palette) +
+  theme_void() +
+  theme(legend.position = "none")
+```
+
+
+```{r geom_polygon, fig.asp = 1}
+palette1 = colorRampPalette(brewer.pal(8, "Reds"))(size/2)
+palette1 = colorRampPalette(brewer.pal(8, "Greens"))(size/2)
+palette3 = rep(c("#FFFFFF"), times = size/2)
+palette <- c(rbind(palette1, palette2)) 
+
+ggplot(df %>% filter(id == 1), aes(x = x, y = y)) +
+  scale_fill_manual(values = palette) +
+  geom_polypath(aes(fill = factor(id), group = id, subgroup = subid), 
+                color = "black", size = 0.5, alpha = 1) +
+  theme_void() +
+  theme(legend.position = "none")
+```
+
+```{r}
+library(ggplot2)
+
+ids <- c("a", "b")
+
+# IDs and values to use for fill colour
+values <- data.frame(
+  id = ids,
+  value = c(4,5)
+)
+
+# Polygon position
+positions <- data.frame(
+  id = rep(ids, each = 10),
+  subid = rep(rep(ids, each = 5), each = 2),
+  #     shape      hole         shape        hole
+  x = c(1,1,48,48,1, 2,2,47,47,2,   2,2,47,47,2, 3,3,46,46,3),
+  y = c(1,48,48,1,1, 2,47,47,2,2,   2,47,47,2,2, 3,46,46,3,3)
+)
+
+# Merge positions and values
+datapoly <- merge(values, positions, by=c("id"))
+
+ggplot(datapoly, aes(x=x, y=y, group=id, subgroup = subid)) + 
+  geom_polygon(aes(fill=factor(value)),
+               color = "white") +
+  scale_fill_discrete("Key") +
+  theme_void()
+```
+
+
+
+```{r geom_polygon, fig.asp = 1}
+df <- rbind(df_outer, df_inner) %>%
+  arrange(t) %>%
+  mutate(t2 = rep(rep(c(1L, 2L), each = 4), size))
+df
+
+ggplot(df, aes(x = x, y = y)) +
+  geom_polypath(aes(fill = factor(t), group = t, subgroup = t2)) +
+  theme_void() +
+  theme(legend.position = "none")
+```
+
+
+```{r geom_polygon, fig.asp = 1}
+ymax_outer <- xmax_outer
+
+xmin_inner <- c(2:(n/2), (n+1)/2)
+xmax_inner <- c((n-1):(n/2 + 1), (n+1)/2)
+ymin_inner <- xmin_inner
+ymax_inner <- xmax_inner
+
+t <- rep(c(1:size), each = 8)
+
+x_outer <- c(rbind(xmin_outer, xmax_outer))
+x_inner <- c(rbind(xmin_inner, xmax_inner))
+x <- c(rbind(x_outer, x_inner))
+
+y_outer <- c(rbind(ymin_outer, ymax_outer))
+y_inner <- c(rbind(ymin_inner, ymax_inner))
+y <- c(rbind(y_outer, y_inner))
+
+df <- data.frame(x, y, t)
+
+ggplot() +
+  geom_polygon(data = df, mapping = aes(x = x, y = y, group = t, fill = factor(t))) +
+  theme_void()
+```
+
+
+```{r geom_polygon, fig.asp = 1}
+palette1 = colorRampPalette(brewer.pal(9, "Blues"))(k/2)
+palette2 = colorRampPalette(brewer.pal(9, "Greys"))(k)[1:(k/2)]
+# display.brewer.all()
+
+df <- df %>%
+  mutate(fill = c(rbind(palette1, palette2)))
+
+ggplot(data = df, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+                      color = "#FFFFFF",
+                      fill = factor(xmin))) + 
+  geom_rect(alpha = 0.25, size = 10, color = "#FFFFFF") +
+  scale_fill_manual(values = df$fill) +
+  theme_void() +
+  theme(legend.position = "none")
+```
+
+```{r}
+spectrumInput(
+                                                inputId = "myBackgroundColor",
+                                                label = "Select background Color:",
+                                                choices = list(
+                                                    list('black', 'white', 'blanchedalmond', 'steelblue', 'forestgreen'),
+                                                    as.list(brewer_pal(palette = "Blues")(9)),
+                                                    as.list(brewer_pal(palette = "Greens")(9)),
+                                                    as.list(brewer_pal(palette = "Spectral")(11)),
+                                                    as.list(brewer_pal(palette = "Dark2")(8))
+                                                ),
+                                                options = list(`toggle-palette-more-text` = "Show more")
+                                            ),
+                                            # verbatimTextOutput(outputId = "res"),
+
+ IMG_DIR <- "img/"
+  IMG_SUBDIR <- "everything/"
+  IMG_SUBDIR2 <- "handpicked/"
+  IMG_PATH <- paste0(IMG_DIR,
+                     IMG_SUBDIR)
+  LOGFILE_DIR <- "logfile/"
+  LOGFILE <- "logfile.csv"
+  LOGFILE_PATH <- paste0(LOGFILE_DIR,
+                         LOGFILE)
+  # create the directory structure
+  generativeart::setup_directories(IMG_DIR,
+                                   IMG_SUBDIR,
+                                   IMG_SUBDIR2,
+                                   LOGFILE_DIR)
+
+  polar <- reactive({(input$myPolar)})
+  color <- reactive({(input$myColor)})
+  background_color <- reactive({(input$myBackgroundColor)})
+
+  # output$myPlot <- renderPlot({generativeart::generate_img(
+  #   formula = list(
+  #     x = quote(runif(1, -1, 10) * x_i^2 - sin(y_i^2)),
+  #     y = quote(runif(1, -1, 10) * y_i^3 - cos(x_i^2) * y_i^4)
+  #   ),
+  #   nr_of_img = 1, filetype = NULL,
+  #   polar = polar(),
+  #   color = color(),
+  #   background_color = background_color())},
+  #   deleteFile = FALSE)
+
+  final_plot <- eventReactive(input$getdata == TRUE, {
+    generativeart::generate_img(
+      formula = list(x = quote(runif(1, -1, 10) * x_i^2 - sin(y_i^2)),
+                     y = quote(runif(1, -1, 10) * y_i^3 - cos(x_i^2) * y_i^4)),
+      nr_of_img = 1,
+      polar = polar(),
+      color = color(),
+      background_color = background_color())
+    })
+
+
+  output$myPlot <- renderPlot({
+    last_plot()
+  })
+
+  # final <- last_plot()
+```
+

@@ -22,19 +22,19 @@ We plan to recreate and make customizable the following four images:
 
 #### Frank Stella, *Lettre sur les sourds et muets II* (1974) ^[NSU Art Museum, https://nsuartmuseum.org/exhibition/frank-stella-experiment-and-change/]
 
-![](images/stella.jpg){width=80%}
+![](images/stella.jpg){width=50%}
 
 #### Barbara Kruger, *Untitled (Your body is a battleground)* (1989) ^[The Broad, https://www.thebroad.org/art/barbara-kruger/untitled-your-body-battleground]
 
-![](images/kruger.jpeg){width=80%}
+![](images/kruger.jpeg){width=50%}
 
 #### Wassily Kandinsky, *Composition 8* (1923) ^[Guggenheim, https://www.guggenheim.org/artwork/1924]
 
-![](images/kandinsky.jpeg){width=80%}
+![](images/kandinsky.jpeg){width=50%}
 
 #### Piet Mondrian, *Trafalgar Square* (1939-1943) ^[Wikiart, https://www.wikiart.org/en/piet-mondrian/trafalgar-square-1943]
 
-![](images/mondrian.jpg){width=80%}
+![](images/mondrian.jpg){width=50%}
 
 
 ## Plan of Attack

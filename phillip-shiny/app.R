@@ -50,6 +50,7 @@ library(reshape2)
 library(colourlovers)
 library(cowplot)
 library(generativeart) # https://github.com/cutterkom/generativeart
+library(ggpolypath)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
@@ -65,47 +66,43 @@ ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
 
                                     sidebarLayout(
                                         sidebarPanel(
+                                            h4("Graphics Input"),
 
-                                            h3("Graphics Input"),
+                                            sliderInput(inputId = "size",
+                                                        label = "Size:",
+                                                        min = 10, max = 50, value = 20),
 
-                                            spectrumInput(
-                                                inputId = "myColor",
-                                                label = " Select color:",
-                                                choices = list(
-                                                    list('black', 'white', 'blanchedalmond', 'steelblue', 'forestgreen'),
-                                                    as.list(brewer_pal(palette = "Blues")(9)),
-                                                    as.list(brewer_pal(palette = "Greens")(9)),
-                                                    as.list(brewer_pal(palette = "Spectral")(11)),
-                                                    as.list(brewer_pal(palette = "Dark2")(8))
-                                                ),
-                                                options = list(`toggle-palette-more-text` = "Show more")
-                                            ),
-                                            # verbatimTextOutput(outputId = "res"),
+                                            selectInput(inputId = "color1",
+                                                        label = h5("Primary Color:"),
+                                                        choices = list(Blues = "Blues",
+                                                                       Greens = "Greens",
+                                                                       Oranges = "Oranges",
+                                                                       Reds = "Reds"),
+                                                        selected = "Blues", multiple = FALSE),
 
-                                            spectrumInput(
-                                                inputId = "myBackgroundColor",
-                                                label = "Select background Color:",
-                                                choices = list(
-                                                    list('black', 'white', 'blanchedalmond', 'steelblue', 'forestgreen'),
-                                                    as.list(brewer_pal(palette = "Blues")(9)),
-                                                    as.list(brewer_pal(palette = "Greens")(9)),
-                                                    as.list(brewer_pal(palette = "Spectral")(11)),
-                                                    as.list(brewer_pal(palette = "Dark2")(8))
-                                                ),
-                                                options = list(`toggle-palette-more-text` = "Show more")
-                                            ),
-                                            # verbatimTextOutput(outputId = "res"),
-
-                                            checkboxInput(inputId = "myPolar",
-                                                          label = "Polar coordinate",
+                                            checkboxInput(inputId = "color1_rev",
+                                                          label = "Reverse sequence",
                                                           value = FALSE),
 
-                                            # plotOutput(outputId = "final", inline = FALSE),
+                                            selectInput(inputId = "color2",
+                                                        label = h5("Secondary Color:"),
+                                                        choices = list(Greys = "Greys",
+                                                                       'Pure White' = "Pure White",
+                                                                       'Pure Black' = "Pure Black"),
+                                                        selected = "Blues", multiple = FALSE),
+
+                                            checkboxInput(inputId = "color2_rev",
+                                                          label = "Reverse sequence",
+                                                          value = FALSE),
+
+                                            switchInput(inputId = "borderline",
+                                                          label = "Borderlines",
+                                                          value = FALSE),
 
                                             hr(),
                                             div(align = "right",
                                                 actionButton(inputId = "getdata",
-                                                             label   = strong("Generate random output")))
+                                                             label = strong("Generate Output")))
 
                                         ), # sidebar panel
 
@@ -113,7 +110,8 @@ ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
                                             h1("Title"),
                                             h5("Text"),
 
-                                            plotOutput(outputId = "myPlot", inline = FALSE),
+                                            plotOutput(outputId = "plot", inline = FALSE),
+                                            tableOutput(outputId = "table")
 
                                         ) # main panel
                                     ) # sidebar 3 layout
@@ -125,52 +123,85 @@ ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-  IMG_DIR <- "img/"
-  IMG_SUBDIR <- "everything/"
-  IMG_SUBDIR2 <- "handpicked/"
-  IMG_PATH <- paste0(IMG_DIR,
-                     IMG_SUBDIR)
-  LOGFILE_DIR <- "logfile/"
-  LOGFILE <- "logfile.csv"
-  LOGFILE_PATH <- paste0(LOGFILE_DIR,
-                         LOGFILE)
-  # create the directory structure
-  generativeart::setup_directories(IMG_DIR,
-                                   IMG_SUBDIR,
-                                   IMG_SUBDIR2,
-                                   LOGFILE_DIR)
+  dat <- reactive({
+    input$size
+    n <- input$size * 2
 
-  polar <- reactive({(input$myPolar)})
-  color <- reactive({(input$myColor)})
-  background_color <- reactive({(input$myBackgroundColor)})
+    # OUTER
 
-  # output$myPlot <- renderPlot({generativeart::generate_img(
-  #   formula = list(
-  #     x = quote(runif(1, -1, 10) * x_i^2 - sin(y_i^2)),
-  #     y = quote(runif(1, -1, 10) * y_i^3 - cos(x_i^2) * y_i^4)
-  #   ),
-  #   nr_of_img = 1, filetype = NULL,
-  #   polar = polar(),
-  #   color = color(),
-  #   background_color = background_color())},
-  #   deleteFile = FALSE)
+    x_lower_left <- c(1:(n/2)) # 1, 2, 3, 4
+    y_lower_left <- c(1:(n/2)) # 1, 2, 3, 4
+    x_upper_left <- c(1:(n/2)) # 1, 2, 3, 4
+    y_upper_left <- c(n:(n/2 + 1)) # 8, 7, 6, 5
+    x_lower_right <- c(n:(n/2 + 1)) # 8, 7, 6, 5
+    y_lower_right <- c(1:(n/2)) # 1, 2, 3, 4
+    x_upper_right <- c(n:(n/2 + 1)) # 8, 7, 6, 5
+    y_upper_right <- c(n:(n/2 + 1)) # 8, 7, 6, 5
 
-  final_plot <- eventReactive(input$getdata == TRUE, {
-    generativeart::generate_img(
-      formula = list(x = quote(runif(1, -1, 10) * x_i^2 - sin(y_i^2)),
-                     y = quote(runif(1, -1, 10) * y_i^3 - cos(x_i^2) * y_i^4)),
-      nr_of_img = 1,
-      polar = polar(),
-      color = color(),
-      background_color = background_color())
-    })
+    x_outer <- c(x_lower_left, x_upper_left, x_lower_right, x_upper_right)
+    y_outer <- c(y_lower_left, y_upper_left, y_lower_right, y_upper_right)
+    id_outer <- rep(c(1:(n/2)), times = 4)
 
+    df_outer <- data.frame(x_outer, y_outer, id_outer) %>%
+      rename(x = x_outer, y = y_outer, id = id_outer)
 
-  output$myPlot <- renderPlot({
-    last_plot()
+    # INNER
+
+    x_lower_left <- c(2:(n/2), (n+1)/2)
+    y_lower_left <- c(2:(n/2), (n+1)/2)
+    x_upper_left <- c(2:(n/2), (n+1)/2)
+    y_upper_left <- c((n-1):(n/2 + 1), (n+1)/2)
+    x_lower_right <- c((n-1):(n/2 + 1), (n+1)/2)
+    y_lower_right <- c(2:(n/2), (n+1)/2)
+    x_upper_right <- c((n-1):(n/2 + 1), (n+1)/2)
+    y_upper_right <- c((n-1):(n/2 + 1), (n+1)/2)
+
+    x_inner <- c(x_lower_left, x_upper_left, x_lower_right, x_upper_right)
+    y_inner <- c(y_lower_left, y_upper_left, y_lower_right, y_upper_right)
+    id_inner <- rep(c(1:(n/2)), times = 4)
+
+    df_inner <- data.frame(x_inner, y_inner, id_inner) %>%
+      rename(x = x_inner, y = y_inner, id = id_inner)
+
+    # FINAL
+
+    df <- rbind(df_outer, df_inner) %>%
+      arrange(id) %>%
+      mutate(subid = rep(rep(c(1L, 2L), each = 4), n/2)) %>%
+      mutate(order = rep(c(1, 2, 4, 3), times = n)) %>%
+      arrange(id, subid, x, order)
+
+    df_extra <- df[seq(1, 4 * (n/2) + 1, by = 4),] %>%
+      mutate(order = 5)
+
+    df_final <- rbind(df, df_extra) %>%
+      arrange(id, subid, order)
+
+    df_final
   })
 
-  # final <- last_plot()
+  output$table <- renderTable({
+    dat()
+  })
+
+
+
+
+
+  # palette1 = colorRampPalette(brewer.pal(8, input$color1))(size/2) %>% rev()
+  # palette2 = colorRampPalette(brewer.pal(8, input$color2))(size/2)
+  # palette3 = rep(c("#FFFFFF"), times = size/2)
+  # palette <- c(rbind(palette1, palette2))
+
+
+  output$plot <- eventReactive(input$getdata == TRUE, {
+    ggplot(dat(), aes(x = x, y = y, group = id, subgroup = subid)) +
+      geom_polygon(aes(fill = factor(id)), color = "white", size = 0.5) +
+      #scale_fill_manual(values = palette) +
+      theme_void() +
+      theme(legend.position = "none")
+  })
+
 }
 
 # Run the application

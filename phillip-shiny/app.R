@@ -51,6 +51,7 @@ library(colourlovers)
 library(cowplot)
 library(generativeart) # https://github.com/cutterkom/generativeart
 library(ggpolypath)
+library(Cairo); options(shiny.usecairo = TRUE)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
@@ -62,7 +63,7 @@ ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
                                  ),
 
                 navbarPage(title = "Viz Biz",
-                           tabPanel(title = "L'esthétique des ondes mathématiques",
+                           tabPanel(title = "Frank Stella",
 
                                     sidebarLayout(
                                         sidebarPanel(
@@ -70,7 +71,7 @@ ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
 
                                             sliderInput(inputId = "size",
                                                         label = "Size:",
-                                                        min = 10, max = 50, value = 20),
+                                                        min = 10, max = 30, value = 15),
 
                                             selectInput(inputId = "color1",
                                                         label = h5("Primary Color:"),
@@ -100,18 +101,29 @@ ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
                                                           value = FALSE),
 
                                             hr(),
+
                                             div(align = "right",
-                                                actionButton(inputId = "getdata",
-                                                             label = strong("Generate Output")))
+                                                downloadLink("save", strong("Download")))
+
+                                            #div(align = "right",
+                                               #actionButton(inputId = "getdata",
+                                                            # label = strong("Generate Output")))
 
                                         ), # sidebar panel
 
                                         mainPanel(
-                                            h1("Title"),
-                                            h5("Text"),
+                                            h2(strong("Frank Stella: Experiment and Change")),
+                                            h5(em("Lettre Sur Les Et Muets II (1974)")),
 
-                                            plotOutput(outputId = "plot", inline = FALSE),
-                                            tableOutput(outputId = "table")
+                                            # plotOutput(outputId = "plot", inline = TRUE),
+                                            div(plotOutput(outputId = "plot", inline = TRUE,
+                                                            height = "100%"), align = "center"),
+
+                                            switchInput(inputId = "table_switch",
+                                                        label = "Dataframe",
+                                                        value = FALSE),
+
+                                            DT::dataTableOutput(outputId = "table_switch")
 
                                         ) # main panel
                                     ) # sidebar 3 layout
@@ -123,42 +135,42 @@ ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
+  n <- reactive({input$size * 2})
+
   dat <- reactive({
-    input$size
-    n <- input$size * 2
 
     # OUTER
 
-    x_lower_left <- c(1:(n/2)) # 1, 2, 3, 4
-    y_lower_left <- c(1:(n/2)) # 1, 2, 3, 4
-    x_upper_left <- c(1:(n/2)) # 1, 2, 3, 4
-    y_upper_left <- c(n:(n/2 + 1)) # 8, 7, 6, 5
-    x_lower_right <- c(n:(n/2 + 1)) # 8, 7, 6, 5
-    y_lower_right <- c(1:(n/2)) # 1, 2, 3, 4
-    x_upper_right <- c(n:(n/2 + 1)) # 8, 7, 6, 5
-    y_upper_right <- c(n:(n/2 + 1)) # 8, 7, 6, 5
+    x_lower_left <- c(1:(n()/2)) # 1, 2, 3, 4
+    y_lower_left <- c(1:(n()/2)) # 1, 2, 3, 4
+    x_upper_left <- c(1:(n()/2)) # 1, 2, 3, 4
+    y_upper_left <- c(n():(n()/2 + 1)) # 8, 7, 6, 5
+    x_lower_right <- c(n():(n()/2 + 1)) # 8, 7, 6, 5
+    y_lower_right <- c(1:(n()/2)) # 1, 2, 3, 4
+    x_upper_right <- c(n():(n()/2 + 1)) # 8, 7, 6, 5
+    y_upper_right <- c(n():(n()/2 + 1)) # 8, 7, 6, 5
 
     x_outer <- c(x_lower_left, x_upper_left, x_lower_right, x_upper_right)
     y_outer <- c(y_lower_left, y_upper_left, y_lower_right, y_upper_right)
-    id_outer <- rep(c(1:(n/2)), times = 4)
+    id_outer <- rep(c(1:(n()/2)), times = 4)
 
     df_outer <- data.frame(x_outer, y_outer, id_outer) %>%
       rename(x = x_outer, y = y_outer, id = id_outer)
 
     # INNER
 
-    x_lower_left <- c(2:(n/2), (n+1)/2)
-    y_lower_left <- c(2:(n/2), (n+1)/2)
-    x_upper_left <- c(2:(n/2), (n+1)/2)
-    y_upper_left <- c((n-1):(n/2 + 1), (n+1)/2)
-    x_lower_right <- c((n-1):(n/2 + 1), (n+1)/2)
-    y_lower_right <- c(2:(n/2), (n+1)/2)
-    x_upper_right <- c((n-1):(n/2 + 1), (n+1)/2)
-    y_upper_right <- c((n-1):(n/2 + 1), (n+1)/2)
+    x_lower_left <- c(2:(n()/2), (n()+1)/2)
+    y_lower_left <- c(2:(n()/2), (n()+1)/2)
+    x_upper_left <- c(2:(n()/2), (n()+1)/2)
+    y_upper_left <- c((n()-1):(n()/2 + 1), (n()+1)/2)
+    x_lower_right <- c((n()-1):(n()/2 + 1), (n()+1)/2)
+    y_lower_right <- c(2:(n()/2), (n()+1)/2)
+    x_upper_right <- c((n()-1):(n()/2 + 1), (n()+1)/2)
+    y_upper_right <- c((n()-1):(n()/2 + 1), (n()+1)/2)
 
     x_inner <- c(x_lower_left, x_upper_left, x_lower_right, x_upper_right)
     y_inner <- c(y_lower_left, y_upper_left, y_lower_right, y_upper_right)
-    id_inner <- rep(c(1:(n/2)), times = 4)
+    id_inner <- rep(c(1:(n()/2)), times = 4)
 
     df_inner <- data.frame(x_inner, y_inner, id_inner) %>%
       rename(x = x_inner, y = y_inner, id = id_inner)
@@ -167,26 +179,30 @@ server <- function(input, output) {
 
     df <- rbind(df_outer, df_inner) %>%
       arrange(id) %>%
-      mutate(subid = rep(rep(c(1L, 2L), each = 4), n/2)) %>%
-      mutate(order = rep(c(1, 2, 4, 3), times = n)) %>%
+      mutate(subid = rep(rep(c(1L, 2L), each = 4), n()/2)) %>%
+      mutate(order = rep(c(1, 2, 4, 3), times = n())) %>%
       arrange(id, subid, x, order)
 
-    df_extra <- df[seq(1, 4 * (n/2) + 1, by = 4),] %>%
+    df_extra <- df[seq(1, 4 * (n()/2) + 1, by = 4),] %>%
       mutate(order = 5)
 
     df_final <- rbind(df, df_extra) %>%
       arrange(id, subid, order)
 
+    rownames(df_final) <- NULL
+
     df_final
   })
 
-  output$table <- renderTable({
-    dat()
+  borderline <- reactive({
+    if(input$borderline == FALSE) {return(0)}
+    if(input$borderline == TRUE & n() < 17) {return(0.36)}
+    if(input$borderline == TRUE & n() < 24) {return(0.24)}
+    if(input$borderline == TRUE & n() > 24) {return(0.12)}
   })
 
-
-
-
+  #eventReactive()
+  #observeEvent()
 
   # palette1 = colorRampPalette(brewer.pal(8, input$color1))(size/2) %>% rev()
   # palette2 = colorRampPalette(brewer.pal(8, input$color2))(size/2)
@@ -194,13 +210,36 @@ server <- function(input, output) {
   # palette <- c(rbind(palette1, palette2))
 
 
-  output$plot <- eventReactive(input$getdata == TRUE, {
+  output$plot <- renderPlot({
+    frank_stella_plot <- ggplot(dat(), aes(x = x, y = y, group = id, subgroup = subid)) +
+      geom_polygon(aes(fill = factor(id)), color = "white", size = borderline()) +
+      #scale_fill_manual(values = palette) +
+      theme_void() +
+      theme(legend.position = "none")
+    frank_stella_plot
+    }, height = 400, width = 400)
+
+  output$table_switch <- DT::renderDataTable({
+    if(input$table_switch == TRUE) {return(dat())}
+  })
+
+  plotInput <- reactive({
     ggplot(dat(), aes(x = x, y = y, group = id, subgroup = subid)) +
-      geom_polygon(aes(fill = factor(id)), color = "white", size = 0.5) +
+      geom_polygon(aes(fill = factor(id)), color = "white", size = borderline()) +
       #scale_fill_manual(values = palette) +
       theme_void() +
       theme(legend.position = "none")
   })
+
+  output$save <- downloadHandler(
+    filename = function() {"frank_stella.png"},
+    # content = function(file) {
+    #   ggsave(plotInput(), filename = file)
+    # }
+    content = function(file) {
+      ggsave(file, plot = plotInput(), device = "png")
+    }
+    )
 
 }
 

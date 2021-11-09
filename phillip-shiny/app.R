@@ -73,8 +73,8 @@ ui <- fluidPage(
           h4("Graphics Input"),
           sliderInput(
             inputId = "size",
-            label = "Size:",
-            min = 10, max = 30, value = 15
+            label = "Size (Number of layers):",
+            min = 10, max = 30, value = 15, ticks = FALSE
           ),
           selectInput(
             inputId = "color1",
@@ -113,8 +113,14 @@ ui <- fluidPage(
             value = FALSE
           ),
           hr(),
-          textInput("custom_filename", "Filename", ".png"),
+          textInput("custom_filename", "Filename", "frank_stella.png"),
           verbatimTextOutput("value"),
+
+          sliderInput(
+            inputId = "res",
+            label = "Resolution (in dpi)",
+            min = 100, max = 2000, value = 600, step = 100, round = TRUE, ticks = FALSE
+          ),
 
           div(
             align = "right",
@@ -135,13 +141,29 @@ ui <- fluidPage(
             outputId = "plot", inline = TRUE,
             height = "100%"
           ), align = "center"),
-          h6("Switch the button below to show/hide the raw dataframe used to recreate the masterpiece."),
-          switchInput(
+
+          h4(" "),
+
+          prettyCheckbox(
             inputId = "table_switch",
-            label = "Dataframe",
+            label = "Raw dataframe used to recreate the masterpiece above",
             value = FALSE
           ),
-          DT::dataTableOutput(outputId = "table_switch")
+          DT::dataTableOutput(outputId = "table_switch"),
+
+          prettyCheckbox(
+            inputId = "original_artwork",
+            label = "Original Artwork",
+            value = FALSE
+          ),
+          div(imageOutput(outputId = "original_artwork", inline = TRUE), align = "center"),
+
+          h4(" "),
+
+          div(textOutput(outputId = "original_artwork_text", inline = TRUE), align = "center"),
+
+          h4(" ")
+
         ) # main panel
       ) # sidebar 3 layout
     ) # tab 1 panel
@@ -260,14 +282,42 @@ server <- function(input, output) {
     input$custom_filename
   })
 
+  custom_res <- reactive({input$res})
+
   output$save <- downloadHandler(
     filename = function() {
       custom_filename()
     },
     content = function(file) {
-      ggsave(file, plot = plotInput(), device = "png")
+      ggsave(file, plot = plotInput(), device = "png", dpi = as.double(custom_res()))
     }
   )
+
+  output$original_artwork <- renderImage({
+    if(input$original_artwork == TRUE) {
+      return(list(
+        src = "./stella.jpg",
+        width = 450,
+        height = 325,
+        contentType = "image/jpg",
+        alt = "Original Artwork"))
+    }
+    if(input$original_artwork == FALSE) {
+      return(list(
+      src = "./stella.jpg",
+      width = 0,
+      height = 0,
+      contentType = "image/jpg",
+      alt = "Original Artwork"))}
+  })
+
+  output$original_artwork_text <- renderText({
+    if(input$original_artwork == TRUE) {
+    return(paste("Photo by Christopher Burke, © 2017 Frank Stella / Artists Rights Society (ARS), New York"))
+  }
+    if(input$original_artwork == FALSE) {
+      return(NULL)}
+    })
 }
 
 # Run the application

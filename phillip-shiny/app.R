@@ -51,126 +51,143 @@ library(colourlovers)
 library(cowplot)
 library(generativeart) # https://github.com/cutterkom/generativeart
 library(ggpolypath)
-library(Cairo); options(shiny.usecairo = TRUE)
+library(Cairo)
+options(shiny.usecairo = TRUE)
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
-                                 bg = "#fff",
-                                 fg = "#000",
-                                 primary = "#4060ff",
-                                 base_font = font_google("Zen Kaku Gothic Antique"),
-                                 code_font = font_google("Zen Kaku Gothic Antique")
-                                 ),
+ui <- fluidPage(
+  theme = bs_theme(
+    bootswatch = "cosmo",
+    bg = "#fff",
+    fg = "#000",
+    primary = "#4060ff",
+    base_font = font_google("Zen Kaku Gothic Antique"),
+    code_font = font_google("Zen Kaku Gothic Antique")
+  ),
+  navbarPage(
+    title = "Viz Biz",
+    tabPanel(
+      title = "Frank Stella",
+      sidebarLayout(
+        sidebarPanel(
+          h4("Graphics Input"),
+          sliderInput(
+            inputId = "size",
+            label = "Size:",
+            min = 10, max = 30, value = 15
+          ),
+          selectInput(
+            inputId = "color1",
+            label = h5("Primary Color:"),
+            choices = list(
+              Blues = "Blues",
+              Greens = "Greens",
+              Oranges = "Oranges",
+              Reds = "Reds"
+            ),
+            selected = "Blues", multiple = FALSE
+          ),
+          checkboxInput(
+            inputId = "color1_rev",
+            label = "Reverse sequence",
+            value = FALSE
+          ),
+          selectInput(
+            inputId = "color2",
+            label = h5("Secondary Color:"),
+            choices = list(
+              Greys = "Greys",
+              "Pure White" = "Pure White",
+              "Pure Black" = "Pure Black"
+            ),
+            selected = "Blues", multiple = FALSE
+          ),
+          checkboxInput(
+            inputId = "color2_rev",
+            label = "Reverse sequence",
+            value = FALSE
+          ),
+          switchInput(
+            inputId = "borderline",
+            label = "Borderlines",
+            value = FALSE
+          ),
+          hr(),
+          textInput("custom_filename", "Filename", ".png"),
+          verbatimTextOutput("value"),
 
-                navbarPage(title = "Viz Biz",
-                           tabPanel(title = "Frank Stella",
+          div(
+            align = "right",
+            downloadLink("save", strong("Download"))
+          )
 
-                                    sidebarLayout(
-                                        sidebarPanel(
-                                            h4("Graphics Input"),
+          # div(align = "right",
+          # actionButton(inputId = "getdata",
+          # label = strong("Generate Output")))
+        ), # sidebar panel
 
-                                            sliderInput(inputId = "size",
-                                                        label = "Size:",
-                                                        min = 10, max = 30, value = 15),
+        mainPanel(
+          h2(strong("Frank Stella: Experiment and Change")),
+          h5(em("Lettre Sur Les Et Muets II (1974)")),
 
-                                            selectInput(inputId = "color1",
-                                                        label = h5("Primary Color:"),
-                                                        choices = list(Blues = "Blues",
-                                                                       Greens = "Greens",
-                                                                       Oranges = "Oranges",
-                                                                       Reds = "Reds"),
-                                                        selected = "Blues", multiple = FALSE),
-
-                                            checkboxInput(inputId = "color1_rev",
-                                                          label = "Reverse sequence",
-                                                          value = FALSE),
-
-                                            selectInput(inputId = "color2",
-                                                        label = h5("Secondary Color:"),
-                                                        choices = list(Greys = "Greys",
-                                                                       'Pure White' = "Pure White",
-                                                                       'Pure Black' = "Pure Black"),
-                                                        selected = "Blues", multiple = FALSE),
-
-                                            checkboxInput(inputId = "color2_rev",
-                                                          label = "Reverse sequence",
-                                                          value = FALSE),
-
-                                            switchInput(inputId = "borderline",
-                                                          label = "Borderlines",
-                                                          value = FALSE),
-
-                                            hr(),
-
-                                            div(align = "right",
-                                                downloadLink("save", strong("Download")))
-
-                                            #div(align = "right",
-                                               #actionButton(inputId = "getdata",
-                                                            # label = strong("Generate Output")))
-
-                                        ), # sidebar panel
-
-                                        mainPanel(
-                                            h2(strong("Frank Stella: Experiment and Change")),
-                                            h5(em("Lettre Sur Les Et Muets II (1974)")),
-
-                                            # plotOutput(outputId = "plot", inline = TRUE),
-                                            div(plotOutput(outputId = "plot", inline = TRUE,
-                                                            height = "100%"), align = "center"),
-
-                                            switchInput(inputId = "table_switch",
-                                                        label = "Dataframe",
-                                                        value = FALSE),
-
-                                            DT::dataTableOutput(outputId = "table_switch")
-
-                                        ) # main panel
-                                    ) # sidebar 3 layout
-
-                                    ) # tab 1 panel
-                           ) # navbar page
-                ) # fluid page
+          # plotOutput(outputId = "plot", inline = TRUE),
+          div(plotOutput(
+            outputId = "plot", inline = TRUE,
+            height = "100%"
+          ), align = "center"),
+          h6("Switch the button below to show/hide the raw dataframe used to recreate the masterpiece."),
+          switchInput(
+            inputId = "table_switch",
+            label = "Dataframe",
+            value = FALSE
+          ),
+          DT::dataTableOutput(outputId = "table_switch")
+        ) # main panel
+      ) # sidebar 3 layout
+    ) # tab 1 panel
+  ) # navbar page
+) # fluid page
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-
-  n <- reactive({input$size * 2})
+  n <- reactive({
+    input$size * 2
+  })
 
   dat <- reactive({
 
     # OUTER
 
-    x_lower_left <- c(1:(n()/2)) # 1, 2, 3, 4
-    y_lower_left <- c(1:(n()/2)) # 1, 2, 3, 4
-    x_upper_left <- c(1:(n()/2)) # 1, 2, 3, 4
-    y_upper_left <- c(n():(n()/2 + 1)) # 8, 7, 6, 5
-    x_lower_right <- c(n():(n()/2 + 1)) # 8, 7, 6, 5
-    y_lower_right <- c(1:(n()/2)) # 1, 2, 3, 4
-    x_upper_right <- c(n():(n()/2 + 1)) # 8, 7, 6, 5
-    y_upper_right <- c(n():(n()/2 + 1)) # 8, 7, 6, 5
+    x_lower_left <- c(1:(n() / 2)) # 1, 2, 3, 4
+    y_lower_left <- c(1:(n() / 2)) # 1, 2, 3, 4
+    x_upper_left <- c(1:(n() / 2)) # 1, 2, 3, 4
+    y_upper_left <- c(n():(n() / 2 + 1)) # 8, 7, 6, 5
+    x_lower_right <- c(n():(n() / 2 + 1)) # 8, 7, 6, 5
+    y_lower_right <- c(1:(n() / 2)) # 1, 2, 3, 4
+    x_upper_right <- c(n():(n() / 2 + 1)) # 8, 7, 6, 5
+    y_upper_right <- c(n():(n() / 2 + 1)) # 8, 7, 6, 5
 
     x_outer <- c(x_lower_left, x_upper_left, x_lower_right, x_upper_right)
     y_outer <- c(y_lower_left, y_upper_left, y_lower_right, y_upper_right)
-    id_outer <- rep(c(1:(n()/2)), times = 4)
+    id_outer <- rep(c(1:(n() / 2)), times = 4)
 
     df_outer <- data.frame(x_outer, y_outer, id_outer) %>%
       rename(x = x_outer, y = y_outer, id = id_outer)
 
     # INNER
 
-    x_lower_left <- c(2:(n()/2), (n()+1)/2)
-    y_lower_left <- c(2:(n()/2), (n()+1)/2)
-    x_upper_left <- c(2:(n()/2), (n()+1)/2)
-    y_upper_left <- c((n()-1):(n()/2 + 1), (n()+1)/2)
-    x_lower_right <- c((n()-1):(n()/2 + 1), (n()+1)/2)
-    y_lower_right <- c(2:(n()/2), (n()+1)/2)
-    x_upper_right <- c((n()-1):(n()/2 + 1), (n()+1)/2)
-    y_upper_right <- c((n()-1):(n()/2 + 1), (n()+1)/2)
+    x_lower_left <- c(2:(n() / 2), (n() + 1) / 2)
+    y_lower_left <- c(2:(n() / 2), (n() + 1) / 2)
+    x_upper_left <- c(2:(n() / 2), (n() + 1) / 2)
+    y_upper_left <- c((n() - 1):(n() / 2 + 1), (n() + 1) / 2)
+    x_lower_right <- c((n() - 1):(n() / 2 + 1), (n() + 1) / 2)
+    y_lower_right <- c(2:(n() / 2), (n() + 1) / 2)
+    x_upper_right <- c((n() - 1):(n() / 2 + 1), (n() + 1) / 2)
+    y_upper_right <- c((n() - 1):(n() / 2 + 1), (n() + 1) / 2)
 
     x_inner <- c(x_lower_left, x_upper_left, x_lower_right, x_upper_right)
     y_inner <- c(y_lower_left, y_upper_left, y_lower_right, y_upper_right)
-    id_inner <- rep(c(1:(n()/2)), times = 4)
+    id_inner <- rep(c(1:(n() / 2)), times = 4)
 
     df_inner <- data.frame(x_inner, y_inner, id_inner) %>%
       rename(x = x_inner, y = y_inner, id = id_inner)
@@ -179,11 +196,11 @@ server <- function(input, output) {
 
     df <- rbind(df_outer, df_inner) %>%
       arrange(id) %>%
-      mutate(subid = rep(rep(c(1L, 2L), each = 4), n()/2)) %>%
+      mutate(subid = rep(rep(c(1L, 2L), each = 4), n() / 2)) %>%
       mutate(order = rep(c(1, 2, 4, 3), times = n())) %>%
       arrange(id, subid, x, order)
 
-    df_extra <- df[seq(1, 4 * (n()/2) + 1, by = 4),] %>%
+    df_extra <- df[seq(1, 4 * (n() / 2) + 1, by = 4), ] %>%
       mutate(order = 5)
 
     df_final <- rbind(df, df_extra) %>%
@@ -195,52 +212,62 @@ server <- function(input, output) {
   })
 
   borderline <- reactive({
-    if(input$borderline == FALSE) {return(0)}
-    if(input$borderline == TRUE & n() < 17) {return(0.36)}
-    if(input$borderline == TRUE & n() < 24) {return(0.24)}
-    if(input$borderline == TRUE & n() > 24) {return(0.12)}
+    if (input$borderline == FALSE) {
+      return(0)
+    }
+    if (input$borderline == TRUE & n() < 17) {
+      return(0.36)
+    }
+    if (input$borderline == TRUE & n() < 24) {
+      return(0.24)
+    }
+    if (input$borderline == TRUE & n() > 24) {
+      return(0.12)
+    }
   })
 
-  #eventReactive()
-  #observeEvent()
+  # eventReactive()
+  # observeEvent()
 
   # palette1 = colorRampPalette(brewer.pal(8, input$color1))(size/2) %>% rev()
   # palette2 = colorRampPalette(brewer.pal(8, input$color2))(size/2)
   # palette3 = rep(c("#FFFFFF"), times = size/2)
   # palette <- c(rbind(palette1, palette2))
 
-
-  output$plot <- renderPlot({
-    frank_stella_plot <- ggplot(dat(), aes(x = x, y = y, group = id, subgroup = subid)) +
-      geom_polygon(aes(fill = factor(id)), color = "white", size = borderline()) +
-      #scale_fill_manual(values = palette) +
-      theme_void() +
-      theme(legend.position = "none")
-    frank_stella_plot
-    }, height = 400, width = 400)
-
   output$table_switch <- DT::renderDataTable({
-    if(input$table_switch == TRUE) {return(dat())}
+    if (input$table_switch == TRUE) {
+      return(dat())
+    }
   })
 
   plotInput <- reactive({
     ggplot(dat(), aes(x = x, y = y, group = id, subgroup = subid)) +
       geom_polygon(aes(fill = factor(id)), color = "white", size = borderline()) +
-      #scale_fill_manual(values = palette) +
+      # scale_fill_manual(values = palette) +
       theme_void() +
       theme(legend.position = "none")
   })
 
+  output$plot <- renderPlot(
+    {
+      plotInput()
+    },
+    height = 400,
+    width = 400
+  )
+
+  custom_filename <- reactive({
+    input$custom_filename
+  })
+
   output$save <- downloadHandler(
-    filename = function() {"frank_stella.png"},
-    # content = function(file) {
-    #   ggsave(plotInput(), filename = file)
-    # }
+    filename = function() {
+      custom_filename()
+    },
     content = function(file) {
       ggsave(file, plot = plotInput(), device = "png")
     }
-    )
-
+  )
 }
 
 # Run the application

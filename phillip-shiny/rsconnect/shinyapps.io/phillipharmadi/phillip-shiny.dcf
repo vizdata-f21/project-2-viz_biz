@@ -5,9 +5,9 @@ account: phillipharmadi
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5064515
-bundleId: 5224476
+bundleId: 5229542
 url: https://phillipharmadi.shinyapps.io/phillip-shiny/
-when: 1636323065.48711
-lastSyncTime: 1636323065.48712
+when: 1636420884.52116
+lastSyncTime: 1636420884.52117
 asMultiple: FALSE
 asStatic: FALSE

@@ -51,6 +51,7 @@ library(colourlovers)
 library(cowplot)
 library(generativeart) # https://github.com/cutterkom/generativeart
 library(ggpolypath)
+library(colourpicker)
 library(Cairo)
 options(shiny.usecairo = TRUE)
 
@@ -76,41 +77,31 @@ ui <- fluidPage(
             label = "Size (Number of layers):",
             min = 10, max = 30, value = 15, ticks = FALSE
           ),
-          selectInput(
-            inputId = "color1",
-            label = h5("Primary Color:"),
-            choices = list(
-              Blues = "Blues",
-              Greens = "Greens",
-              Oranges = "Oranges",
-              Reds = "Reds"
-            ),
-            selected = "Blues", multiple = FALSE
+          p(""),
+          p("Primary Gradient"),
+
+          fluidRow(
+            column(width = 6, colourInput(inputId = "color_primary_start",
+                                          label = NULL, value = "#DBDFFF")),
+            column(width = 6, colourInput(inputId = "color_primary_end",
+                                          label = NULL, value = "#0C0C3B"))
           ),
+
+          p(""),
+          p("Secondary Gradient"),
+
+          fluidRow(
+            column(width = 6, colourInput(inputId = "color_secondary_start",
+                                          label = NULL, value = "#EDEDF0")),
+            column(width = 6, colourInput(inputId = "color_secondary_end",
+                                          label = NULL, value = "#525252"))
+          ),
+          p(""),
           prettyCheckbox(
-            inputId = "color1_rev",
-            label = "Reverse sequence",
-            value = FALSE
-          ),
-          selectInput(
-            inputId = "color2",
-            label = h5("Secondary Color:"),
-            choices = list(
-              Greys = "Greys",
-              "Pure White" = "Pure White",
-              "Pure Black" = "Pure Black"
-            ),
-            selected = "Blues", multiple = FALSE
-          ),
-          prettyCheckbox(
-            inputId = "color2_rev",
-            label = "Reverse sequence",
-            value = FALSE
-          ),
-          switchInput(
             inputId = "borderline",
-            label = "Borderlines",
-            value = FALSE
+            label = "Activate thin borderlines",
+            value = FALSE,
+            inline = TRUE
           ),
           hr(),
           textInput("custom_filename", "Filename", "frank_stella.png"),
@@ -136,6 +127,19 @@ ui <- fluidPage(
           h2(strong("Frank Stella: Experiment and Change")),
           h5(em("Lettre Sur Les Et Muets II (1974)")),
 
+          p(""),
+
+          p("Inspired by the original artwork, we invite you to recreate your
+            own modified piece of Frank Stella's masterpiece and adjust the
+            settings in the", em("Graphics Input"), "sidebar on the left
+            according to your preference."),
+
+          p("Our recommendation is to have more layers and higher resolution
+            if you are intending to print the plot for a huge decoration. Otherwise,
+            hacing a smaller number of layers and lower resolution would be more appropriate.
+            Feel free to toggle as much as you want and experiment varieties of ways on
+            modifying this plot to figure out your desired unique style!"),
+
           # plotOutput(outputId = "plot", inline = TRUE),
           div(plotOutput(
             outputId = "plot", inline = TRUE,
@@ -150,7 +154,6 @@ ui <- fluidPage(
             value = FALSE
           ),
           DT::dataTableOutput(outputId = "table_switch"),
-
           prettyCheckbox(
             inputId = "original_artwork",
             label = "Original Artwork",
@@ -233,6 +236,24 @@ server <- function(input, output) {
     df_final
   })
 
+  # COLOR
+
+  size <- reactive({input$size})
+
+  color_primary_start <- reactive({input$color_primary_start})
+  color_primary_end <- reactive({input$color_primary_end})
+  color_primary <- reactive({
+    colorRampPalette(c(color_primary_start(), color_primary_end()))(ceiling(size()/2))
+    })
+
+  color_secondary_start <- reactive({input$color_secondary_start})
+  color_secondary_end <- reactive({input$color_secondary_end})
+  color_secondary <- reactive({
+    colorRampPalette(c(color_secondary_start(), color_secondary_end()))(floor(size()/2))
+    })
+
+  full <- reactive(c(rbind(color_primary(), color_secondary())))
+
   borderline <- reactive({
     if (input$borderline == FALSE) {
       return(0)
@@ -263,9 +284,9 @@ server <- function(input, output) {
   })
 
   plotInput <- reactive({
-    ggplot(dat(), aes(x = x, y = y, group = id, subgroup = subid)) +
-      geom_polygon(aes(fill = factor(id)), color = "white", size = borderline()) +
-      # scale_fill_manual(values = palette) +
+    ggplot(dat(), aes(x = x, y = y, group = factor(id), subgroup = subid)) +
+      geom_polygon(aes(fill = factor(id)), colour = "white", size = borderline()) +
+      scale_fill_manual(values = full()) +
       theme_void() +
       theme(legend.position = "none")
   })
@@ -300,7 +321,8 @@ server <- function(input, output) {
         width = 450,
         height = 325,
         contentType = "image/jpg",
-        alt = "Original Artwork"))
+        alt = "Original Artwork",
+        deleteFile = FALSE))
     }
     if(input$original_artwork == FALSE) {
       return(list(
@@ -308,7 +330,8 @@ server <- function(input, output) {
       width = 0,
       height = 0,
       contentType = "image/jpg",
-      alt = "Original Artwork"))}
+      alt = "Original Artwork",
+      deleteFile = FALSE))}
   })
 
   output$original_artwork_text <- renderText({

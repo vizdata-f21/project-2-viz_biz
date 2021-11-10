@@ -79,22 +79,27 @@ ui <- fluidPage(
           ),
           p(""),
           p("Primary Gradient"),
-
           fluidRow(
-            column(width = 6, colourInput(inputId = "color_primary_start",
-                                          label = NULL, value = "#DBDFFF")),
-            column(width = 6, colourInput(inputId = "color_primary_end",
-                                          label = NULL, value = "#0C0C3B"))
+            column(width = 6, colourInput(
+              inputId = "color_primary_start",
+              label = NULL, value = "#DBDFFF"
+            )),
+            column(width = 6, colourInput(
+              inputId = "color_primary_end",
+              label = NULL, value = "#0C0C3B"
+            ))
           ),
-
           p(""),
           p("Secondary Gradient"),
-
           fluidRow(
-            column(width = 6, colourInput(inputId = "color_secondary_start",
-                                          label = NULL, value = "#EDEDF0")),
-            column(width = 6, colourInput(inputId = "color_secondary_end",
-                                          label = NULL, value = "#525252"))
+            column(width = 6, colourInput(
+              inputId = "color_secondary_start",
+              label = NULL, value = "#EDEDF0"
+            )),
+            column(width = 6, colourInput(
+              inputId = "color_secondary_end",
+              label = NULL, value = "#525252"
+            ))
           ),
           p(""),
           prettyCheckbox(
@@ -106,13 +111,11 @@ ui <- fluidPage(
           hr(),
           textInput("custom_filename", "Filename", "frank_stella.png"),
           verbatimTextOutput("value"),
-
           sliderInput(
             inputId = "res",
             label = "Resolution (in dpi)",
             min = 100, max = 2000, value = 600, step = 100, round = TRUE, ticks = FALSE
           ),
-
           div(
             align = "right",
             downloadLink("save", strong("Download"))
@@ -126,14 +129,11 @@ ui <- fluidPage(
         mainPanel(
           h2(strong("Frank Stella: Experiment and Change")),
           h5(em("Lettre Sur Les Et Muets II (1974)")),
-
           p(""),
-
           p("Inspired by the original artwork, we invite you to recreate your
             own modified piece of Frank Stella's masterpiece and adjust the
             settings in the", em("Graphics Input"), "sidebar on the left
             according to your preference."),
-
           p("Our recommendation is to have more layers and higher resolution
             if you are intending to print the plot for a huge decoration. Otherwise,
             hacing a smaller number of layers and lower resolution would be more appropriate.
@@ -145,9 +145,7 @@ ui <- fluidPage(
             outputId = "plot", inline = TRUE,
             height = "100%"
           ), align = "center"),
-
           h4(" "),
-
           prettyCheckbox(
             inputId = "table_switch",
             label = "Raw dataframe used to recreate the masterpiece above",
@@ -160,13 +158,9 @@ ui <- fluidPage(
             value = FALSE
           ),
           div(imageOutput(outputId = "original_artwork", inline = TRUE), align = "center"),
-
           h4(" "),
-
           div(textOutput(outputId = "original_artwork_text", inline = TRUE), align = "center"),
-
           h4(" ")
-
         ) # main panel
       ) # sidebar 3 layout
     ) # tab 1 panel
@@ -238,19 +232,29 @@ server <- function(input, output) {
 
   # COLOR
 
-  size <- reactive({input$size})
+  size <- reactive({
+    input$size
+  })
 
-  color_primary_start <- reactive({input$color_primary_start})
-  color_primary_end <- reactive({input$color_primary_end})
+  color_primary_start <- reactive({
+    input$color_primary_start
+  })
+  color_primary_end <- reactive({
+    input$color_primary_end
+  })
   color_primary <- reactive({
-    colorRampPalette(c(color_primary_start(), color_primary_end()))(ceiling(size()/2))
-    })
+    colorRampPalette(c(color_primary_start(), color_primary_end()))(ceiling(size() / 2))
+  })
 
-  color_secondary_start <- reactive({input$color_secondary_start})
-  color_secondary_end <- reactive({input$color_secondary_end})
+  color_secondary_start <- reactive({
+    input$color_secondary_start
+  })
+  color_secondary_end <- reactive({
+    input$color_secondary_end
+  })
   color_secondary <- reactive({
-    colorRampPalette(c(color_secondary_start(), color_secondary_end()))(floor(size()/2))
-    })
+    colorRampPalette(c(color_secondary_start(), color_secondary_end()))(floor(size() / 2))
+  })
 
   full <- reactive(c(rbind(color_primary(), color_secondary())))
 
@@ -303,7 +307,9 @@ server <- function(input, output) {
     input$custom_filename
   })
 
-  custom_res <- reactive({input$res})
+  custom_res <- reactive({
+    input$res
+  })
 
   output$save <- downloadHandler(
     filename = function() {
@@ -315,32 +321,36 @@ server <- function(input, output) {
   )
 
   output$original_artwork <- renderImage({
-    if(input$original_artwork == TRUE) {
+    if (input$original_artwork == TRUE) {
       return(list(
         src = "./stella.jpg",
         width = 450,
         height = 325,
         contentType = "image/jpg",
         alt = "Original Artwork",
-        deleteFile = FALSE))
+        deleteFile = FALSE
+      ))
     }
-    if(input$original_artwork == FALSE) {
+    if (input$original_artwork == FALSE) {
       return(list(
-      src = "./stella.jpg",
-      width = 0,
-      height = 0,
-      contentType = "image/jpg",
-      alt = "Original Artwork",
-      deleteFile = FALSE))}
+        src = "./stella.jpg",
+        width = 0,
+        height = 0,
+        contentType = "image/jpg",
+        alt = "Original Artwork",
+        deleteFile = FALSE
+      ))
+    }
   })
 
   output$original_artwork_text <- renderText({
-    if(input$original_artwork == TRUE) {
-    return(paste("Photo by Christopher Burke, © 2017 Frank Stella / Artists Rights Society (ARS), New York"))
-  }
-    if(input$original_artwork == FALSE) {
-      return(NULL)}
-    })
+    if (input$original_artwork == TRUE) {
+      return(paste("Photo by Christopher Burke, © 2017 Frank Stella / Artists Rights Society (ARS), New York"))
+    }
+    if (input$original_artwork == FALSE) {
+      return(NULL)
+    }
+  })
 }
 
 # Run the application

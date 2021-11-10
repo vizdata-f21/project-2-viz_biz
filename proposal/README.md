@@ -29,8 +29,12 @@ positively to popularize the usage of R not only among statisticians and
 data scientists, but also among digital designers and professionals that
 don’t tend to work with data.
 
-We are going to use fake datasets, mathematical functions, and
-“ready-to-use” packages to recreate art pieces in ggplot.
+We are going to use our own created dataframes (based on user inputs),
+mathematical functions, and packages such as `library(colourpicker)` to
+recreate art pieces in ggplot. For instance, when recreating Frank
+Stella’s artwork, users will be able to determine how many layers of
+rectangles do they want to have in the final plot, and we will create
+the dataframe manually according to that selected input.
 
 We plan to recreate and make customizable the following four images:
 

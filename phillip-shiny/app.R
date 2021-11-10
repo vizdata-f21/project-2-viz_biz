@@ -87,7 +87,7 @@ ui <- fluidPage(
             ),
             selected = "Blues", multiple = FALSE
           ),
-          checkboxInput(
+          prettyCheckbox(
             inputId = "color1_rev",
             label = "Reverse sequence",
             value = FALSE
@@ -102,7 +102,7 @@ ui <- fluidPage(
             ),
             selected = "Blues", multiple = FALSE
           ),
-          checkboxInput(
+          prettyCheckbox(
             inputId = "color2_rev",
             label = "Reverse sequence",
             value = FALSE

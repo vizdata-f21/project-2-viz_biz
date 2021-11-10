@@ -5,9 +5,10 @@ account: phillipharmadi
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5064515
-bundleId: 5229754
+bundleId: 5234722
 url: https://phillipharmadi.shinyapps.io/phillip-shiny/
-when: 1636427172.57495
-lastSyncTime: 1636427172.57497
+when: 1636517752.25842
+lastSyncTime: 1636517752.25844
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: frank_stella.png|frank-stella-art.nb.html|frank-stella-art.Rmd|README.md|README.rmd

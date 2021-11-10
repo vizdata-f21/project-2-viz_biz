@@ -270,3 +270,9 @@ spectrumInput(
   # final <- last_plot()
 ```
 
+```{r}
+library(colorspace)
+pal <- choose_palette()
+pal
+```
+

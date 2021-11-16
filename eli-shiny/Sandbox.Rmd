@@ -1,0 +1,16 @@
+---
+title: "Sandbox"
+output: html_document
+---
+
+Things to alter
+-color
+-what the text says
+-background image?
+-effect on the image??
+
+
+```{r}
+library(tidyverse)
+library(cowplot)
+```

@@ -1,0 +1,14 @@
+name: phillip-shiny
+title: phillip-shiny
+username:
+account: phillipharmadi
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5064515
+bundleId: 5237996
+url: https://phillipharmadi.shinyapps.io/phillip-shiny/
+when: 1636574061.41741
+lastSyncTime: 1636574061.41742
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: frank_stella.png|frank-stella-art-draft.nb.html|frank-stella-art-draft.Rmd|README.md|README.rmd

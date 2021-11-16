@@ -10,31 +10,31 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Goals
 
-We strive to create a convenient website where non-R users and the general public can navigate to and customize the several famous art pieces recreated in ggplot. Users will have the ability to adjust and modify some of the artwork aesthetics to make the masterworks their own. 
+We strive to create a convenient website where non-R users and the general public can navigate to and customize several famous art pieces recreated in ggplot, modifying some of the artwork aesthetics to make the masterworks their own. 
 
 Our goal is to promote digital extensions of modern, abstract paintings and encourage users to  play with and modify pieces with significance and status in the art world. Wealthy collectors, curators, and gallery owners have historically had a massive amount of power in determining what is considered “good art” and what sells. We see our project as part of the move to question empty status designations and push back against institutional art gatekeeping. We will do this by creating a convenient website where users can access several examples of recreated art pieces and adjust their aesthetics based on one’s personal preference and download them for their personal use. 
 
-In addition, our motivation is also to increase public appreciation and awareness on the advent of using digital techniques to recreate modern or postmodern artworks and help spark the tech community's interest in contributing to R by developing and creating more R packages (especially in generative art and ggplot). We hope that our work will contribute positively to widen up the usage of R not only to statisticians and data scientists, but also to digital designers and professionals outside of the field of statistics/data.
+In addition, our motivation is also to increase public appreciation and awareness on the advent of using digital techniques to recreate modern or postmodern artworks and help spark the tech community's interest in contributing to R by developing and creating more R packages (especially in generative art and ggplot). We hope that our work will contribute positively to popularize the usage of R not only among statisticians and data scientists, but also among digital designers and professionals that don't tend to work with data.
 
-We are going to use fake datasets, mathematical functions, and “ready-to-use” packages to recreate art pieces in ggplot.
+We are going to use our own created dataframes (based on user inputs), mathematical functions, and  packages such as `library(colourpicker)` to recreate art pieces in ggplot. For instance, when recreating Frank Stella's artwork, users will be able to determine how many layers of rectangles do they want to have in the final plot, and we will create the dataframe manually according to that selected input.
 
 We plan to recreate and make customizable the following four images:
 
 #### Frank Stella, *Lettre sur les sourds et muets II* (1974) ^[NSU Art Museum, https://nsuartmuseum.org/exhibition/frank-stella-experiment-and-change/]
 
-![](images/stella.jpg){width=80%}
+![](images/stella.jpg){width=40%}
 
 #### Barbara Kruger, *Untitled (Your body is a battleground)* (1989) ^[The Broad, https://www.thebroad.org/art/barbara-kruger/untitled-your-body-battleground]
 
-![](images/kruger.jpeg){width=80%}
+![](images/kruger.jpeg){width=30%}
 
 #### Wassily Kandinsky, *Composition 8* (1923) ^[Guggenheim, https://www.guggenheim.org/artwork/1924]
 
-![](images/kandinsky.jpeg){width=80%}
+![](images/kandinsky.jpeg){width=40%}
 
 #### Piet Mondrian, *Trafalgar Square* (1939-1943) ^[Wikiart, https://www.wikiart.org/en/piet-mondrian/trafalgar-square-1943]
 
-![](images/mondrian.jpg){width=80%}
+![](images/mondrian.jpg){width=25%}
 
 
 ## Plan of Attack
@@ -51,7 +51,7 @@ Each member will make an individual prototype ggplot object and ShinyR website t
  
 **Week of Mon, Nov 15:**
  
-Gather feedback from teammates to improve each individual work. Every team member should draft a 150-250 (total = 600-1000) word summary of their artwork methodology for the write-up. Put the summary on each one designated folder’s README.md..
+Gather feedback from teammates to improve each individual work. Every team member should draft a 150-250 (total = 600-1000) word summary of their artwork methodology for the write-up. Put the summary on each one designated folder’s README.md.
  
 Once done, each member can proceed as soon as possible to their task in the Week of Mon, Nov 22 (since it will be Thanksgiving week).
  
@@ -68,7 +68,7 @@ Finalizing writeup and creating the slides and preparing for the presentation on
 
 ## Project Organization
 
-Within our project, we will have seven different folders. The first folder will be the proposal, which will include a README.md that explains the goals and plan of our project. Then, the four of us will each have a folder with our shiny app in it, in which we will work on recreating the chosen art piece. The README.md for each of these folders with have the name of the artwork we are recreating and 150-250 words summary and methodology of how we recreated the artwork.We will have a folder with the final shiny app, in which we will combine all of our individual work. The README.md for this will contain the final 1000-2000 word write-up. Finally, we will have our presentation folder, which will contain our slides and code for our final project presentation. 
+Within our project, we will have seven different folders. The first folder will be the proposal, which will include a README.md that explains the goals and plan of our project. Then, the four of us will each have a folder with our shiny app in it, in which we will work on recreating the chosen art piece. The README.md for each of these folders with have the name of the artwork we are recreating and 150-250 words summary and methodology of how we recreated the artwork. We will have a folder with the final shiny app, in which we will combine all of our individual work. The README.md for this will contain the final 1000-2000 word write-up. Finally, we will have our presentation folder, which will contain our slides and code for our final project presentation. 
 
 
 

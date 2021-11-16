@@ -5,9 +5,9 @@ Viz Biz
 ## Goals
 
 We strive to create a convenient website where non-R users and the
-general public can navigate to and customize the several famous art
-pieces recreated in ggplot. Users will have the ability to adjust and
-modify some of the artwork aesthetics to make the masterworks their own.
+general public can navigate to and customize several famous art pieces
+recreated in ggplot, modifying some of the artwork aesthetics to make
+the masterworks their own.
 
 Our goal is to promote digital extensions of modern, abstract paintings
 and encourage users to play with and modify pieces with significance and
@@ -25,30 +25,34 @@ awareness on the advent of using digital techniques to recreate modern
 or postmodern artworks and help spark the tech community’s interest in
 contributing to R by developing and creating more R packages (especially
 in generative art and ggplot). We hope that our work will contribute
-positively to widen up the usage of R not only to statisticians and data
-scientists, but also to digital designers and professionals outside of
-the field of statistics/data.
+positively to popularize the usage of R not only among statisticians and
+data scientists, but also among digital designers and professionals that
+don’t tend to work with data.
 
-We are going to use fake datasets, mathematical functions, and
-“ready-to-use” packages to recreate art pieces in ggplot.
+We are going to use our own created dataframes (based on user inputs),
+mathematical functions, and packages such as `library(colourpicker)` to
+recreate art pieces in ggplot. For instance, when recreating Frank
+Stella’s artwork, users will be able to determine how many layers of
+rectangles do they want to have in the final plot, and we will create
+the dataframe manually according to that selected input.
 
 We plan to recreate and make customizable the following four images:
 
 #### Frank Stella, *Lettre sur les sourds et muets II* (1974) [1]
 
-<img src="images/stella.jpg" style="width:80.0%" />
+<img src="images/stella.jpg" style="width:40.0%" />
 
 #### Barbara Kruger, *Untitled (Your body is a battleground)* (1989) [2]
 
-<img src="images/kruger.jpeg" style="width:80.0%" />
+<img src="images/kruger.jpeg" style="width:30.0%" />
 
 #### Wassily Kandinsky, *Composition 8* (1923) [3]
 
-<img src="images/kandinsky.jpeg" style="width:80.0%" />
+<img src="images/kandinsky.jpeg" style="width:40.0%" />
 
 #### Piet Mondrian, *Trafalgar Square* (1939-1943) [4]
 
-<img src="images/mondrian.jpg" style="width:80.0%" />
+<img src="images/mondrian.jpg" style="width:25.0%" />
 
 ## Plan of Attack
 
@@ -71,7 +75,7 @@ their digital art.
 Gather feedback from teammates to improve each individual work. Every
 team member should draft a 150-250 (total = 600-1000) word summary of
 their artwork methodology for the write-up. Put the summary on each one
-designated folder’s README.md..
+designated folder’s README.md.
 
 Once done, each member can proceed as soon as possible to their task in
 the Week of Mon, Nov 22 (since it will be Thanksgiving week).
@@ -100,7 +104,7 @@ explains the goals and plan of our project. Then, the four of us will
 each have a folder with our shiny app in it, in which we will work on
 recreating the chosen art piece. The README.md for each of these folders
 with have the name of the artwork we are recreating and 150-250 words
-summary and methodology of how we recreated the artwork.We will have a
+summary and methodology of how we recreated the artwork. We will have a
 folder with the final shiny app, in which we will combine all of our
 individual work. The README.md for this will contain the final 1000-2000
 word write-up. Finally, we will have our presentation folder, which will

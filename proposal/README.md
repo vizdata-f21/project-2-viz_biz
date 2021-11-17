@@ -29,26 +29,30 @@ positively to popularize the usage of R not only among statisticians and
 data scientists, but also among digital designers and professionals that
 don’t tend to work with data.
 
-We are going to use fake datasets, mathematical functions, and
-“ready-to-use” packages to recreate art pieces in ggplot.
+We are going to use our own created dataframes (based on user inputs),
+mathematical functions, and packages such as `library(colourpicker)` to
+recreate art pieces in ggplot. For instance, when recreating Frank
+Stella’s artwork, users will be able to determine how many layers of
+rectangles do they want to have in the final plot, and we will create
+the dataframe manually according to that selected input.
 
 We plan to recreate and make customizable the following four images:
 
 #### Frank Stella, *Lettre sur les sourds et muets II* (1974) [1]
 
-<img src="images/stella.jpg" style="width:80.0%" />
+<img src="images/stella.jpg" style="width:40.0%" />
 
 #### Barbara Kruger, *Untitled (Your body is a battleground)* (1989) [2]
 
-<img src="images/kruger.jpeg" style="width:80.0%" />
+<img src="images/kruger.jpeg" style="width:30.0%" />
 
 #### Wassily Kandinsky, *Composition 8* (1923) [3]
 
-<img src="images/kandinsky.jpeg" style="width:80.0%" />
+<img src="images/kandinsky.jpeg" style="width:40.0%" />
 
 #### Piet Mondrian, *Trafalgar Square* (1939-1943) [4]
 
-<img src="images/mondrian.jpg" style="width:80.0%" />
+<img src="images/mondrian.jpg" style="width:25.0%" />
 
 ## Plan of Attack
 

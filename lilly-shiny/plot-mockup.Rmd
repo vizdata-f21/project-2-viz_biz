@@ -145,3 +145,8 @@ ggplot() +
         plot.margin = unit(c(0, 0, 0, 0), units = "inches"))
 ```
 
+References
+for ggcircle
+https://datavizpyr.com/annotate-a-plot-with-circle-ggplot2/
+multiple manual color scales
+https://pythonawesome.com/multiple-fill-and-color-scales-in-ggplot2/

@@ -144,6 +144,52 @@ ggplot() +
         panel.background = element_rect(fill = "#D9D2BF"),
         plot.margin = unit(c(0, 0, 0, 0), units = "inches"))
 ```
+```{r}
+triangles <- tribble(~x, ~y, ~group, ~color, ~color_category, ~layer_order,
+                     36, 44, 1, "#90AFC7", "blue", 2,
+                     55.5, 64.5, 1, "#90AFC7", "blue", 2,
+                     90, 34, 1, "#90AFC7", "blue", 2) %>%
+  mutate(
+    color_order = row_number(),
+    color = fct_reorder(color, color_order))
+
+id <- factor(c(1:16))
+
+shapes <- data.frame(
+  id = id,
+  color = c("#90AFC7", "#234533", "#E3D2D3", "#9E7237", "#E6D54B", "#8C898A", "#0B0B0B", "#B4B76F", "#CB3121",
+            "#C12B1D", "#C92B1F", "#B89D42", "#AE774C", "#B26A2D", "#744C1A", "#814819"),
+  color_category = c("blue", "green", "white", "brown", "yellow", "grey", "black", "green", "red", "red", "red",
+                     "yellow", "brown", "brown", "brown", "brown"),
+  layer_order = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+  transparency = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 1))
+
+coords <- data.frame(
+  id = rep(id, each = 3),
+  x = c(36, 55.5, 90, 80, 107, 99, 74.5, 102, 88, 80, 100.5, 97, 89, 94, 92, 88.5, 96, 89, 97.5, 104.3, 103.5, 
+        98, 107.5, 108.5, 93.2, 96, 93.5, 99, 97.5, 98.6, 99.2, 98, 99.5, 112, 122.5, 120, 112.5, 134, 111.5,
+        112, 126.5, 113.2, 111, 124, 112.3, 109.5, 125, 110.6),
+  y = c(44, 64.5, 34, 39.5, 39.5, 52.5, 35, 35, 84, 39.5, 39.5, 51, 75, 75, 79.5, 48.3, 46.5, 50, 47, 54, 55,
+        45, 33, 34, 47.2, 46.5, 47.7, 48.3, 47, 48.5, 43.3, 45, 43.5, 19, 16, 28, 59, 73, 61,
+        57, 33, 57.5, 51.5, 32, 52, 50.5, 27, 51)
+)
+
+triangles <- full_join(coords, shapes, by = "id") %>%
+  mutate(
+    color_order = row_number(),
+    color = fct_reorder(color, color_order))
+
+cols <- as.character(unique(triangles$color))
+
+ggplot() +
+  geom_polygon(data = triangles, aes(x = x, y = y, group = id, fill = color)) +
+  scale_fill_manual(values = cols) +
+  coord_fixed(xlim = c(0, 157), ylim = c(0, 86), expand = FALSE) +
+  theme_void() +
+  theme(legend.position = "none")
+
+```
+
 
 References
 for ggcircle

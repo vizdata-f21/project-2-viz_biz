@@ -207,6 +207,163 @@ ggplot() +
 ```
 
 ```{r}
+id <- factor(c(1:55))
+
+shapes <- data.frame(
+  id = id,
+  color = c("#0C0C0F", "#7A521E", "#F4E4E2", "#4F652D", "#DED5D3", "#070709", 
+            # new row
+            "#B4BDC7", "#09090B", "#DFD8D4", "#6D93AE", "#DBD3CA", "#0E0E11", "#D9D3BF", "#0B0B0D",
+            # new row
+            "#E9D5D0", "#CCCBB0", "#DFD6D1", "#E0DACC", "#40664B", "#DBD2CC", "#101014", "#E0D8D6", "#D5C6C1",
+            "#D9D2C7", "#0C0C0E",
+            # new row
+            "#7B9248", "#E7DFDD", "#D1D4CE", "#E1A1A0", "#C9BDB3", "#111013", "#D4CCC2", "#855A20",
+            "#D8D0CA", "#101414", "#D4CBC3", "#09080B", "#D5CEC9", "#141416", "#DFD9D3", "#0A0B0D",
+            # other squares
+            "#7B1B1C", "#E2D299", "#DA90A4", "#424242", "#050507", "#0D0C11", "#07030C", "#0C0A0F", "#1C1918", "#000000",
+            # hashtag
+            "#EBB2A8", "#E8E8ED", "#C54D54", "#DAD7DA"
+            ),
+  color_category = c("black", "brown", "white", "green", "white", "black", 
+                     # new row
+                     "grey", "black", "white", "blue", "white", "black", "white", "black",
+                     # new row
+                     "white", "white", "white", "white", "green", "white", "black", "white", "white", "white", "black",
+                     # new row
+                     "green", "white", "white", "pink", "white", "black", "white", "brown", "white", "black",
+                     "white", "black", "white", "black", "white", "black",
+                     # other squares
+                     "red", "yellow", "pink", "black", "black", "black", "black", "black", "black", "black",
+                     # hashtag
+                     "pink", "white", "pink", "white"),
+  layer_order = c(rep(1, 49), rep(2, 2), rep(1, 4)),
+  transparency = c(rep(1, 55)))
+
+coords <- data.frame(
+  id = rep(id, each = 4),
+  x = c(30.5, 31, 51, 50, 42, 44, 48, 46, 44, 45, 50, 48, 45, 46.5, 52.5, 50, 46.5, 47.5, 54.5, 52.5, 
+        47.5, 49.5, 56, 54.5, 46, 48, 49.5, 46.5, 48, 50, 52, 49.5, 50, 52.5, 55, 52, 52.5, 54.5, 57.5, 55,
+        54.5, 56, 59, 57.5,
+        56, 57, 60, 59, 
+        57, 58, 61.5, 60,
+        58, 59, 63, 61.5,
+        # new row
+        46.5, 49.5, 51, 48.5,
+        49.5, 52, 53.5, 51,
+        52, 55, 57, 53.5,
+        55, 57.5, 59, 57,
+        57.5, 59, 60, 59,
+        59, 60, 61.5, 60,
+        60, 61.5, 62.5, 61.5,
+        61.5, 63, 64, 62.5,
+        63, 66, 67, 64,
+        66, 68, 69, 67,
+        68, 70, 70.5, 69,
+        # new row
+        48.5, 51, 53, 51,
+        51, 53.5, 55.5, 53,
+        53.5, 57, 59, 55.5,
+        57, 59, 61, 59,
+        59, 60, 61.5, 61,
+        60, 61.5, 63, 61.5,
+        61.5, 62.5, 64, 63,
+        62.5, 64, 65, 64,
+        64, 67, 68, 65,
+        67, 69, 70, 68,
+        69, 70.5, 72, 70,
+        70.5, 72, 73, 72,
+        72, 73.5, 74.5, 73,
+        73.5, 74.5, 75.5, 74.5,
+        74.5, 75.5, 76.5, 75.5,
+        75.5, 77, 78, 76.5,
+        # other squares
+        125.5, 125.5, 130, 130,
+        116, 116, 118, 118,
+        100, 100, 107, 107,
+        119.5, 122.5, 124, 121,
+        122, 124.5, 126, 123,
+        127, 129, 130, 128,
+        127, 128.5, 129, 127.5,
+        128, 129.5, 131, 129,
+        125.3, 125.3, 130.3, 130.3,
+        115.5, 115.5, 118.5, 118.5,
+        # hashtag
+        129, 129, 132, 132,
+        129, 129, 132, 132,
+        132, 132, 135, 135,
+        132, 132, 135, 135
+        ),
+  y = c(33, 34, 23, 22, 28, 34, 30, 26, 34, 37, 33, 30, 37, 39.5, 36, 33, 39.5, 43, 38.5, 36, 
+        43, 47.5, 41, 38.5, 26, 30, 28.5, 25.5, 30, 33, 31.5, 28.5, 33, 36, 35, 31.5, 36, 38.5, 37, 35,
+        38.5, 41, 38.5, 37,
+        41, 43, 40, 38.5,
+        43, 44, 41, 40,
+        44, 46.5, 42.5, 41,
+        # new row
+        25.5, 28.5, 27, 24.5,
+        28.5, 31.5, 30, 27,
+        31.5, 35, 33.5, 30,
+        35, 37, 36, 33.5,
+        37, 38.5, 37, 36,
+        38.5, 40, 38.5, 37,
+        40, 41, 40, 38.5,
+        41, 42.5, 41.5, 40,
+        42.5, 45.5, 44.5, 41.5,
+        45.5, 47.5, 47, 44.5,
+        47.5, 49.5, 49, 47,
+        # new row
+        24.5, 27, 25.5, 23,
+        27, 30, 28.5, 25.5,
+        30, 33.5, 33, 28.5,
+        33.5, 36, 35, 33,
+        36, 37, 35.5, 35,
+        37, 38.5, 37, 35.5,
+        38.5, 40, 38.5, 37,
+        40, 41.5, 40, 38.5,
+        41.5, 44.5, 43, 40,
+        44.5, 47, 46, 43,
+        47, 49, 48, 46,
+        49, 50, 49.5, 48,
+        50, 52, 51, 49.5,
+        52, 53, 52, 51,
+        53, 54, 53.5, 52,
+        54, 56, 55, 53.5,
+        # other squares
+        7, 11, 11, 7,
+        79, 81, 81, 79,
+        60.5, 67, 67, 60.5,
+        61.5, 63.5, 60.5, 58.5,
+        58, 59.5, 57, 55.5,
+        73.5, 74.5, 72.5, 71.5,
+        68.5, 69.5, 68, 67,
+        66, 67, 65, 64,
+        6.8, 11.2, 11.2, 6.8,
+        78.5, 81.5, 81.5, 78.5,
+        # hashtag
+        47, 50, 50, 47,
+        50, 53, 53, 50,
+        50, 53, 53, 50,
+        47, 50, 50, 47
+        )
+)
+
+quads <- full_join(coords, shapes, by = "id") %>%
+  mutate(
+    color_order = row_number(),
+    color = fct_reorder(color, color_order))
+
+cols <- as.character(unique(quads$color))
+
+ggplot() +
+  geom_polygon(data = quads, aes(x = x, y = y, group = id, fill = color)) +
+  scale_fill_manual(values = cols) +
+  coord_fixed(xlim = c(0, 157), ylim = c(0, 86), expand = FALSE) +
+  theme_void() +
+  theme(legend.position = "none")
+```
+
+```{r}
 lines <- tribble(~grouping, ~x, ~xend, ~y, ~yend, ~thickness, ~layer_order,
                  1, 28, 72, 44, 57, 1, 1,
                  2, 46, 68, 8, 22, 1, 1,
@@ -311,11 +468,12 @@ horizontal_lines <- tibble(grouping = c(rep(0, 6), rep(22, 5)),
 lines <- bind_rows(lines, horizontal_lines)
 
 ggplot() +
-  geom_polygon(data = triangles, aes(x = x, y = y, group = id, fill = color)) +
+  #geom_polygon(data = triangles, aes(x = x, y = y, group = id, fill = color)) +
+  geom_polygon(data = quads, aes(x = x, y = y, group = id, fill = color)) +
   scale_fill_manual(values = cols) +
   new_scale_fill() +
   new_scale_color() +
-  geom_circle(data = circles, aes(x0 = x, y0 = y, r = radius, fill = color, color = color)) +
+  #geom_circle(data = circles, aes(x0 = x, y0 = y, r = radius, fill = color, color = color)) +
   scale_fill_manual(values = circle_cols) +
   scale_color_manual(values = circle_cols) +
   geom_segment(data = lines, aes(x = x, xend = xend, y = y, yend = yend)) +

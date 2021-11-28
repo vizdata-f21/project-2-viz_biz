@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggforce)
 library(ggnewscale)
+library(magrittr)
 ```
 
 ```{r}
@@ -58,6 +59,13 @@ circles <- tribble(~x, ~y, ~shape, ~color, ~radius, ~layer_order, ~color_categor
                 96.5, 46, "fill", "#E7DEDC", 3, 2, "white",
                 96.5, 46, "fill", "#33388F", 3.7, 3, "blue",
                 96.5, 46, "stroke", "#170E01", 3.9, 4, "black")
+
+circles %<>%
+  mutate(
+    color_order = row_number(),
+    color = fct_reorder(color, color_order))
+
+circle_cols <- as.character(circles$color)
 
 circle_1 <- circles %>%
   filter(layer_order == 1) %>%
@@ -141,18 +149,27 @@ ggplot() +
   guides(color = NULL) +
   theme_void() +
   theme(legend.position = "none",
-        panel.background = element_rect(fill = "#D9D2BF"),
+        #panel.background = element_rect(fill = "#D9D2BF"),
         plot.margin = unit(c(0, 0, 0, 0), units = "inches"))
 ```
-```{r}
-triangles <- tribble(~x, ~y, ~group, ~color, ~color_category, ~layer_order,
-                     36, 44, 1, "#90AFC7", "blue", 2,
-                     55.5, 64.5, 1, "#90AFC7", "blue", 2,
-                     90, 34, 1, "#90AFC7", "blue", 2) %>%
-  mutate(
-    color_order = row_number(),
-    color = fct_reorder(color, color_order))
 
+cols <- as.character(circle$color)
+
+circle %<>%
+  arrange(desc(layer_order))
+
+ggplot() +
+  geom_circle(data = circle, aes(x0 = x, y0 = y, r = radius, color = color, fill = color)) +
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = cols) +
+  coord_fixed(xlim = c(0, 157), ylim = c(0, 86), expand = FALSE) +
+  guides(color = NULL) +
+  theme_void() +
+  theme(legend.position = "none",
+        #panel.background = element_rect(fill = "#D9D2BF"),
+        plot.margin = unit(c(0, 0, 0, 0), units = "inches"))
+        
+```{r}
 id <- factor(c(1:16))
 
 shapes <- data.frame(
@@ -161,7 +178,7 @@ shapes <- data.frame(
             "#C12B1D", "#C92B1F", "#B89D42", "#AE774C", "#B26A2D", "#744C1A", "#814819"),
   color_category = c("blue", "green", "white", "brown", "yellow", "grey", "black", "green", "red", "red", "red",
                      "yellow", "brown", "brown", "brown", "brown"),
-  layer_order = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+  layer_order = c(4, 6, 5, 3, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1),
   transparency = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 1))
 
 coords <- data.frame(
@@ -187,7 +204,124 @@ ggplot() +
   coord_fixed(xlim = c(0, 157), ylim = c(0, 86), expand = FALSE) +
   theme_void() +
   theme(legend.position = "none")
+```
 
+```{r}
+lines <- tribble(~grouping, ~x, ~xend, ~y, ~yend, ~thickness, ~layer_order,
+                 1, 28, 72, 44, 57, 1, 1,
+                 2, 46, 68, 8, 22, 1, 1,
+                 2, 50, 66, 3, 17.7, 1, 1,
+                 3, 65, 78, 16, 15.6, 1, 1,
+                 3, 65, 77, 18.4, 18, 1, 1,
+                 4, 68, 88, 10, 84, 1.5, 1,
+                 4, 88, 111, 84, 6, 1.5, 2,
+                 5, 37, 55.5, 45, 64.5, 1, 1,
+                 5, 55.5, 90, 64.5, 34, 1, 1,
+                 6, 42, 49.5, 28, 47, 1, 1,
+                 6, 49.5, 62, 47, 36, 1, 1,
+                 6, 46, 59, 26, 46, 1, 1,
+                 6, 59, 65, 46, 40, 1, 1,
+                 6, 46.5, 70, 25.5, 49.5, 1, 1,
+                 6, 70, 72, 49.5, 48, 1, 1,
+                 6, 49, 77, 24, 56, 1, 1,
+                 6, 77, 78, 56, 55, 1, 1,
+                 6, 44, 53, 34, 25, 1, 1,
+                 6, 45.5, 55.5, 37, 28.5, 1, 1,
+                 6, 46.5, 59, 39.5, 33, 1, 1,
+                 6, 48, 61, 43, 35, 1, 1,
+                 6, 57, 63, 43, 37, 1, 1,
+                 6, 58, 64, 44, 39, 1, 1,
+                 6, 66, 68, 45.5, 43, 1, 1,
+                 6, 68, 70, 48, 46, 1, 1,
+                 6, 72, 73, 50, 49, 1, 1,
+                 6, 74, 75, 52, 51, 1, 1,
+                 6, 75, 76, 53, 52, 1, 1,
+                 6, 76, 77, 54.5, 53.5, 1, 1,
+                 6, 51, 78, 23, 55, 1, 1, 
+                 7, 55.5, 120, 28.5, 27.6, 1, 1, 
+                 # new page
+                 8, 87.5, 87.5, 0, 32, 1, 1, 
+                 9, 85, 99, 12, 27, 1, 1, 
+                 10, 85, 99, 12, 27, 1, 1, 
+                 10, 84.5, 98.5, 12.5, 27.5, 1, 1, 
+                 10, 84, 98, 13, 28, 1, 1, 
+                 11, 83.5, 98, 19.5, 33.5, 1, 1, 
+                 11, 83, 97.5, 20, 34, 1, 1, 
+                 11, 82.5, 97, 20.5, 34.5, 1, 1, 
+                 12, 104, 118.5, 10.5, 11, 1, 1, 
+                 12, 97, 117.5, 20, 20, 1, 1, 
+                 13, 120, 98, 15, 36, 2, 1,
+                 14, 132, 107, 36, 44.5, 3, 1,
+                 15, 128, 131.5, 8.5, 8.5, 1.5, 1,
+                 15, 128, 131.5, 9.1, 9.1, 1, 1,
+                 16, 52, 86, 28, 38, 3, 1,
+                 17, 53.5, 90, 33, 40, 3, 1,
+                 # return to upper left
+                 18, 55.5, 55.5, 56, 78, 1, 1,
+                 18, 53, 61, 68.6, 68.9, 1, 1,
+                 18, 52, 60, 70, 70.4, 1, 1,
+                 18, 51, 66, 77, 70, 1, 1,
+                 19, 76, 98, 78, 64, 1, 1,
+                 19, 77, 98, 73, 64, 1, 1,
+                 20, 78, 91, 54.5, 60.5, 1, 1,
+                 20, 78.5, 91.5, 54, 60, 1, 1,
+                 21, 77, 98, 51, 62, 1, 1, # needs orange right above
+                 21, 88, 101.5, 52, 64, 1, 1,
+                 21, 84.5, 102.5, 46.5, 63.5, 1, 1,
+                 21, 91.5, 101.5, 51, 58.5, 1, 1, #needs yellow right below
+                 22, 99.5, 99.5, 70, 86, 1, 1,
+                 # top right checkerboard cluster
+                 23, 102.5, 142, 65, 86, 1, 1,
+                 23, 104, 147, 63.5, 86, 1, 1,
+                 23, 105, 156, 62, 86, 1, 1,
+                 23, 106, 124, 60, 69.5, 1, 1,
+                 23, 104, 134, 56, 73, 1, 1,
+                 23, 105, 109.5, 54.5, 57, 1, 1,
+                 23, 111.5, 134, 58.5, 73, 1, 1,
+                 23, 106, 110, 53, 55.5, 1, 1,
+                 23, 112, 122.5, 57, 63.5, 1, 1,
+                 23, 107, 112, 51, 54, 1, 1,
+                 23, 108, 113, 49.5, 52.5, 1, 1,
+                 23, 104, 137, 56, 4, 1, 1,
+                 23, 105.5, 125, 57, 26.5, 1, 1,
+                 23, 108, 125, 56, 26.5, 1, 1,
+                 23, 102.5, 124, 65, 32, 1, 1,
+                 23, 104.5, 124, 66.3, 32, 1, 1,
+                 23, 106, 126.5, 67, 33.5, 1, 1,
+                 23, 108, 126.5, 68, 33.5, 1, 1,
+                 23, 109.5, 113, 69, 64, 1, 1,
+                 23, 111.5, 116.5, 70, 65.5, 1, 1,
+                 23, 119, 120, 74, 72, 1, 1,
+                 23, 121, 122, 75, 73, 1, 1,
+                 23, 129, 130, 79, 77.5, 1, 1,
+                 23, 131.5, 80.5, 132.5, 78.5, 1, 1,
+                 23, 138.5, 140, 84, 82.5, 1, 1,
+                 23, 141, 142, 85.5, 83.5, 1, 1
+) %>%
+  mutate(thickness = thickness / 10)
+
+horizontal_lines <- tibble(grouping = c(rep(0, 6), rep(22, 5)),
+       x = c(rep(124, 3), seq(129, 135, 3), rep(98, 3), rep(97.5, 2)),
+       xend = c(rep(139, 3), seq(129, 135, 3), rep(101.7, 5)),
+       y = c(seq(47, 53, 3), rep(42, 3), seq(71.1, 71.9, length.out = 3), seq(82.5, 82.9, length.out = 2)),
+       yend = c(seq(47, 53, 3), rep(57, 3), seq(71.2, 72, length.out = 3), seq(82.6, 83, length.out = 2)),
+       thickness = c(rep(1, 6), rep(0.5, 5)),
+       layer_order = rep(1, 11))
+
+lines <- bind_rows(lines, horizontal_lines)
+
+ggplot() +
+  geom_polygon(data = triangles, aes(x = x, y = y, group = id, fill = color)) +
+  scale_fill_manual(values = cols) +
+  new_scale_fill() +
+  new_scale_color() +
+  geom_circle(data = circles, aes(x0 = x, y0 = y, r = radius, fill = color, color = color)) +
+  scale_fill_manual(values = circle_cols) +
+  scale_color_manual(values = circle_cols) +
+  geom_segment(data = lines, aes(x = x, xend = xend, y = y, yend = yend)) +
+  coord_fixed(xlim = c(0, 157), ylim = c(0, 86), expand = FALSE) +
+  theme_void() +
+  theme(legend.position = "none")
 ```
 
 

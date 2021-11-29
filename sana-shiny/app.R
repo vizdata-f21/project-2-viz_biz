@@ -89,6 +89,15 @@ ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
         mainPanel(
             h2(strong("Piet Mondrian: Trafalgar Square")),
             h5(em("1939-1943")),
+            p(""),
+            p("Inspired by the original artwork, we invite you to recreate your
+            own modified piece of Piet Mondrian's masterpiece and adjust the
+            settings in the", em("Graphics Input"), "sidebar on the left
+            according to your preference."),
+            p("Feel free to toggle between different amount of horizontal lines
+            in the artwork and to adjust the color of the boxes pictured. Experiment
+            with your own varieties of abstract ways to
+            modify this plot and figure out your desired unique style!"),
             plotOutput("plot")
         )
 ))))

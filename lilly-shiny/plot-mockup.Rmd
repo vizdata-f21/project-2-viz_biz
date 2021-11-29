@@ -40,7 +40,7 @@ circles <- tribble(~x, ~y, ~shape, ~color, ~radius, ~layer_order, ~color_categor
                 82, 78, "fill", "#80808C", 1.5, 1, "grey",
                 88, 65, "fill", "#FFFEFD", 1.5, 1, "white",
                 88, 65, "stroke", "#666561", 1.7, 2, "grey",
-                88, 65, "fill", "#B3BBB2", 0.8, 3, "green",
+                88, 65, "fill", "#B3BBB2", 2.5, 3, "green",
                 96, 73.5, "fill", "#2A2981", 1.3, 1, "blue",
                 96, 73.5, "fill", "#CBC5C0", 1.8, 2, "grey",
                 96, 73.5, "stroke", "#2E2A28", 2, 3, "black",
@@ -58,7 +58,8 @@ circles <- tribble(~x, ~y, ~shape, ~color, ~radius, ~layer_order, ~color_categor
                 97, 46, "fill", "#050405", 0.5, 1, "black",
                 96.5, 46, "fill", "#E7DEDC", 3, 2, "white",
                 96.5, 46, "fill", "#33388F", 3.7, 3, "blue",
-                96.5, 46, "stroke", "#170E01", 3.9, 4, "black")
+                96.5, 46, "stroke", "#170E01", 3.9, 4, "black",
+                )
 
 circles %<>%
   mutate(
@@ -183,10 +184,10 @@ shapes <- data.frame(
 
 coords <- data.frame(
   id = rep(id, each = 3),
-  x = c(36, 55.5, 90, 80, 107, 99, 74.5, 102, 88, 80, 100.5, 97, 89, 94, 92, 88.5, 96, 89, 97.5, 104.3, 103.5, 
+  x = c(36, 55.5, 90, 80, 107, 99, 73, 104, 88, 80, 100.5, 97, 89, 94, 92, 88.5, 96, 89, 97.5, 104.3, 103.5, 
         98, 107.5, 108.5, 93.2, 96, 93.5, 99, 97.5, 98.6, 99.2, 98, 99.5, 112, 122.5, 120, 112.5, 134, 111.5,
         112, 126.5, 113.2, 111, 124, 112.3, 109.5, 125, 110.6),
-  y = c(44, 64.5, 34, 39.5, 39.5, 52.5, 35, 35, 84, 39.5, 39.5, 51, 75, 75, 79.5, 48.3, 46.5, 50, 47, 54, 55,
+  y = c(44, 64.5, 34, 39.5, 39.5, 52.5, 28, 28, 84, 39.5, 39.5, 51, 75, 75, 79.5, 48.3, 46.5, 50, 47, 54, 55,
         45, 33, 34, 47.2, 46.5, 47.7, 48.3, 47, 48.5, 43.3, 45, 43.5, 19, 16, 28, 59, 73, 61,
         57, 33, 57.5, 51.5, 32, 52, 50.5, 27, 51)
 )
@@ -590,9 +591,108 @@ ggplot() +
   theme(legend.position = "none")
 ```
 
+```{r half-circles}
+make_half_circle <- function(id, center = c(0, 0), diameter = 1, thickness = 1, layer_order = 1,
+                             npoints = 100, start = 0, end = 1, color = "black", color_category = "black")
+{
+  tt <- seq(start*pi, end*pi, length.out=npoints)
+  data.frame(x = center[1] + diameter / 2 * cos(tt), 
+             y = center[2] + diameter / 2 * sin(tt),
+             id = id,
+             thickness = thickness,
+             layer_order = layer_order,
+             color = color,
+             color_category = color_category)
+}
+
+half_circle_stroke <- bind_rows(
+  make_half_circle(1, c(72, 28), 10.5),
+  make_half_circle(2, c(82.5, 28), 10.5, 0.5),
+  #make_half_circle(3, c(93, 28), 10.5, 0.5),
+  make_half_circle(4, c(103.5, 28), 10.5, 0.75),
+  make_half_circle(5, c(77.25, 22.75), 10.5, 0.5),
+  make_half_circle(6, c(87.75, 22.75), 10.5, 0.5),
+  make_half_circle(7, c(93, 17.5), 10.5, 0.5),
+  make_half_circle(8, c(101, 79), 5, start = -1.5, end = -.5),
+  make_half_circle(9, c(88, 49), 8, start = 0.25, end = 1.25),
+  make_half_circle(10, c(93.5, 53), 6, start = 0.25, end = 1.25),
+  make_half_circle(11, c(97, 57), 4.5, start = 0.25, end = 1.25),
+  make_half_circle(12, c(100, 59.5), 3, start = 0.25, end = 1.25),
+  make_half_circle(13, c(92, 58), 52, start = 0.9, end = 0.65),
+  make_half_circle(14, c(81, 59.5), 29, start = 1, end = 0.65),
+  # funky circles
+  make_half_circle(15, c(63, 42), 2, 0.5, start = 0.7, end = 0.35),
+  make_half_circle(16, c(55.5, 43.5), 3.1, 2, start = 1.2, end = -0.2),
+  make_half_circle(17, c(44, 32), 11.5, 0.5, start = 1.15, end = 0.4)
+  )
+
+half_circle_stroke_color <- bind_rows(
+  make_half_circle(1, c(72,28), 10, color = "#83809F", color_category = "blue"),
+  make_half_circle(2, c(82.5, 28), 10, color = "#C9BE3B", color_category = "yellow"),
+  make_half_circle(3, c(93, 28), 10, color = "#A62115", color_category = "red"),
+  make_half_circle(5, c(77.25, 22.75), 10, color = "#D1A0A0", color_category = "pink"),
+  make_half_circle(6, c(88, 49), 8.5, start = 0.25, end = 1.25, color = "#D47B76", color_category = "pink"),
+  make_half_circle(7, c(93.5, 53), 6.5, start = 0.25, end = 1.25, color = "#A2112D", color_category = "red"),
+  make_half_circle(8, c(97, 57), 5, start = 0.25, end = 1.25, color = "#AF3241", color_category = "pink"),
+  make_half_circle(9, c(100, 59.5), 3.5, start = 0.25, end = 1.25, color = "#C15E6A", color_category = "pink"),
+  make_half_circle(10, c(103, 46), 8, 2, start = -0.35, end = 0.65, color = "#C56D62", color_category = "pink"),
+  # funky circles
+  make_half_circle(11, c(63, 43), 4, 3, start = 0.85, end = 0.22, color = "#99ABBD", color_category = "blue"),
+  make_half_circle(12, c(63.5, 43), 6, start = 0.85, end = 0.25, color = "#E0C6BE", color_category = "pink"),
+  make_half_circle(13, c(63.5, 43), 6.5, start = 0.85, end = 0.25, color = "#A4B89E", color_category = "green"),
+  make_half_circle(14, c(55.5, 43.5), 3.5, 2, start = 1.2, end = -0.2, color = "#3F5F47", color_category = "green"),
+  make_half_circle(15, c(55.5, 44), 5, start = 1, end = 0, color = "#D2A3B5", color_category = "pink"),
+  make_half_circle(16, c(55.5, 44), 5.3, start = 1, end = 0, color = "#D5DBB4", color_category = "green"),
+  make_half_circle(17, c(44, 32), 11.7, 0.5, start = 1.15, end = 0.4, color = "#EBEDA0", color_category = "yellow")
+  ) %>%
+  mutate(
+    color_order = row_number(),
+    color = fct_reorder(color, color_order)
+  )
+
+cols_hcs <- as.character(unique(half_circle_stroke_color$color))
+
+half_circle_fill <- bind_rows(
+  make_half_circle(1, c(72,28), 10.5, color = "#EDE5E3", color_category = "white"),
+  make_half_circle(2, c(82.5, 28), 10.5, color = "#F3EEEE", color_category = "white"),
+  make_half_circle(3, c(93, 28), 10.5, color = "#F4F1EE", color_category = "white"),
+  make_half_circle(4, c(103.5, 28), 10.5, color = "#F6F5F6", color_category = "white"),
+  make_half_circle(5, c(103, 46), 2, start = -0.35, end = -1.35, color = "#F5EDF1", color_category = "white"),
+  make_half_circle(6, c(103, 46), 2, start = -0.35, end = 0.65, color = "#111112", color_category = "black"),
+  make_half_circle(7, c(103, 46), 5, start = -0.35, end = 0.65, color = "#DADBEB", color_category = "grey",
+                   layer_order = 2),
+  make_half_circle(8, c(103, 46), 6, 2, start = -0.35, end = 0.65, color = "#CEC161", color_category = "yellow"),
+  # funky circles
+  (make_half_circle(9, c(63.5, 43), 6.5, start = 0.85, end = 0.25, color = "#EEEBF1", color_category = "white") %>%
+     add_row(id = 9, x = 63, y = 42.5, thickness = 1, layer_order = 1, color = "#EEEBF1", color_category = "white")),
+  (make_half_circle(10, c(55.5, 44), 5.3, start = 1, end = 0, color = "#E2D9D6", color_category = "white") %>%
+     add_row(id = 10, x = 56, y = 41, thickness = 1, layer_order = 1, color = "#E2D9D6", color_category = "white"))
+  ) %>%
+  mutate(
+    color_order = row_number(),
+    color = fct_reorder(color, color_order)
+  )
+
+cols_hcf <- as.character(unique(half_circle_fill$color))
+
+ggplot() +
+  #geom_polygon(data = quads, aes(x = x, y = y, group = id)) +
+  geom_polygon(data = half_circle_fill, aes(x = x, y = y, group = id, fill = color)) +
+  scale_fill_manual(values = cols_hcf) +
+  geom_path(data = half_circle_stroke, aes(x = x, y = y, group = id)) +
+  geom_path(data = half_circle_stroke_color, aes(x = x, y = y, group = id, color = color)) +
+  geom_segment(data = lines, aes(x = x, xend = xend, y = y, yend = yend)) +
+  scale_color_manual(values = cols_hcs) +
+  coord_fixed(xlim = c(0, 152), ylim = c(0, 86), expand = FALSE) +
+  theme_void() +
+  theme(legend.position = "none")
+```
+
 
 References
 for ggcircle
 https://datavizpyr.com/annotate-a-plot-with-circle-ggplot2/
 multiple manual color scales
 https://pythonawesome.com/multiple-fill-and-color-scales-in-ggplot2/
+for half circle function
+https://stackoverflow.com/questions/28185743/draw-a-half-circle-with-ggplot2

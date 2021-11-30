@@ -1,0 +1,70 @@
+---
+title: "Democratizing Modern Art"
+subtitle: "Customizable Artworks using Shiny App"
+author: "Viz Biz <br> Eli, Lilly, Phillip, Sana"
+institute: "Duke University"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r load-packages, include = FALSE}
+library(tidyverse)
+library(knitr)
+library(viridis)
+library(xaringanthemer)
+library(ggrepel)
+library(scales)
+library(gganimate)
+library(gridExtra)
+```
+
+```{r setup, include = FALSE}
+# For better figure resolution
+knitr::opts_chunk$set(
+  fig.retina = 3, 
+  dpi = 300, 
+  fig.width = 6, 
+  fig.asp = 0.618, 
+  out.width = "70%"
+  )
+```
+
+```{r load-data, include = FALSE}
+```
+
+```{r style-slides, echo = FALSE}
+style_xaringan(
+  title_slide_background_image = "img/watercolour_sys02_img32_percolate.jpg"
+)
+```
+
+Class: middle, inverse, center
+
+### Big Picture
+
+**Goal:** Make expensive, luxury modern artworks that are once accessible only in museum and private collections to be accessible to the public mass.
+
+- We will also make the artwork *customizable* and reproducible using the Shiny App.
+
+- Users will be to download their own customized artwork.
+
+---
+
+### Demo
+
+We will demo you to our final Shiny App with a click [***here***](https://phillipharmadi.shinyapps.io/phillip-shiny/).
+
+---
+
+### Thank You
+
+Feel free to ask any questions to our team!
+

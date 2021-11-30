@@ -24,7 +24,7 @@ We plan to recreate and make customizable the following four images:
 
 #### Frank Stella, *Lettre sur les sourds et muets II* (1974) [1]
 
-<img src="images/stella.jpg" style="width:40.0%" />
+<img src="images/frank_stella.png" style="width:40.0%" />
 
 #### Barbara Kruger, *Untitled (Your body is a battleground)* (1989) [2]
 

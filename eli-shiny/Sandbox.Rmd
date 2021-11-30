@@ -3,6 +3,13 @@ title: "Sandbox"
 output: html_document
 ---
 
+#reactive
+-path
+#fonts
+-not updating
+#placement of colors next to each other?
+-so it all  fits in one?
+
 Things to alter
 -color of text boxes (geom_rect --> size dependent on #letters) - one color for the text box color (gradient hex) - text inside gonna be white
 -what the text says - 3 different textboxes (filename)
@@ -10,122 +17,91 @@ Things to alter
 -effect on the image??
 
 
-```{r}
+```{r packages}
 library(tidyverse)
 library(cowplot)
-library(stringr)
 library(magick)
-library(rasterImage)
 ```
 
-```{r}
-# #read image and convert to grayscale
-# #this will have to be changed when combining to shiny
-# img <- image_read("/home/guest/R/project-2-viz_biz/eli-shiny/img/kruger.png") %>%
-#   image_convert(colorspace = "gray")
+```{r inputs}
+path <- "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"
+
+#text
+top <- "Your body"
+middle <- "is a"
+bottom <- "battleground"
+text_size <- 10
+rect_color <- "red"
+text_color <- "white"
+font <- "times"
+emphasis <- "bold"
+
+#0 to 5
+border_size <- 10
+#0 to 200
+img_brightness <- 100
+img_saturation <- 100
+img_hue <- 100
 ```
 
-```{r}
-library(jpeg)
-library(png)
-my_image <- readPNG("/home/guest/R/project-2-viz_biz/eli-shiny/img/kruger.png")
- 
+```{r dimensions}
+my_image <- image_read(path)
 
-height <- dim(my_image)[1]
-width <- dim(my_image)[2]
+if (image_info(my_image)$height>700 | image_info(my_image)$width>700) {
+  if(image_info(my_image)$height>=image_info(my_image)$width){
+            my_image <- image_scale(my_image, "x700")
+        } else {
+            my_image <- image_scale(my_image, "700")
+        }
+    }
 
+height <- image_info(my_image)$height
+width <- image_info(my_image)$width
 
-dev.new(width = width, height = height, unit = "px")
-plot(x= width, y = height, xlim=c(0,width), ylim=c(0,height))
-```
+plot_size <- tribble(
+  ~x, ~y,
+  0, 0, 
+  width, height)
 
-
-height <- dim(my_image)[1]
-width <- dim(my_image)[2]
-
-# Set up a plot area with no plot
-plot(1:50, type='n', main="", xlab="x", ylab="y", asp = 1)
- 
-# Get the plot information so the image will fill the plot box, and draw it
-lim <- par()
-rasterImage(my_image, 
-            xleft=1, xright=2, 
-            ybottom=1.3, ytop=1.7)
-grid()
- 
-#Add your plot !
-lines(
-  x=c(1, 1.2, 1.4, 1.6, 1.8, 2.0), 
-  y=c(1, 1.3, 1.7, 1.6, 1.7, 1.0), 
-  type="b", lwd=5, col="black")
-
-
-```
-
-
-
-```{r}
-# Get dimensions
-img_w <- image_info(img)$width
-img_h <- image_info(img)$height
-img_ratio <- img_w / img_h
-
-# Resize the longest dimension to 80 pixels
-if (img_w >= img_h) {
-  img <- image_resize(img, "80")
+if (height>width) {
+size = width/500
 } else {
-  img <- image_resize(img, ("x80"))
+size  = height/500
 }
 ```
 
-```{r}
-plot(1:80,ty="n")
-rasterImage(img,0,0,63,80)
+```{r labels}
+#unsure of correct ratio for borders
+label_maker <- tribble(
+  ~text, ~x, ~y,
+  top, width/2, height-30*size,
+  middle, width/2, height/2,
+  bottom, width/2, 30*size)
 ```
 
-
-
-
-
-
-```{r}
-img_array <- drop(as.integer(img[[1]]))
-rownames(img_array) <- 1:nrow(img_array)
-colnames(img_array) <- 1:ncol(img_array)
-
-# Create data frame from array and rename columns
-img_df <- as.data.frame.table(img_array) %>% 
-  `colnames<-`(c("y", "x", "b")) %>% 
-  mutate(
-		across(everything(), as.numeric),
-		# map b (0-255) to bf (1-0), so that "brighter" values become smaller numbers
-		bf = 1 - b / 255,
-		# and then map to i (1-10) to use with the character ramp
-		i = round(bf * 10),
-		# replace 0 with 1
-		i = if_else(i == 0, 1, i)
-		) %>%
-  rowwise() %>%
-  arrange(y, x)
-
+```{r plotting}
+ggplot() +
+  geom_point(data = plot_size, aes(x = x, y = y), alpha = 0) +
+    geom_rect(aes(xmin = 0, xmax = width,
+            ymin = 0, ymax = height),
+            color = rect_color,
+            size = border_size,
+            fill = NA) +
+  draw_image(image_modulate(my_image, 
+               brightness = img_brightness, 
+               saturation = img_saturation, 
+               hue = img_hue), x = 0, y=0, width = width,  height = height) +
+  geom_label(data = label_maker, 
+             mapping = aes(x = x, 
+                           y = y, 
+                           label = text),
+             size = text_size,
+             fill = rect_color,
+             color = text_color,
+             family = font,
+             fontface = emphasis,
+             label.size = 0,
+             label.r = unit(0, "lines")) +
+  coord_equal() +
+  theme_void()
 ```
-
-
-
-
-
-
-
-
-
-```{r}
-ggplot(img_df) +
-  # size of text is calculated from image height and is approximate
-	geom_text(aes(x, y, label = c), family = "Courier Bold", size = max(img_df$y)/20) +
-	scale_y_reverse() +
-	coord_fixed() +
-	theme_void()
-```
-
-
-

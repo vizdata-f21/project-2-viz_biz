@@ -24,19 +24,11 @@ We plan to recreate and make customizable the following four images:
 
 #### Frank Stella, *Lettre sur les sourds et muets II* (1974) [1]
 
-<img src="images/frank_stella.png" style="width:40.0%" />
-
 #### Barbara Kruger, *Untitled (Your body is a battleground)* (1989) [2]
-
-<img src="images/kruger.jpeg" style="width:30.0%" />
 
 #### Wassily Kandinsky, *Composition 8* (1923) [3]
 
-<img src="images/kandinsky.jpeg" style="width:40.0%" />
-
 #### Piet Mondrian, *Trafalgar Square* (1939-1943) [4]
-
-<img src="images/mondrian.jpg" style="width:25.0%" />
 
 To recreate these modern art pieces, we will be creating our own dataframes, which will incorporate user input to customize certain artistic aspects of each piece. We will also utilize mathematical functions and specific packages such as `library(colourpicker)` and `library(generativeart)` to facilitate the digitization of these art pieces. 
 
@@ -98,7 +90,11 @@ in the ggplot. `geom_polygon(..., size = borderline())`
 
 ### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
 
+<img src="images/kruger.jpeg" style="width:30.0%" />
+
 ### Wassily Kandinsky, *Composition 8* (1923)
+
+<img src="images/kandinsky.jpeg" style="width:40.0%" />
 
 ### Piet Mondrian, *Trafalgar Square* (1939-1943) 
 

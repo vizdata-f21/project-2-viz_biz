@@ -9,6 +9,7 @@ of 20th century abstract art.
 Painted from 1939-1943, *Trafalgar Square* was the first in a series of paintings
 Mondrian created named after locations in cities that gave him refuge during World War II. 
 
+<img src="mondrian.jpg" style="width:30.0%" />
 
 The painting’s geometric shapes and lines are what allowed us to recreate this 
 visualization in ggplot2. 2 distinct

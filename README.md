@@ -131,7 +131,7 @@ red and yellow in different colored boxes. We wanted to give users the ability t
 these colors based on their likings and to understand how a new color scheme 
 changes the vision of the art. 
 
-To do this, we will use the 'checkboxGroupInput' in the UI interface
+To do this, we will use the `checkboxGroupInput` in the UI interface
 to allow users to select four colors out of list of multiple color options. If the user picks 
 more than four colors, only the first four colors will show up. If the user uses less than 
 four colors, the boxes corresponding to the missing color will show up blank (i.e. white). 

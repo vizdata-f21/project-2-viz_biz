@@ -17,14 +17,14 @@ set.seed(54)
 
 ```{r layer-function}
 make_layers <- function(df){
-  n <- max(df$layer_order)
+  n <- max(df$order)
   coords <- vector(mode = "complex", length = n)
   colors <- vector(mode = "complex", length = n)
   df_list = mget(ls(pattern = "new_df[1-2]"))
   
   for (i in 1:n){
     new_df <- df %>%
-      filter(layer_order == i) %>%
+      filter(order == i) %>%
       mutate(
         color_order = row_number(),
         color = fct_reorder(color, color_order))
@@ -39,7 +39,7 @@ make_layers <- function(df){
 ```
 
 ```{r make-circles}
-circles <- tribble(~x, ~y, ~shape, ~color, ~radius, ~layer_order, ~color_cat, ~grouping,
+circles <- tribble(~x, ~y, ~shape, ~color, ~radius, ~order, ~color_cat, ~grouping,
                 30, 69, "fill", "#583B76", 6, 1, "purple", 1,
                 30, 69, "fill", "#0F0F11", 12, 2, "black", 1,
                 30, 69, "fill", "#CA7A7C", 14, 4, "pink", 1,
@@ -100,7 +100,7 @@ shapes <- data.frame(
             "#C12B1D", "#C92B1F", "#B89D42", "#AE774C", "#B26A2D", "#744C1A", "#814819"),
   color_cat = c("blue", "green", "white", "brown", "yellow", "grey", "black", "green", "red", "red", "red",
                      "yellow", "brown", "brown", "brown", "brown"),
-  layer_order = c(4, 6, 5, 3, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1),
+  order = c(4, 6, 5, 3, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1),
   alpha = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9, 1, 1, 1, 1))
 
 coords <- data.frame(
@@ -179,7 +179,7 @@ shapes <- data.frame(
                      # boomerang
                      "black", "green"
                      ),
-  layer_order = c(rep(1, 49), rep(2, 2), rep(1, 6), 2, rep(1, 2), 4, rep(1, 6), 3, rep(1, 16)),
+  order = c(rep(1, 49), rep(2, 2), rep(1, 6), 2, rep(1, 2), 4, rep(1, 6), 3, rep(1, 16)),
   alpha = c(rep(1, 84)),
   grouping = c(rep(1, 41), 2:9, 2, 3, rep(10, 4), rep(11, 21), rep(12, 6), rep(13, 2)))
 
@@ -383,7 +383,7 @@ quads_l <- make_layers(quads)
 ```
 
 ```{r make-lines}
-lines <- tribble(~grouping, ~x, ~xend, ~y, ~yend, ~thickness, ~layer_order,
+lines <- tribble(~grouping, ~x, ~xend, ~y, ~yend, ~thickness, ~order,
                  1, 28, 72, 44, 57, 1, 1,
                  2, 46, 68, 8, 22, 1, 1,
                  2, 50, 66, 3, 17.7, 1, 1,
@@ -483,7 +483,7 @@ horizontal_lines <- tibble(grouping = c(rep(0, 6), rep(22, 5)),
        y = c(seq(47, 53, 3), rep(42, 3), seq(71.1, 71.9, length.out = 3), seq(82.5, 82.9, length.out = 2)),
        yend = c(seq(47, 53, 3), rep(57, 3), seq(71.2, 72, length.out = 3), seq(82.6, 83, length.out = 2)),
        thickness = c(rep(1, 6), rep(0.5, 5)),
-       layer_order = rep(1, 11))
+       order = rep(1, 11))
 
 lines <- bind_rows(lines, horizontal_lines) %>%
   mutate(color = "black", 
@@ -493,14 +493,14 @@ lines_l <- make_layers(lines)
 ```
 
 ```{r make-semicircles}
-make_half_circle <- function(id, center = c(0, 0), diameter = 1, thickness = 1, layer_order = 1,
+make_half_circle <- function(id, center = c(0, 0), diameter = 1, thickness = 1, order = 1,
                              npoints = 100, start = 0, end = 1, color = "black", color_cat = "black"){
   tt <- seq(start*pi, end*pi, length.out=npoints)
   data.frame(x = center[1] + diameter / 2 * cos(tt), 
              y = center[2] + diameter / 2 * sin(tt),
              id = id,
              thickness = thickness,
-             layer_order = layer_order,
+             order = order,
              color = color,
              color_cat = color_cat)
 }
@@ -560,14 +560,14 @@ semicircle_fill <- bind_rows(
   make_half_circle(5, c(103, 46), 2, start = -0.35, end = -1.35, color = "#F5EDF1", color_cat = "white"),
   make_half_circle(6, c(103, 46), 2, start = -0.35, end = 0.65, color = "#111112", color_cat = "black"),
   make_half_circle(7, c(103, 46), 5, start = -0.35, end = 0.65, color = "#DADBEB", color_cat = "grey",
-                   layer_order = 2),
-  make_half_circle(8, c(103, 46), 6, layer_order = 2, start = -0.35, end = 0.65, 
+                   order = 2),
+  make_half_circle(8, c(103, 46), 6, order = 2, start = -0.35, end = 0.65, 
                    color = "#CEC161", color_cat = "yellow"),
   # funky circles
   (make_half_circle(9, c(63.5, 43), 6.5, start = 0.85, end = 0.25, color = "#EEEBF1", color_cat = "white") %>%
-     add_row(id = 9, x = 63, y = 42.5, layer_order = 1, color = "#EEEBF1", color_cat = "white")),
+     add_row(id = 9, x = 63, y = 42.5, order = 1, color = "#EEEBF1", color_cat = "white")),
   (make_half_circle(10, c(55.5, 44), 5.3, start = 1, end = 0, color = "#E2D9D6", color_cat = "white") %>%
-     add_row(id = 10, x = 56, y = 41, layer_order = 1, color = "#E2D9D6", color_cat = "white"))
+     add_row(id = 10, x = 56, y = 41, order = 1, color = "#E2D9D6", color_cat = "white"))
   ) %>%
   mutate(alpha = 1,
          grouping = id)
@@ -673,36 +673,45 @@ add_noise <- function(df, layers = c(1), magnitude = 5){
   }
   return(df)
 }
-```
-
-```{r make-plot}
-for (df in c(quads_l, circles_l, lines_l, semicircle_fill_l, semicircle_stroke_color_l, semicircle_stroke_l,
-            triangles_l)){
-  df <- add_noise(df)
-}
-
-magnitude <- 5
-woo <- quads %>%
-  group_by(grouping) %>%
-  mutate(noise_h = rnorm(1, 0, magnitude),
-         noise_v = rnorm(1, 0, magnitude)) %>%
-  ungroup() %>%
-  mutate(across(contains("x"), ~ typeof(x)),
-         across(contains("y"), ~ typeof(x)))
-
-woo <- add_noise(quads_l)
-
-lapply(c(quads_l, circles_l, lines_l, semicircle_fill_l, semicircle_stroke_color_l, semicircle_stroke_l,
-            triangles_l), add_noise)
-  
-lines_l <- add_noise(lines_l, c(1:2), 30)
 
 xmin <- 0
 xmax <- 152
 ymin <- 0
 ymax <- 86
-
 ```
+
+```{r}
+circles_l <- readRDS("data/circles.rds")
+lines_l <- readRDS("data/lines.rds")
+quads_l <- readRDS("data/quads.rds")
+semicircle_fill_l <- readRDS("data/semicircle-fill.rds")
+semicircle_stroke_l <- readRDS("data/semicircle-stroke.rds")
+semicircle_stroke_color_l <- readRDS("data/semicircle-stroke-color.rds")
+triangles_l <- readRDS("data/triangles.rds")
+```
+
+```{r make-plot}
+circles_l <- add_noise(circles_l, c(1:6))
+lines_l <- add_noise(lines_l, c(1:2))
+quads_l <- add_noise(quads_l, c(1:4))
+semicircle_fill_l <- add_noise(semicircle_fill_l)
+semicircle_stroke_l <- add_noise(semicircle_stroke_l)
+semicircle_stroke_color_l <- add_noise(semicircle_stroke_color_l)
+triangles_l <- add_noise(triangles_l, c(1:6))
+```
+
+
+lapply(c(quads_l, circles_l, lines_l, semicircle_fill_l, semicircle_stroke_color_l, semicircle_stroke_l,
+            triangles_l), add_noise)
+
+map(c(quads_l, circles_l, lines_l, semicircle_fill_l, semicircle_stroke_color_l, semicircle_stroke_l,
+            triangles_l), add_noise)
+
+lines_l <- add_noise(lines_l, c(1:2), 30)
+
+
+-other applys and maps
+-reduce list hierarchy
 
 ```{r}
 p <- ggplot() +
@@ -758,7 +767,7 @@ Make Shiny:
   ,
   (bind_rows(make_half_circle(18, c(52, 67), 15, start = 0, end = -0.65, color = "red", color_cat = "black"),
   make_half_circle(18, c(51.5, 66), 17, start = 0.05, end = -0.6, color = "red", color_cat = "black")) %>%
-    add_row(id = 18, x = 49, y = 58, layer_order = 1, color = "red", color_cat = "black"))
+    add_row(id = 18, x = 49, y = 58, order = 1, color = "red", color_cat = "black"))
     
 References
 for ggcircle

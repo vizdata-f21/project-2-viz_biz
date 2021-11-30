@@ -5,7 +5,7 @@ output: html_document
 
 #reactive
 #fonts
-#image size
+#image size (750 as the height?)
 #placement of text below?
 
 Things to alter

@@ -13,41 +13,35 @@ Things to alter
 ```{r packages}
 library(tidyverse)
 library(cowplot)
-library(stringr)
 library(magick)
-library(rasterImage)
-library(jpeg)
-library(png)
 ```
 
 ```{r inputs}
-path <- "/home/guest/R/project-2-viz_biz/eli-shiny/img/kruger.png"
+path <- "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"
 
 #text
 top <- "Your body"
-middle <- "is a fantastically amazing"
+middle <- "is a"
 bottom <- "battleground"
-
-text_size <- 5
+text_size <- 10
 rect_color <- "red"
 text_color <- "white"
 font <- "times"
 emphasis <- "bold"
-border_size <- 3
+
+#0 to 5
+border_size <- 10
+#0 to 200
+img_brightness <- 100
+img_saturation <- 100
+img_hue <- 100
 ```
 
 ```{r dimensions}
-if (substring(path, nchar(path)-3, nchar(path)) == "jpeg" |
-    substring(path, nchar(path)-3, nchar(path)) == "jpg") {
-  my_image <- readJPEG(path)
-} else {
- my_image <- readPNG(path)
-}
+my_image <- image_read(path)
 
-
-
-height <- dim(my_image)[1]
-width <- dim(my_image)[2]
+height <- image_info(my_image)$height
+width <- image_info(my_image)$width
 
 plot_size <- tribble(
   ~x, ~y,
@@ -62,6 +56,7 @@ size  = height/500
 ```
 
 ```{r labels}
+#unsure of correct ratio for borders
 label_maker <- tribble(
   ~text, ~x, ~y,
   top, width/2, height-30*size,
@@ -69,16 +64,18 @@ label_maker <- tribble(
   bottom, width/2, 30*size)
 ```
 
-```{r}
-
-```
-
-
-
 ```{r plotting}
 ggplot() +
   geom_point(data = plot_size, aes(x = x, y = y), alpha = 0) +
- draw_image(frink, x = 0, y=0, width = width,  height = height) +
+    geom_rect(aes(xmin = 0, xmax = width,
+            ymin = 0, ymax = height),
+            color = rect_color,
+            size = border_size,
+            fill = NA) +
+  draw_image(image_modulate(my_image, 
+               brightness = img_brightness, 
+               saturation = img_saturation, 
+               hue = img_hue), x = 0, y=0, width = width,  height = height) +
   geom_label(data = label_maker, 
              mapping = aes(x = x, 
                            y = y, 
@@ -90,12 +87,6 @@ ggplot() +
              fontface = emphasis,
              label.size = 0,
              label.r = unit(0, "lines")) +
-  geom_rect(aes(xmin  = 0 , xmax = width ,
-            ymin = 0 , ymax = height ),
-            color = rect_color,
-            size = border_size,
-            fill = NA) +
   coord_equal() +
   theme_void()
-
 ```

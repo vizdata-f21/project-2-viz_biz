@@ -7,6 +7,9 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+    fig.width = 8, fig.asp = 0.618, fig.retina = 3, dpi = 300, out.width = "100%"
+)
 library(tidyverse)
 library(ggforce)
 library(ggnewscale)
@@ -690,7 +693,7 @@ semicircle_stroke_color_l <- readRDS("data/semicircle-stroke-color.rds")
 triangles_l <- readRDS("data/triangles.rds")
 ```
 
-```{r make-plot}
+
 circles_l <- add_noise(circles_l, c(1:6))
 lines_l <- add_noise(lines_l, c(1:2))
 quads_l <- add_noise(quads_l, c(1:4))
@@ -698,7 +701,6 @@ semicircle_fill_l <- add_noise(semicircle_fill_l)
 semicircle_stroke_l <- add_noise(semicircle_stroke_l)
 semicircle_stroke_color_l <- add_noise(semicircle_stroke_color_l)
 triangles_l <- add_noise(triangles_l, c(1:6))
-```
 
 
 lapply(c(quads_l, circles_l, lines_l, semicircle_fill_l, semicircle_stroke_color_l, semicircle_stroke_l,

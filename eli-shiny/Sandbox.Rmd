@@ -3,6 +3,11 @@ title: "Sandbox"
 output: html_document
 ---
 
+#reactive
+#fonts
+#image size
+#placement of text below?
+
 Things to alter
 -color of text boxes (geom_rect --> size dependent on #letters) - one color for the text box color (gradient hex) - text inside gonna be white
 -what the text says - 3 different textboxes (filename)

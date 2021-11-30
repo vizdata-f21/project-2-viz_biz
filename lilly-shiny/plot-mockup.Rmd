@@ -89,7 +89,7 @@ circles <- tribble(~x, ~y, ~shape, ~color, ~radius, ~order, ~color_cat, ~groupin
                 96.5, 46, "stroke", "#170E01", 3.9, 4, "black", 17
                 ) %>%
   mutate(id = row_number(),
-         alpha = ifelse(id %in% c(38, 39), 0.9, 1))
+         alpha = 1)
 
 circles_l <- make_layers(circles)
 ```
@@ -104,7 +104,7 @@ shapes <- data.frame(
   color_cat = c("blue", "green", "white", "brown", "yellow", "grey", "black", "green", "red", "red", "red",
                      "yellow", "brown", "brown", "brown", "brown"),
   order = c(4, 6, 5, 3, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1),
-  alpha = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9, 1, 1, 1, 1))
+  alpha = rep(1, 16))
 
 coords <- data.frame(
   id = rep(id, each = 3),

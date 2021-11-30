@@ -50,71 +50,6 @@ xmax <- 152
 ymin <- 0
 ymax <- 86
 
-plot_circles <- function(layers = c()){
-    for(i in layers){
-        p <- p +
-            new_scale_fill() +
-            new_scale_color() +
-            geom_circle(data = as.data.frame(circles_l[[1]][[i]]),
-                        aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)) +
-            scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
-            scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
-    }
-
-    return(p)
-}
-
-plot_semicircles <- function(layers = c()){
-    for(i in layers){
-        p <- p +
-            new_scale_fill() +
-            new_scale_color() +
-            geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[i]]),
-                         aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
-            scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]]))
-    }
-
-    return(p)
-}
-
-plot_quads <- function(layers = c()){
-    for(i in layers){
-        p <- p +
-            new_scale_fill() +
-            new_scale_color() +
-            geom_polygon(data = as.data.frame(quads_l[[1]][[i]]),
-                         aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
-            scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
-    }
-
-    return(p)
-}
-
-plot_triangles <- function(layers = c()){
-    for(i in layers){
-        p <- p +
-            new_scale_fill() +
-            new_scale_color() +
-            geom_polygon(data = as.data.frame(triangles_l[[1]][[i]]),
-                         aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
-            scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
-    }
-
-    return(p)
-}
-
-plot_lines <- function(layers = c()){
-    for(i in layers){
-        p <- p +
-            #new_scale_fill() +
-            #new_scale_color() +
-            geom_segment(data = as.data.frame(lines_l[[1]][[i]]),
-                         aes(x = x, xend = xend, y = y, yend = yend, size = thickness ^ 2))
-    }
-
-    return(p)
-}
-
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
@@ -133,8 +68,8 @@ ui <- fluidPage(
             sliderInput("circlealpha",
                         "Transparency:",
                         min = 1,
-                        max = 100,
-                        value = 10),
+                        max = 20,
+                        value = 1),
             h4("Add random noise"),
             sliderInput("magnitudenoise",
                         "Magnitude:",
@@ -162,28 +97,95 @@ server <- function(input, output) {
         }
 
         # change circle alpha based on input$circlealpha from ui.R
-        for (i in c(1:6)){
-            circles_l[[1]][[i]] <- as.data.frame(circles_l[[1]][[i]]) %>%
-                mutate(radius = radius * input$circlesize / 10)
-        }
+#        for (i in c(1:6)){
+#            circles_l[[1]][[i]] <- as.data.frame(circles_l[[1]][[i]]) %>%
+#                mutate(alpha = alpha * input$circlealpha)
+#        }
 
         # add random noise based on input$magnitudenoise from ui.R
-#        circles_l <- add_noise(circles_l, c(1:6), magnitude = input$magnitudenoise)
-#        lines_l <- add_noise(lines_l, c(1:2), magnitude = input$magnitudenoise)
-#        quads_l <- add_noise(quads_l, c(1:4), magnitude = input$magnitudenoise)
-#        semicircle_fill_l <- add_noise(semicircle_fill_l, magnitude = input$magnitudenoise)
-#        semicircle_stroke_l <- add_noise(semicircle_stroke_l, magnitude = input$magnitudenoise)
-#        semicircle_stroke_color_l <- add_noise(semicircle_stroke_color_l, magnitude = input$magnitudenoise)
-#        triangles_l <- add_noise(triangles_l, c(1:6), magnitude = input$magnitudenoise)
+        circles_l <- add_noise(circles_l, c(1:6), magnitude = input$magnitudenoise)
+        lines_l <- add_noise(lines_l, c(1:2), magnitude = input$magnitudenoise)
+        quads_l <- add_noise(quads_l, c(1:4), magnitude = input$magnitudenoise)
+        semicircle_fill_l <- add_noise(semicircle_fill_l, magnitude = input$magnitudenoise)
+        semicircle_stroke_l <- add_noise(semicircle_stroke_l, magnitude = input$magnitudenoise)
+        semicircle_stroke_color_l <- add_noise(semicircle_stroke_color_l, magnitude = input$magnitudenoise)
+        triangles_l <- add_noise(triangles_l, c(1:6), magnitude = input$magnitudenoise)
+
+        # plotting functions
+        plot_circles <- function(layers = c()){
+            for(i in layers){
+                p <- p +
+                    new_scale_fill() +
+                    new_scale_color() +
+                    geom_circle(data = as.data.frame(circles_l[[1]][[i]]),
+                                aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)) +
+                    scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
+                    scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
+            }
+
+            return(p)
+        }
+
+        plot_semicircles <- function(layers = c()){
+            for(i in layers){
+                p <- p +
+                    new_scale_fill() +
+                    new_scale_color() +
+                    geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[i]]),
+                                 aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                    scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]]))
+            }
+
+            return(p)
+        }
+
+        plot_quads <- function(layers = c()){
+            for(i in layers){
+                p <- p +
+                    new_scale_fill() +
+                    new_scale_color() +
+                    geom_polygon(data = as.data.frame(quads_l[[1]][[i]]),
+                                 aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                    scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
+            }
+
+            return(p)
+        }
+
+        plot_triangles <- function(layers = c()){
+            for(i in layers){
+                p <- p +
+                    new_scale_fill() +
+                    new_scale_color() +
+                    geom_polygon(data = as.data.frame(triangles_l[[1]][[i]]),
+                                 aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                    scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
+            }
+
+            return(p)
+        }
+
+        plot_lines <- function(layers = c()){
+            for(i in layers){
+                p <- p +
+                    #new_scale_fill() +
+                    #new_scale_color() +
+                    geom_segment(data = as.data.frame(lines_l[[1]][[i]]),
+                                 aes(x = x, xend = xend, y = y, yend = yend, size = thickness ^ 2))
+            }
+
+            return(p)
+        }
 
         # plot artwork
         p <- ggplot() +
-            scale_alpha(range = c(0.8, 1)) +
+            scale_alpha(range = c(0.99, 1)) +
             scale_size(range = c(0.3, 1.3)) +
             coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = FALSE) +
             theme_void() +
             theme(legend.position = "none",
-                  panel.background = element_rect(fill = "#EBE6CE"))
+                  panel.background = element_rect(fill = "#EBE6CE"),
+                  panel.border = element_blank())
 
         p <- plot_triangles(c(6:3))
         p <- plot_semicircles(c(2:1))

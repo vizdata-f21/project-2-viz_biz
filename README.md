@@ -52,7 +52,7 @@ attracts us to recreate a visualization of this masterpiece. 4 distinct
 features spark our interest. We also believe that these features should
 be made *adjustable/modifiable* to the preference of each audience:
 
-1.  **Number of layers**
+**Number of layers**
 
 In the original painting, there are 12 layers
 of colored-gradient rectangles and 11 layers of
@@ -68,21 +68,22 @@ In the server, the input ‘size’ will and integral component to
 create the dataframe that will be used in the plotting process.
 `n <- reactive({input$size * 2})`
 
-2.  **Primary color sequence**
+**Primary color sequence**
 
 The original painting uses a rainbow-gradient color sequence as part of its 
 12 layers of colored-gradient rectangles. For the recreated visualization, the
 audience will be able to change this through adjusting the color
 palette and decide whether or not to reverse the direction of the color sequence.
 
-3.  **Secondary color sequence**
+**Secondary color sequence**
 
 The original painting uses a black-and-white-gradient color sequence as part 
 of its 11 layers of non-colored-gradient rectangles. For the recreated visualization,
 the audience will be able to change this through adjusting the color palette and
 decide whether or not to reverse the direction of the color sequence.
 
-4.  **Borderline**
+**Borderline**
+
 We’ve noticed that the original artwork contains a thin white borderlines 
 between each of the rectangle layers. We believe that some of our audience 
 like this feature but not all, hence, we make it an option for the audience to 
@@ -108,7 +109,8 @@ visualization in ggplot2. 2 distinct
 features sparked our interest to make *adjustable/modifiable* to the preference 
 of each audience:
 
-1. **Horizontal Lines**
+**Horizontal Lines**
+
 In the original painting, there are 4 horizontal lines
 that seem to be evenly distributed within the middle of the painting. We would like the 
 audience to be able to create more horizontal lines between the upper and lower bounds 
@@ -122,7 +124,7 @@ we were able to pass the input from the UI sliderinput to a parameter in the geo
 to change the number of horizontal lines between the defined upper and lower bounds. 
     
 
-2.  **Colors**
+**Colors**
 
 The original painting uses four distinct colors: blue, black 
 red and yellow in different colored boxes. We wanted to give users the ability to change 

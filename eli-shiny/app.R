@@ -66,7 +66,21 @@ ui <- fluidPage(
                             inputId = "rect_color",
                             label = NULL, value = "#FF0000"
                         ))
-                    )), #sidebar panel
+                    ),
+                    hr(),
+                    textInput("custom_filename", "Filename", "kruger_example.png"),
+                    verbatimTextOutput("value"),
+                    sliderInput(
+                        inputId = "res",
+                        label = "Resolution (in dpi)",
+                        min = 100, max = 2000, value = 600, step = 100, round = TRUE, ticks = FALSE
+                    ),
+                    div(
+                        align = "right",
+                        downloadLink("save", strong("Download"))
+                    )
+
+                    ), #sidebar panel
 
                 mainPanel(
                     h2(strong("Barbara Kruger")),
@@ -93,7 +107,7 @@ ui <- fluidPage(
 server <- function(input, output) {
 
    #my_image <- image_read(input$path)
-    my_image <- image_read("https://www.logolynx.com/images/logolynx/d5/d5879b5a204d222b526600e93cc01022.jpeg")
+    my_image <- image_read("https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg")
 
     #if (image_info(my_image)$height>700 | image_info(my_image)$width>700) {
         if(image_info(my_image)$height>=image_info(my_image)$width){

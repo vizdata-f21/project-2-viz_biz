@@ -111,6 +111,11 @@ ui <- fluidPage(theme = bs_theme(bootswatch = "cosmo",
                                  min = 2,
                                  max = 10,
                                  value = 4),
+            sliderInput("sizehorizontal",
+                        "Thickness of horizontal lines:",
+                        min = 1,
+                        max = 7,
+                        value = 4),
         checkboxGroupInput("color", "Choose 4 colors:",
                            c("Black",
                              "Blue",
@@ -145,9 +150,9 @@ server <- function(input, output) {
         piet_mondrian_plot <- ggplot() +
             geom_rect(data = geom_rect, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill)) +
             scale_fill_manual(values = c(input$color, rep("white", 4))[1:4]) +
-            geom_rect(data = pietmondrianvertical, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "black") +
-            geom_hline(yintercept = seq(4, 10, length.out = input$lines), size = 3) +
-            geom_segment(data= segment, aes(x = x, y = y, xend = xend, yend = yend), color = "black", size = 3) +
+            geom_rect(data = pietmondrianvertical, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "black", size = 3) +
+            geom_hline(yintercept = seq(4, 10, length.out = input$lines), size = input$sizehorizontal) +
+            geom_segment(data= segment, aes(x = x, y = y, xend = xend, yend = yend), color = "black", size = input$sizehorizontal) +
             scale_x_continuous(limits = c(0, 10),breaks = seq(0, 10, by = 2))  +
             scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, by = 2)) +
             coord_fixed(xlim = c(0, 10), ylim = c(0,12)) +

@@ -72,6 +72,12 @@ ui <- fluidPage(
                         max = 20,
                         value = 10,
                         ticks = FALSE),
+            sliderInput("linethickness",
+                        "Line Thickness:",
+                        min = 0.001,
+                        max = 3,
+                        value = c(0.3, 1.3),
+                        ticks = FALSE),
             sliderInput("alpha",
                         "Transparency:",
                         min = 0,
@@ -94,13 +100,13 @@ ui <- fluidPage(
                         "Magnitude:",
                         min = 0,
                         max = 25,
-                        value = 0)
+                        value = 0),
+            actionButton("go", "Apply Changes")
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("kandinsky"),
-           textOutput("test")
+           plotOutput("kandinsky")
         )
     )
 )
@@ -108,10 +114,9 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-    output$test <- renderText({
-        input$checkbox_layers})
+    kplot <- eventReactive(input$go, {
 
-    output$kandinsky <- renderPlot({
+        input$goButton
 
         # change circle size based on input$circlesize from ui.R
         for (i in c(1:6)){
@@ -270,7 +275,7 @@ server <- function(input, output) {
         # plot artwork
         p <- ggplot() +
             scale_alpha(range = c(input$alpha[1], input$alpha[2])) +
-            scale_size(range = c(0.3, 1.3)) +
+            scale_size(range = c(input$linethickness[1], input$linethickness[2])) +
             coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = FALSE) +
             theme_void() +
             theme(legend.position = "none",
@@ -288,6 +293,10 @@ server <- function(input, output) {
         p <- plot_lines(c(2:1), execute = print_lines_straight)
 
         p
+    })
+
+    output$kandinsky <- renderPlot({
+        kplot()
     })
 }
 

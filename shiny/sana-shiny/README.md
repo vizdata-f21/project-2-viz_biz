@@ -18,25 +18,28 @@ of each audience:
 
 1.  **Horizontal Lines**: In the original painting, there are 4 horizontal lines
 that seem to be evenly distributed within the middle of the painting. We would like the 
-audience to be able to create more horizontal lines between the upper and lower bounds 
-of the original horizontal lines to adjust the abstract feel of the art and 
+audience to be able to be able to choose how many horizontal lines are in the piece. 
+This can help them adjust the abstract feel of the art and 
 to make it more to their liking. 
 
 -   ***Approach:*** We will use the ‘slider input’ Shiny widget in the
     UI interface.
-    `sliderInput(inputId = "lines", label = "Number of lines:", min = 2, max = 10, value = 4)`
+    `sliderInput("piet_lines",
+            "Number of Full Horizontal Lines:",
+            min = 0, max = 5, value = 4, ticks = FALSE
+          )`
     Because the original four horizontal lines are defined by one specific function (geom_hline()), 
     we were able to pass the input from the UI sliderinput to a parameter in the geom_hline()
     to change the number of horizontal lines between the defined upper and lower bounds. 
     
 
 2.  **Colors**: The original painting uses four distinct colors: blue, black 
-red and yellow in different colored boxes. We wanted to give users the ability to change 
-these colors based on their likings and to understand how a new color scheme 
+red and yellow in the different colored boxes. It also uses one specific color for
+the lines: black. We wanted to give users the ability to change 
+the colors of the rectangles, the gridlines, and the background color
+based on their likings and to understand how a new color scheme 
 changes the vision of the art. 
 
 
--   ***Approach:*** To do this, we will use the 'checkboxGroupInput' in the UI interface
-to allow users to select four colors out of list of multiple color options. If the user picks 
-more than four colors, only the first four colors will show up. If the user uses less than 
-four colors, the boxes corresponding to the missing color will show up blank (i.e. white). 
+-   ***Approach:*** To do this, we will use the 'colourInput' in the UI interface
+to allow users to select four colors out of a full color spectrum. 

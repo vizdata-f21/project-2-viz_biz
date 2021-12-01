@@ -72,8 +72,7 @@ ui <- fluidPage(
       title = "Who Are We?",
       sidebarLayout(
         sidebarPanel(
-          h4("Our Team"),
-          h6(b("Viz Biz"))
+          h4("Our Team")
         ),
         mainPanel()
       )

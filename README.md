@@ -32,12 +32,18 @@ We plan to recreate and make customizable the following four images:
 
 To recreate these modern art pieces, we will be creating our own dataframes, which will incorporate user input to customize certain artistic aspects of each piece. We will also utilize mathematical functions and specific packages such as `library(colourpicker)` and `library(generativeart)` to facilitate the digitization of these art pieces. 
 
+We will accumulate these recreated, customizable art pieces in a Shiny App. Within this Shiny App,
+there will be an initial tab with a description of how to use the app to customize and download 
+these art pieces. Then, there will be a separate tab for each of the pieces. We will allow users 
+to change features such as colors, number and amount of certain shapes, transparency, etc
+throughout the pieces. 
+
 
 ## Approaches 
 
 ### Frank Stella, *Lettre sur les sourds et muets II* (1974)
 
-<img src="stella.jpg" style="width:40.0%" />
+<img src="images/frank_stella.png" style="width:40.0%" />
 
 The painting’s symmetrical and easily identifiable features are what
 attracts us to recreate a visualization of this masterpiece. 4 distinct

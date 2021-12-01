@@ -278,7 +278,7 @@ server <- function(input, output) {
                   panel.border = element_blank())
 
         p <- plot_triangles(c(6:3), execute = print_triangles)
-        p <- plot_semicircles(c(2:1), execute = print_circles)
+        p <- plot_semicircles(c(3:1), execute = print_circles)
         p <- plot_semicircle_stroke_color(c(1), execute = print_lines_curved)
         p <- plot_semicircle_stroke(c(1), execute = print_lines_curved)
         p <- plot_quads(c(4:1), execute = print_quads)

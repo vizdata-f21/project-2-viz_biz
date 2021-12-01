@@ -823,3 +823,7 @@ multiple manual color scales
 https://pythonawesome.com/multiple-fill-and-color-scales-in-ggplot2/
 for half circle function
 https://stackoverflow.com/questions/28185743/draw-a-half-circle-with-ggplot2
+https://stackoverflow.com/questions/10276092/to-find-whether-a-column-exists-in-data-frame-or-not
+https://stackoverflow.com/questions/38181744/r-shiny-input-slider-range-values/38181817
+https://stackoverflow.com/questions/34351356/plotting-with-action-button-in-shiny-rmarkdown
+https://stackoverflow.com/questions/15987367/how-to-add-layers-in-ggplot-using-a-for-loop

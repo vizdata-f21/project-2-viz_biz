@@ -58,7 +58,9 @@ collections to be accessible to the public mass.
 - Users will be able to download their own customized artwork with their desired resolution or 
 quality level.
 
-**Our Chosen Artworks:** We are regenerating these artworks in R and will be using Shiny reactive 
+** **
+
+**Our Chosen Artworks:** We are regenerating these artworks in R and will be using Shiny *reactive* 
 features.
 
 - Frank Stella, *Lettre sur les sourds et muets II* (1974)
@@ -75,9 +77,14 @@ features.
 
 We will demo you to our final Shiny App with a click [***here***](https://phillipharmadi.shinyapps.io/final-shiny/).
 
----
+Please do not hesitate let us know at at any time if you want to be shown something 
+specific within our app's reactive features during our demonstration soon.
 
-### Thank You
+```{r}
+stella <- image_read("stella.jpg")
+stella
+```
 
-Feel free to ask any questions to our team!
+
+
 

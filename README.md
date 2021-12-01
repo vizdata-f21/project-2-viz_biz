@@ -14,7 +14,7 @@
 *Note: Each of the individual artwork's 150-250 words summary will later be combined into the 1000-2000 words final writeup.*
 
 
-**WRITEUP**
+**WRITE-UP:**
 
 ## Introduction
 

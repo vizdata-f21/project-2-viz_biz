@@ -29,7 +29,7 @@ throughout the pieces.
 
 ### Frank Stella, *Lettre sur les sourds et muets II* (1974)
 
-<img src="images/frank_stella.png" style="width:20.0%" />
+<img src="images/frank_stella.png" style="width:20%" />
 
 The painting’s symmetrical and easily identifiable features are what
 attracts us to recreate a visualization of this masterpiece. 4 distinct
@@ -80,11 +80,11 @@ in the ggplot. `geom_polygon(..., size = borderline())`
 
 ### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
 
-<img src="images/kruger.jpeg" style="width:15.0%" />
+<img src="images/kruger.jpeg" style="width:15%" />
 
 ### Wassily Kandinsky, *Composition 8* (1923)
 
-<img src="images/kandinsky.jpeg" style="width:20.0%" />
+<img src="images/kandinsky.jpeg" style="width:20%" />
 
 ### Piet Mondrian, *Trafalgar Square* (1939-1943) 
 

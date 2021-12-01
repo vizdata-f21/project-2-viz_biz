@@ -106,54 +106,58 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-   #my_image <- image_read(input$path)
-    my_image <- image_read("https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg")
+   my_image <- reactive({image_read(input$path)})
+    #my_image <- image_read("https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg")
 
-    #if (image_info(my_image)$height>700 | image_info(my_image)$width>700) {
-        if(image_info(my_image)$height>=image_info(my_image)$width){
-            my_image <- image_scale(my_image, "x700")
-        } else {
-            my_image <- image_scale(my_image, "700")
-        }
-    #}
+   plot_image <- reactive({
 
-    img_height <- image_info(my_image)$height
-    img_width <- image_info(my_image)$width
+       ifelse(
+           image_info(my_image())$height >= image_info(my_image())$width,
+           image_scale(my_image(), "x700"),
+           image_scale(my_image(), "700")
+           )
+
+   })
+
+    img_height <- reactive(image_info(plot_image())$height)
+    img_width <- reactive(image_info(plot_image())$width)
 
 
-    plot_size <- tribble(
+    plot_size <- reactive({tribble(
         ~x, ~y,
         0, 0,
-        img_width, img_height)
+        img_width(), img_height())})
 
 
-    if (img_height>img_width) {
-        size = img_width/500
-    } else {
-        size  = img_height/500
-    }
+
+    size <- reactive({
+        ifelse(img_height()>img_width(),
+           img_width/500,
+           img_height/500)
+    })
 
 
-    label_maker <- tribble(
+
+    label_maker <- reactive({tribble(
         ~x, ~y,
-        img_width/2, img_height-30*size,
-        img_width/2, img_height/2,
-        img_width/2, 30*size)
+        img_width()/2, img_height()-30*size(),
+        img_width()/2, img_height()/2,
+        img_width()/2, 30*size())})
 
 
     output$plot <- renderPlot({
         kruger_plot <- ggplot() +
-            geom_point(data = plot_size, aes(x = x, y = y), alpha = 0) +
-            geom_rect(aes(xmin = 0, xmax = img_width,
-                          ymin = 0, ymax = img_height),
+            geom_point(data = plot_size(), aes(x = x, y = y), alpha = 0) +
+            geom_rect(aes(xmin = 0, xmax = img_width(),
+                          ymin = 0, ymax = img_height()),
                       color = input$rect_color,
                       size = input$border_size,
                       fill = NA) +
-            draw_image(image_modulate(my_image,
+            draw_image(image_modulate(plot_image(),
                                       brightness = input$img_brightness,
                                       saturation = input$img_saturation,
                                       hue = input$img_hue),
-                       x = 0, y=0, width = img_width,  height = img_height) +
+                       x = 0, y=0, width = img_width(),  height = img_height()) +
             geom_label(data = label_maker,
                        mapping = aes(x = x,
                                      y = y
@@ -169,7 +173,7 @@ server <- function(input, output) {
             coord_equal() +
             theme_void()
 
-        kruger_plot}, height = img_height, width = img_width)
+        kruger_plot}, height = img_height(), width = img_width())
 
 }
 

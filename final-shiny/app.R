@@ -70,8 +70,8 @@ pietmondrianvertical <- tribble(
 piet_geom_rect <- tribble(
     ~xmin, ~xmax, ~ymin, ~ymax, ~fill,
     0.3, 0.8, 0, 1.9, "yellow",
-    1.1, 2, 4.05, 5.9, "red",
-    0, 0.1, 4.05, 5.9, "yellow",
+    1.1, 2, 4.0, 6.0, "red",
+    0, 0.1, 4.0, 6.0, "yellow",
     0, 0.8, 10, 12, "yellow",
     2.05, 3, 0, 0.7, "blue",
     5, 5.8, 0, 0.7, "red",
@@ -80,7 +80,7 @@ piet_geom_rect <- tribble(
     9, 9.7, 1.3, 2, "black",
     9, 9.7, 2.8, 3.4, "red",
     9, 9.7, 4.8, 5.4, "black",
-    9.7, 10, 4, 6, "blue"
+    9.7, 10, 4, 6.0, "blue"
 )
 
 piet_segment <- tribble(
@@ -147,7 +147,6 @@ ui <- fluidPage(
           ),
           hr(),
           textInput("custom_filename", "Filename", "frank_stella.png"),
-          verbatimTextOutput("value"),
           sliderInput(
             inputId = "res",
             label = "Resolution (in dpi)",
@@ -208,29 +207,36 @@ ui <- fluidPage(
           h4("Graphics Input"),
           div(align = "right"),
           sliderInput("piet_lines",
-            "Number of lines:",
-            min = 2,
-            max = 10,
-            value = 4
+            "Number of Full Horizontal Lines:",
+            min = 0, max = 5, value = 4, ticks = FALSE
           ),
-          sliderInput("sizehorizontal",
-                      "Thickness of horizontal lines:",
-                      min = 1,
-                      max = 7,
-                      value = 4),
-          checkboxGroupInput("piet_color", "Pick 3 or 4 colors:",
-            c("Black",
-              "Blue",
-              "Red",
-              "Yellow",
-              "Purple",
-              "Green",
-              "Orange",
-              "Pink",
-              "Brown" = "tan4",
-              "Turquoise" = "cyan3"
-            ),
-            selected = c("Black", "Blue", "Red", "Yellow")
+          # sliderInput("sizehorizontal",
+          #             "Thickness of Horizontal Lines:",
+          #             min = 0, max = 10, value = 4.5, step = 0.25, ticks = FALSE),
+
+          colourInput(inputId = "grid_color_piet", label = "Grid Color", value = "#3D3D3D"),
+
+          h6("Box Colors"),
+          fluidRow(
+            column(width = 6, colourInput(inputId = "color_piet_1", label = NULL, value = "#3D3D3D")),
+            column(width = 6, colourInput(inputId = "color_piet_2", label = NULL, value = "#2A4FE0"))
+          ),
+
+          fluidRow(
+            column(width = 6, colourInput(inputId = "color_piet_3", label = NULL, value = "#CC0000")),
+            column(width = 6, colourInput(inputId = "color_piet_4", label = NULL, value = "#F5D800"))
+          ),
+
+          hr(),
+          textInput("custom_filename_piet", "Filename", "piet_mondrian.png"),
+          sliderInput(
+            inputId = "res_piet",
+            label = "Resolution (in dpi)",
+            min = 100, max = 2000, value = 600, step = 100, round = TRUE, ticks = FALSE
+          ),
+          div(
+            align = "right",
+            downloadLink("save_piet", strong("Download"))
           )
         ),
         mainPanel(
@@ -245,7 +251,19 @@ ui <- fluidPage(
             in the artwork and to adjust the color of the boxes pictured. Experiment
             with your own varieties of abstract ways to
             modify this plot and figure out your desired unique style!"),
-          plotOutput("piet_plot")
+          div(plotOutput(
+            outputId = "plot_piet", inline = TRUE,
+            height = "100%"
+          ), align = "center"),
+          prettyCheckbox(
+            inputId = "original_artwork_piet",
+            label = "Original Artwork",
+            value = FALSE
+          ),
+          div(imageOutput(outputId = "original_artwork_piet", inline = TRUE), align = "center"),
+          h4(" "),
+          div(textOutput(outputId = "original_artwork_text_piet", inline = TRUE), align = "center"),
+          h4(" ")
         )
       )
     ) # tab 2 panel
@@ -430,37 +448,88 @@ server <- function(input, output) {
 
   output$original_artwork_text <- renderText({
     if (input$original_artwork == TRUE) {
-      return(paste("Photo by Christopher Burke, © 2017 Frank Stella / Artists Rights Society (ARS), New York"))
+      return(paste("Photo by Christopher Burke, © 2017 Artists Rights Society (ARS), New York"))
     }
     if (input$original_artwork == FALSE) {
       return(NULL)
     }
   })
 
-  output$piet_plot <- renderPlot(
-    {
+  # PIET MONDRIAN
 
-        validate(
-            need(length(input$piet_color) <= 4, "Please select a maximum of 4 colors."),
-            need(length(input$piet_color) > 2, "Please select a minimum of 3 colors.")
-        )
-
-      piet_mondrian_plot <- ggplot() +
+  plotInput_piet <- reactive({
+    ggplot() +
         geom_rect(data = piet_geom_rect, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill)) +
-        scale_fill_manual(values = c(input$piet_color, rep("white", 4))[1:4]) +
-        geom_rect(data = pietmondrianvertical, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "black", size = 3) +
-        geom_hline(yintercept = seq(4, 10, length.out = input$piet_lines), size = input$sizehorizontal) +
-        geom_segment(data = piet_segment, aes(x = x, y = y, xend = xend, yend = yend), color = "black", size = 3.5) +
+        scale_fill_manual(values = c(input$color_piet_1,input$color_piet_2,
+                                     input$color_piet_3, input$color_piet_4)) +
+        geom_rect(data = pietmondrianvertical, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = input$grid_color_piet, size = 3) +
+        geom_hline(yintercept = seq(4, 10, length.out = input$piet_lines), size = 4.5, #input$sizehorizontal,
+                   color = input$grid_color_piet) +
+        geom_segment(data = piet_segment, aes(x = x, y = y, xend = xend, yend = yend), color = input$grid_color_piet, size = 3.5) +
         scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 2)) +
         scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, by = 2)) +
         coord_fixed(xlim = c(0, 10), ylim = c(0, 12)) +
         theme_void() +
         theme(legend.position = "none")
-      piet_mondrian_plot
+    })
+
+  output$plot_piet <- renderPlot(
+    {
+      plotInput_piet()
     },
     height = 600,
     width = 500
   )
+
+  custom_filename_piet <- reactive({
+    input$custom_filename_piet
+  })
+
+  custom_res_piet <- reactive({
+    input$res_piet
+  })
+
+  output$save_piet <- downloadHandler(
+    filename = function() {
+      custom_filename_piet()
+    },
+    content = function(file) {
+      ggsave(file, plot = plotInput_piet(), device = "png", dpi = as.double(custom_res_piet()))
+    }
+  )
+
+  output$original_artwork_piet <- renderImage({
+    if (input$original_artwork_piet == TRUE) {
+      return(list(
+        src = "./piet.jpg",
+        width = 250,
+        height = 325,
+        contentType = "image/jpg",
+        alt = "Original Artwork",
+        deleteFile = FALSE
+      ))
+    }
+    if (input$original_artwork_piet == FALSE) {
+      return(list(
+        src = "./piet.jpg",
+        width = 0,
+        height = 0,
+        contentType = "image/jpg",
+        alt = "Original Artwork",
+        deleteFile = FALSE
+      ))
+    }
+  })
+
+  output$original_artwork_text_piet <- renderText({
+    if (input$original_artwork_piet == TRUE) {
+      return(paste("Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Museum of Modern Art (MoMA), New York"))
+    }
+    if (input$original_artwork_piet == FALSE) {
+      return(NULL)
+    }
+  })
+
 }
 
 # Run the application

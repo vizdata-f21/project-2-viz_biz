@@ -84,7 +84,7 @@ in the ggplot. `geom_polygon(..., size = borderline())`
 
 ### Wassily Kandinsky, *Composition 8* (1923)
 
-<img src="images/kandinsky.jpeg" style="width:24%"/>
+<img src="images/kandinsky.jpeg" style="width:28%"/>
 
 ### Piet Mondrian, *Trafalgar Square* (1939-1943) 
 

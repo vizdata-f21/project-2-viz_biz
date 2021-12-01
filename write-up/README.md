@@ -29,7 +29,7 @@ throughout the pieces.
 
 ### Frank Stella, *Lettre sur les sourds et muets II* (1974)
 
-<img src="images/stella.png" style="width:24%" />
+<img src="images/stella.jpg" style="width:24%" />
 
 The painting’s symmetrical and easily identifiable features are what
 attracts us to recreate a visualization of this masterpiece. 4 distinct
@@ -88,7 +88,7 @@ in the ggplot. `geom_polygon(..., size = borderline())`
 
 ### Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
-<img src="images/mondrian.jpg" style="width:14%" />
+<img src="images/mondrian.jpg" style="width:15%" />
 
 This painting’s geometric shapes and lines are what allowed us to recreate this 
 visualization in ggplot2. 2 distinct

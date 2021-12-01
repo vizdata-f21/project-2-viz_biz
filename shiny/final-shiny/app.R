@@ -640,7 +640,7 @@ server <- function(input, output) {
 
   piet_geom_rect <- tribble(
     ~xmin, ~xmax, ~ymin, ~ymax, ~fill,
-    0.3, 0.8, 0, 1.9, "yellow",
+    0.3, 0.8, 0, 2.0, "yellow",
     1.1, 2, 4.0, 6.0, "red",
     0, 0.1, 4.0, 6.0, "yellow",
     0, 0.8, 10, 12, "yellow",

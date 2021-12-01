@@ -208,23 +208,23 @@ ui <- fluidPage(
           div(align = "right"),
           sliderInput("piet_lines",
             "Number of Full Horizontal Lines:",
-            min = 0, max = 10, value = 4, ticks = FALSE
+            min = 0, max = 5, value = 4, ticks = FALSE
           ),
-          sliderInput("sizehorizontal",
-                      "Thickness of Horizontal Lines:",
-                      min = 0, max = 10, value = 4.5, step = 0.25, ticks = FALSE),
+          # sliderInput("sizehorizontal",
+          #             "Thickness of Horizontal Lines:",
+          #             min = 0, max = 10, value = 4.5, step = 0.25, ticks = FALSE),
 
-          colourInput(inputId = "grid_color_piet", label = "Grid Color", value = "#E8E8E8"),
+          colourInput(inputId = "grid_color_piet", label = "Grid Color", value = "#3D3D3D"),
 
           h6("Box Colors"),
           fluidRow(
-            column(width = 6, colourInput(inputId = "color_piet_1", label = NULL, value = "black")),
-            column(width = 6, colourInput(inputId = "color_piet_2", label = NULL, value = "blue"))
+            column(width = 6, colourInput(inputId = "color_piet_1", label = NULL, value = "#3D3D3D")),
+            column(width = 6, colourInput(inputId = "color_piet_2", label = NULL, value = "#2A4FE0"))
           ),
 
           fluidRow(
-            column(width = 6, colourInput(inputId = "color_piet_3", label = NULL, value = "red")),
-            column(width = 6, colourInput(inputId = "color_piet_4", label = NULL, value = "yellow"))
+            column(width = 6, colourInput(inputId = "color_piet_3", label = NULL, value = "#CC0000")),
+            column(width = 6, colourInput(inputId = "color_piet_4", label = NULL, value = "#F5D800"))
           ),
 
           hr(),
@@ -254,7 +254,16 @@ ui <- fluidPage(
           div(plotOutput(
             outputId = "plot_piet", inline = TRUE,
             height = "100%"
-          ), align = "center")
+          ), align = "center"),
+          prettyCheckbox(
+            inputId = "original_artwork_piet",
+            label = "Original Artwork",
+            value = FALSE
+          ),
+          div(imageOutput(outputId = "original_artwork_piet", inline = TRUE), align = "center"),
+          h4(" "),
+          div(textOutput(outputId = "original_artwork_text_piet", inline = TRUE), align = "center"),
+          h4(" ")
         )
       )
     ) # tab 2 panel
@@ -439,7 +448,7 @@ server <- function(input, output) {
 
   output$original_artwork_text <- renderText({
     if (input$original_artwork == TRUE) {
-      return(paste("Photo by Christopher Burke, © 2017 Frank Stella / Artists Rights Society (ARS), New York"))
+      return(paste("Photo by Christopher Burke, © 2017 Artists Rights Society (ARS), New York"))
     }
     if (input$original_artwork == FALSE) {
       return(NULL)
@@ -454,7 +463,8 @@ server <- function(input, output) {
         scale_fill_manual(values = c(input$color_piet_1,input$color_piet_2,
                                      input$color_piet_3, input$color_piet_4)) +
         geom_rect(data = pietmondrianvertical, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = input$grid_color_piet, size = 3) +
-        geom_hline(yintercept = seq(4, 10, length.out = input$piet_lines), size = input$sizehorizontal, color = input$grid_color_piet) +
+        geom_hline(yintercept = seq(4, 10, length.out = input$piet_lines), size = 4.5, #input$sizehorizontal,
+                   color = input$grid_color_piet) +
         geom_segment(data = piet_segment, aes(x = x, y = y, xend = xend, yend = yend), color = input$grid_color_piet, size = 3.5) +
         scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 2)) +
         scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, by = 2)) +
@@ -487,6 +497,39 @@ server <- function(input, output) {
       ggsave(file, plot = plotInput_piet(), device = "png", dpi = as.double(custom_res_piet()))
     }
   )
+
+  output$original_artwork_piet <- renderImage({
+    if (input$original_artwork_piet == TRUE) {
+      return(list(
+        src = "./piet.jpg",
+        width = 250,
+        height = 325,
+        contentType = "image/jpg",
+        alt = "Original Artwork",
+        deleteFile = FALSE
+      ))
+    }
+    if (input$original_artwork_piet == FALSE) {
+      return(list(
+        src = "./piet.jpg",
+        width = 0,
+        height = 0,
+        contentType = "image/jpg",
+        alt = "Original Artwork",
+        deleteFile = FALSE
+      ))
+    }
+  })
+
+  output$original_artwork_text_piet <- renderText({
+    if (input$original_artwork_piet == TRUE) {
+      return(paste("Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Museum of Modern Art (MoMA), New York"))
+    }
+    if (input$original_artwork_piet == FALSE) {
+      return(NULL)
+    }
+  })
+
 }
 
 # Run the application

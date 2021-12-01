@@ -89,7 +89,7 @@ circles <- tribble(~x, ~y, ~shape, ~color, ~radius, ~order, ~color_cat, ~groupin
                 96.5, 46, "stroke", "#170E01", 3.9, 4, "black", 17
                 ) %>%
   mutate(id = row_number(),
-         alpha = 1)
+         alpha = ifelse(id == 40, 2, 1))
 
 circles_l <- make_layers(circles)
 ```
@@ -591,8 +591,11 @@ saveRDS(triangles_l, "data/triangles.rds")
 ```
 
 ```{r plot-functions}
-plot_circles <- function(layers = c()){
-  for(i in layers){
+plot_circles <- function(layers = c(), execute = TRUE){
+  if(execute == FALSE) {
+    return(p)
+  } else{
+    for(i in layers){
     p <- p +
     new_scale_fill() +
     new_scale_color() +
@@ -601,59 +604,109 @@ plot_circles <- function(layers = c()){
     scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
     scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
   }
-  
-  return(p)
+    return(p)
+  }
 }
 
-plot_semicircles <- function(layers = c()){
-  for(i in layers){ 
-    p <- p + 
-    new_scale_fill() +
-    new_scale_color() +
-    geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[i]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
-    scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]])) 
-  }
+plot_semicircles <- function(layers = c(), execute = TRUE){
+  if(execute == FALSE) {
+    return(p)
+  } else{
+    for(i in layers){ 
+      p <- p + 
+      new_scale_fill() +
+      new_scale_color() +
+      geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[i]]), 
+                 aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+      scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]])) 
+    }
   
   return(p)
+  }
 }
 
-plot_quads <- function(layers = c()){
-  for(i in layers){
-    p <- p +
-    new_scale_fill() +
-    new_scale_color() +
-    geom_polygon(data = as.data.frame(quads_l[[1]][[i]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
-    scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
+plot_quads <- function(layers = c(), execute = TRUE){
+  if(execute == FALSE) {
+    return(p)
+  } else{
+    for(i in layers){
+      p <- p +
+      new_scale_fill() +
+      new_scale_color() +
+      geom_polygon(data = as.data.frame(quads_l[[1]][[i]]), 
+                 aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+      scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
+    }
+    
+    return(p)
   }
-  
-  return(p)
 }
 
-plot_triangles <- function(layers = c()){
-  for(i in layers){
-    p <- p + 
-    new_scale_fill() +
-    new_scale_color() +
-    geom_polygon(data = as.data.frame(triangles_l[[1]][[i]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
-    scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
+plot_triangles <- function(layers = c(), execute = TRUE){
+  if(execute == FALSE) {
+    return(p)
+  } else{
+    for(i in layers){
+      p <- p + 
+      new_scale_fill() +
+      new_scale_color() +
+      geom_polygon(data = as.data.frame(triangles_l[[1]][[i]]), 
+                 aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+      scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
+    }
+    
+    return(p)
   }
-  
-  return(p)
 }
 
-plot_lines <- function(layers = c()){
-  for(i in layers){
-    p <- p + 
-    #new_scale_fill() +
-    #new_scale_color() +
-    geom_segment(data = as.data.frame(lines_l[[1]][[i]]), 
-               aes(x = x, xend = xend, y = y, yend = yend, size = thickness ^ 2))
+plot_lines <- function(layers = c(), execute = TRUE){
+  if(execute == FALSE) {
+    return(p)
+  } else{
+    for(i in layers){
+      p <- p + 
+      #new_scale_fill() +
+      #new_scale_color() +
+      geom_segment(data = as.data.frame(lines_l[[1]][[i]]), 
+                 aes(x = x, xend = xend, y = y, yend = yend, size = thickness ^ 2))
+    }
+    
+    return(p)
   }
-  
-  return(p)
+}
+
+plot_semicircle_stroke <- function(layers = c(), execute = TRUE){
+  if(execute == FALSE) {
+    return(p)
+  } else{
+    for(i in layers){
+      p <- p + 
+      new_scale_fill() +
+      new_scale_color() +
+      geom_path(data = as.data.frame(semicircle_stroke_l[[1]][[i]]), 
+                aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
+      scale_color_manual(values = unique(semicircle_stroke_l[[2]][[i]][[1]]))
+    }
+    
+    return(p)
+  }
+}
+
+plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE){
+  if(execute == FALSE) {
+    return(p)
+  } else{
+    for(i in layers){
+      p <- p + 
+      new_scale_fill() +
+      new_scale_color() +
+      geom_path(data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]), 
+              aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
+    scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[i]][[1]]))
+    }
+    
+    return(p)
+  }
 }
 ```
 
@@ -717,28 +770,18 @@ lines_l <- add_noise(lines_l, c(1:2), 30)
 
 ```{r}
 p <- ggplot() +
-  scale_alpha(range = c(0.8, 1)) +
+  scale_alpha(range = c(0.999, 1)) +
   scale_size(range = c(0.3, 1.3)) +
   coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = FALSE) +
   theme_void() +
   theme(legend.position = "none",
         panel.background = element_rect(fill = "#EBE6CE"))
 
+
 p <- plot_triangles(c(6:3))
 p <- plot_semicircles(c(2:1))
-
-p <- p +
-  new_scale_fill() +
-  new_scale_color() +
-  geom_path(data = as.data.frame(semicircle_stroke_color_l[[1]][[1]]), 
-            aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
-  scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[1]][[1]])) +
-  new_scale_fill() +
-  new_scale_color() +
-  geom_path(data = as.data.frame(semicircle_stroke_l[[1]][[1]]), 
-            aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
-  scale_color_manual(values = unique(semicircle_stroke_l[[2]][[1]][[1]]))
-
+p <- plot_semicircle_stroke_color(c(1))
+p <- plot_semicircle_stroke(c(1))
 p <- plot_quads(c(4:1))
 p <- plot_circles(c(6:2))
 p <- plot_triangles(c(2:1))

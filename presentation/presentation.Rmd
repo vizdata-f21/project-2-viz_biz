@@ -50,21 +50,41 @@ Class: middle, inverse, center
 
 ### Big Picture
 
-**Goal:** Make expensive, luxury modern artworks that are once accessible only in museum and private collections to be accessible to the public mass.
+**Goal:** Make expensive, luxury modern artworks that are once accessible only in museum and private
+collections to be accessible to the public mass.
 
-- We will also make the artwork *customizable* and reproducible using the Shiny App.
+- We will make our chosen artworks *customizable* and reproducible using the Shiny App.
 
-- Users will be to download their own customized artwork.
+- Users will be able to download their own customized artwork with their desired resolution or 
+quality level.
+
+** **
+
+**Our Chosen Artworks:** We are regenerating these artworks in R and will be using Shiny *reactive* 
+features.
+
+- Frank Stella, *Lettre sur les sourds et muets II* (1974)
+
+- Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
+
+- Wassily Kandinsky, *Composition 8* (1923)
+
+- Piet Mondrian, *Trafalgar Square* (1939-1943)
 
 ---
 
 ### Demo
 
-We will demo you to our final Shiny App with a click [***here***](https://phillipharmadi.shinyapps.io/phillip-shiny/).
+We will demo you to our final Shiny App with a click [***here***](https://phillipharmadi.shinyapps.io/final-shiny/).
 
----
+Please do not hesitate let us know at at any time if you want to be shown something 
+specific within our app's reactive features during our demonstration soon.
 
-### Thank You
+```{r}
+stella <- image_read("stella.jpg")
+stella
+```
 
-Feel free to ask any questions to our team!
+
+
 

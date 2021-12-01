@@ -52,6 +52,7 @@ library(cowplot)
 # library(generativeart) # https://github.com/cutterkom/generativeart
 library(ggpolypath)
 library(colourpicker)
+library(ggnewscale)
 library(Cairo)
 library(ggforce)
 options(shiny.usecairo = TRUE)
@@ -308,7 +309,7 @@ ui <- fluidPage(
           colourInput(
             inputId = "background_color",
             label = "Background Color",
-            value = "#EBE6CE"),
+            value = "#F1E8DC"),
           checkboxGroupInput(inputId = "checkbox_layers",
                              label   = "Select layers to display:",
                              choices = list("Circles", "Quadrilaterals", "Triangles",
@@ -338,7 +339,7 @@ ui <- fluidPage(
           h2(strong("Wassily Kandinsky: Composing Onesself")),
           h5(em("Composition 8 (1923)")),
           p(""),
-          p("Modify Wassily Kandinsky's masterpiece to make it your own by adjusting the
+          p("Modify Wassily Kandinsky's artwork to make it your own by adjusting the
             settings in the", em("Graphics Input"), "sidebar on the left."),
           p("Change the color, transparency, or add some random noise to the plot to see how
             much composition really matters blah blah"),
@@ -847,6 +848,56 @@ server <- function(input, output) {
 
   output$plot_kandinsky <- renderPlot({
     kplot()
+  },
+  height = 800, width = 900)
+
+  custom_filename_kandinsky <- reactive({
+    input$custom_filename_kandinsky
+  })
+
+  custom_res_kandinsky <- reactive({
+    input$res_kandinsky
+  })
+
+  output$save_kandinsky <- downloadHandler(
+    filename = function() {
+      custom_filename_kandinsky()
+    },
+    content = function(file) {
+      ggsave(file, plot = kplot(), device = "png", dpi = as.double(custom_res_kandinsky()))
+    }
+  )
+
+  output$original_artwork_kandinsky <- renderImage({
+    if (input$original_artwork_kandinsky == TRUE) {
+      return(list(
+        src = "./kandinsky.jpg",
+        width = 450,
+        height = 315,
+        contentType = "image/jpg",
+        alt = "Original Artwork",
+        deleteFile = FALSE
+      ))
+    }
+    if (input$original_artwork_kandinsky == FALSE) {
+      return(list(
+        src = "./kandinsky.jpg",
+        width = 0,
+        height = 0,
+        contentType = "image/jpg",
+        alt = "Original Artwork",
+        deleteFile = FALSE
+      ))
+    }
+  })
+
+  output$original_artwork_text_kandinsky <- renderText({
+    if (input$original_artwork_kandinsky == TRUE) {
+      return(paste("Solomon R. Guggenheim Founding Collection, By gift © 2018 Artists Rights Society (ARS), New York/ADAGP, Paris"))
+    }
+    if (input$original_artwork_kandinsky == FALSE) {
+      return(NULL)
+    }
   })
 }
 

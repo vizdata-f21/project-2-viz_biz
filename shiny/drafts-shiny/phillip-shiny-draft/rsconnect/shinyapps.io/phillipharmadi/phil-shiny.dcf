@@ -1,0 +1,13 @@
+name: phil-shiny
+title: phil-shiny
+username:
+account: phillipharmadi
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5064559
+bundleId: 5225449
+url: https://phillipharmadi.shinyapps.io/phil-shiny/
+when: 1636349095.77255
+lastSyncTime: 1636349095.77256
+asMultiple: FALSE
+asStatic: FALSE

@@ -75,15 +75,19 @@ clip <- function(x, low, high) {
   return(x)
 }
 
-add_noise <- function(df, layers = c(1), magnitude = 5){
-  for (i in layers){
+add_noise <- function(df, layers = c(1), magnitude = 5) {
+  for (i in layers) {
     df[[1]][[i]] <- as.data.frame(df[[1]][[i]]) %>%
       group_by(grouping) %>%
-      mutate(noise_x = rnorm(1, 0, magnitude),
-             noise_y = rnorm(1, 0, magnitude)) %>%
+      mutate(
+        noise_x = rnorm(1, 0, magnitude),
+        noise_y = rnorm(1, 0, magnitude)
+      ) %>%
       ungroup() %>%
-      mutate(across(contains("x"), ~ clip(.x + noise_x, xmin, xmax)),
-             across(contains("y"), ~ clip(.x + noise_y, ymin, ymax)))
+      mutate(
+        across(contains("x"), ~ clip(.x + noise_x, xmin, xmax)),
+        across(contains("y"), ~ clip(.x + noise_y, ymin, ymax))
+      )
   }
   return(df)
 }
@@ -113,12 +117,70 @@ ui <- fluidPage(
   navbarPage(
     title = "Viz Biz",
     tabPanel(
-      title = "Who Are We?",
+      title = "About Us",
       sidebarLayout(
         sidebarPanel(
-          h4("Our Team"),
+          h5("Who Are We?"),
+          p("", style = "margin-bottom: 24px;"),
+          p("We are the ", em("Viz Biz"), " team:", style = "margin-bottom: 6px;"),
+          p("1. Phillip Harmadi (ph119@duke.edu)",
+            style = "margin-bottom: 3px;"
+          ),
+          p("2. Sana Pashankar (sdp47@duke.edu)",
+            style = "margin-bottom: 3px;"
+          ),
+          p("3. Lillian Clark (lmc97@duke.edu)",
+            style = "margin-bottom: 3px;"
+          ),
+          p("4. Eli Feder (esf10@duke.edu)",
+            style = "margin-bottom: 3px;"
+          ),
+          p("", style = "margin-bottom: 24px;"),
+          p(
+            "This dahsboard website is the main portion of our final project for Duke University's ",
+            em("STA 313 (Advanced Data Visualization)"), "course during the Fall 2021 semester."
+          ),
+          p("We hope that our project will increase your appreciation and awareness
+            of using digital techniques to recreate modern and abstract artworks.")
         ),
-        mainPanel()
+        mainPanel(
+          h2("Democratizing Modern Art"),
+          p("", style = "margin-bottom: 24px;"),
+          h5("💡 Customizable Artworks using the Shiny App"),
+          p("", style = "margin-bottom: 12px;"),
+          p("Our goal is to promote digital extensions of modern, abstract paintings
+          and encourage users to play with and modify pieces with significance and
+          status in the art world. Wealthy collectors, curators, and gallery owners
+          have historically had a massive amount of power in determining what is
+          considered “good art” and what sells."),
+          p("We see our project as part of the
+          move to question empty status designations and push back against institutional
+          art gatekeeping. Hence, this Shiny App allow users to access several examples
+          of recreated art pieces and adjust their aesthetics based on one’s personal
+          preference and download them for their personal use with no strings attached."),
+          p("", style = "margin-bottom: 24px;"),
+          h5("🖌 Our chosen artworks for you to explore creatively"),
+          p("", style = "margin-bottom: 12px;"),
+          p("1. Frank Stella, ", em("Lettre sur les sourds et muets II"), " (1974)",
+            style = "margin-bottom: 3px;"
+          ),
+          p("2. Piet Mondrian, ", em("Trafalgar Square"), " (1939-1943)",
+            style = "margin-bottom: 3px;"
+          ),
+          p("3. Wassily Kandinsky, ", em("Composition 8"), " (1923)",
+            style = "margin-bottom: 3px;"
+          ),
+          p("4. Barbara Kruger, ", em("Untitled (Your body is a battleground)"), " (1989)",
+            style = "margin-bottom: 3px;"
+          ),
+          p("", style = "margin-bottom: 24px;"),
+          h5("❓ How to navigate the artworks?"),
+          p("", style = "margin-bottom: 12px;"),
+          p("We invite you to recreate your
+            own modified piece of famous artworks and adjust their
+            settings by using the", em("Graphics Input"), "sidebar on the left bar
+            of each of our dashboard tab according to your preference.")
+        )
       )
     ),
     tabPanel(
@@ -183,10 +245,12 @@ ui <- fluidPage(
           h2(strong("Frank Stella: Experiment and Change")),
           h5(em("Lettre Sur Les Et Muets II (1974)")),
           p(""),
-          p("Inspired by the original artwork, we invite you to recreate your
-            own modified piece of Frank Stella's masterpiece and adjust the
-            settings in the", em("Graphics Input"), "sidebar on the left
-            according to your preference."),
+          p("Stella alternates between bands of gray, lightening as they approach
+            the center and a rich chromatic scale, which transitions from reds,
+            to yellow, to greens and finally dark blue. The painting’s simultaneous
+            formal cohesion and discordant color combinations create a precisely
+            wrought tension within the painting, an effect Stella often strives
+            for in his pictures."),
           p("Our recommendation is to have more layers and higher resolution
             if you are intending to print the plot for a huge decoration. Otherwise,
             hacing a smaller number of layers and lower resolution would be more appropriate.
@@ -230,7 +294,7 @@ ui <- fluidPage(
           # sliderInput("sizehorizontal",
           #             "Thickness of Horizontal Lines:",
           #             min = 0, max = 10, value = 4.5, step = 0.25, ticks = FALSE),
-          colourInput(inputId = "background_color_piet", label = "Background Color", value = "#FAF4EB"),
+          colourInput(inputId = "background_color_piet", label = "Background Color", value = "#F5EFDF"),
           colourInput(inputId = "grid_color_piet", label = "Grid Color", value = "#000000"),
           h6("Box Colors"),
           fluidRow(
@@ -257,18 +321,22 @@ ui <- fluidPage(
           h2(strong("Piet Mondrian: Finding Refuge")),
           h5(em("Trafalgar Square (1939-1943)")),
           p(""),
-          p("Inspired by the original artwork, we invite you to recreate your
-            own modified piece of Piet Mondrian's masterpiece and adjust the
-            settings in the", em("Graphics Input"), "sidebar on the left
-            according to your preference."),
+          p("In September 1938, Mondrian moved from Paris to London to escape the
+            threat of a German invasion. There he made Trafalgar Square, the first
+            in a series of paintings titled after locations in cities that gave him
+            refuge during World War II. Mondrian revisited this painting after his
+            flight to New York in 1940 to escape the escalating war. The small,
+            subtly textured planes of primary colors vibrate within their black
+            perimeters."),
           p("Feel free to toggle between different amount of horizontal lines
             in the artwork and to adjust the color of the boxes pictured. Experiment
-            with your own varieties of abstract ways to
-            modify this plot and figure out your desired unique style!"),
+            with your own varieties of abstract ways to modify and figure out your
+            own custom style!"),
           div(plotOutput(
             outputId = "plot_piet", inline = TRUE,
             height = "100%"
           ), align = "center"),
+          p(""),
           prettyCheckbox(
             inputId = "original_artwork_piet",
             label = "Original Artwork",
@@ -288,40 +356,50 @@ ui <- fluidPage(
           h4("Graphics Input"),
           div(align = "right"),
           sliderInput("circlesize",
-                      "Circle Size:",
-                      min = 1,
-                      max = 20,
-                      value = 10,
-                      ticks = FALSE),
+            "Circle Size:",
+            min = 1,
+            max = 20,
+            value = 10,
+            ticks = FALSE
+          ),
           sliderInput("linethickness",
-                      "Line Thickness:",
-                      min = 0.001,
-                      max = 3,
-                      value = c(0.3, 1.3),
-                      ticks = FALSE),
+            "Line Thickness:",
+            min = 0.001,
+            max = 3,
+            value = c(0.3, 1.3),
+            ticks = FALSE
+          ),
           sliderInput("alpha",
-                      "Transparency:",
-                      min = 0,
-                      max = 1,
-                      value = c(0.95, 1),
-                      ticks = FALSE
+            "Transparency:",
+            min = 0,
+            max = 1,
+            value = c(0.95, 1),
+            ticks = FALSE
           ),
           colourInput(
             inputId = "background_color",
             label = "Background Color",
-            value = "#F1E8DC"),
-          checkboxGroupInput(inputId = "checkbox_layers",
-                             label   = "Select layers to display:",
-                             choices = list("Circles", "Quadrilaterals", "Triangles",
-                                            "Straight Lines", "Curved Lines"),
-                             selected = list("Circles", "Quadrilaterals", "Triangles",
-                                             "Straight Lines", "Curved Lines")),
+            value = "#F1E8DC"
+          ),
+          checkboxGroupInput(
+            inputId = "checkbox_layers",
+            label = "Select layers to display:",
+            choices = list(
+              "Circles", "Quadrilaterals", "Triangles",
+              "Straight Lines", "Curved Lines"
+            ),
+            selected = list(
+              "Circles", "Quadrilaterals", "Triangles",
+              "Straight Lines", "Curved Lines"
+            )
+          ),
           h4("Add random noise"),
           sliderInput("magnitudenoise",
-                      "Magnitude:",
-                      min = 0,
-                      max = 25,
-                      value = 0),
+            "Magnitude:",
+            min = 0,
+            max = 25,
+            value = 0
+          ),
           actionButton("go", "Apply Changes"),
           hr(),
           textInput("custom_filename_kandinsky", "Filename", "wassily_kandinsky.png"),
@@ -336,7 +414,7 @@ ui <- fluidPage(
           )
         ),
         mainPanel(
-          h2(strong("Wassily Kandinsky: Composing Onesself")),
+          h2(strong("Wassily Kandinsky: Composing Oneself")),
           h5(em("Composition 8 (1923)")),
           p(""),
           p("Modify Wassily Kandinsky's artwork to make it your own by adjusting the
@@ -358,8 +436,7 @@ ui <- fluidPage(
           h4(" ")
         )
       )
-
-    )# tab 3 panel
+    ) # tab 3 panel
   ) # navbar page
 ) # fluid page
 
@@ -495,8 +572,8 @@ server <- function(input, output) {
     {
       plotInput()
     },
-    height = 400,
-    width = 400
+    height = 450,
+    width = 450
   )
 
   custom_filename <- reactive({
@@ -596,12 +673,12 @@ server <- function(input, output) {
       )) +
       geom_rect(data = pietmondrianvertical, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = input$grid_color_piet, size = 3) +
       geom_hline(
-        yintercept = seq(4, 10, length.out = input$piet_lines), size = 4.5, # input$sizehorizontal,
+        yintercept = seq(4, 10, length.out = input$piet_lines), size = 3, # input$sizehorizontal,
         color = input$grid_color_piet
       ) +
-      geom_segment(data = piet_segment, aes(x = x, y = y, xend = xend, yend = yend), color = input$grid_color_piet, size = 3.5) +
-      scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 2)) +
-      scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, by = 2)) +
+      geom_segment(data = piet_segment, aes(x = x, y = y, xend = xend, yend = yend), color = input$grid_color_piet, size = 3) +
+      scale_x_continuous(limits = c(0, 10), expand = c(0, 0), breaks = seq(0, 10, by = 2)) +
+      scale_y_continuous(limits = c(0, 12), expand = c(0, 0), breaks = seq(0, 12, by = 2)) +
       coord_fixed(xlim = c(0, 10), ylim = c(0, 12)) +
       theme_void() +
       theme(legend.position = "none")
@@ -611,8 +688,8 @@ server <- function(input, output) {
     {
       plotInput_piet()
     },
-    height = 600,
-    width = 500
+    height = 400,
+    width = 333
   )
 
   custom_filename_piet <- reactive({
@@ -637,7 +714,7 @@ server <- function(input, output) {
       return(list(
         src = "./piet.jpg",
         width = 250,
-        height = 325,
+        height = 333,
         contentType = "image/jpg",
         alt = "Original Artwork",
         deleteFile = FALSE
@@ -664,13 +741,12 @@ server <- function(input, output) {
     }
   })
 
-## KANDINSKY
+  ## KANDINSKY
   kplot <- eventReactive(input$go, {
-
     input$goButton
 
     # change circle size based on input$circlesize from ui.R
-    for (i in c(1:6)){
+    for (i in c(1:6)) {
       circles_l[[1]][[i]] <- as.data.frame(circles_l[[1]][[i]]) %>%
         mutate(radius = radius * input$circlesize / 10)
     }
@@ -685,16 +761,18 @@ server <- function(input, output) {
     triangles_l <- add_noise(triangles_l, c(1:6), magnitude = input$magnitudenoise)
 
     # plotting functions
-    plot_circles <- function(layers = c(), execute = TRUE){
-      if(execute == FALSE) {
+    plot_circles <- function(layers = c(), execute = TRUE) {
+      if (execute == FALSE) {
         return(p)
-      } else{
-        for(i in layers){
+      } else {
+        for (i in layers) {
           p <- p +
             new_scale_fill() +
             new_scale_color() +
-            geom_circle(data = as.data.frame(circles_l[[1]][[i]]),
-                        aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)) +
+            geom_circle(
+              data = as.data.frame(circles_l[[1]][[i]]),
+              aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)
+            ) +
             scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
             scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
         }
@@ -702,16 +780,18 @@ server <- function(input, output) {
       }
     }
 
-    plot_semicircles <- function(layers = c(), execute = TRUE){
-      if(execute == FALSE) {
+    plot_semicircles <- function(layers = c(), execute = TRUE) {
+      if (execute == FALSE) {
         return(p)
-      } else{
-        for(i in layers){
+      } else {
+        for (i in layers) {
           p <- p +
             new_scale_fill() +
             new_scale_color() +
-            geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[i]]),
-                         aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+            geom_polygon(
+              data = as.data.frame(semicircle_fill_l[[1]][[i]]),
+              aes(x = x, y = y, group = id, fill = color, alpha = alpha)
+            ) +
             scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]]))
         }
 
@@ -719,16 +799,18 @@ server <- function(input, output) {
       }
     }
 
-    plot_quads <- function(layers = c(), execute = TRUE){
-      if(execute == FALSE) {
+    plot_quads <- function(layers = c(), execute = TRUE) {
+      if (execute == FALSE) {
         return(p)
-      } else{
-        for(i in layers){
+      } else {
+        for (i in layers) {
           p <- p +
             new_scale_fill() +
             new_scale_color() +
-            geom_polygon(data = as.data.frame(quads_l[[1]][[i]]),
-                         aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+            geom_polygon(
+              data = as.data.frame(quads_l[[1]][[i]]),
+              aes(x = x, y = y, group = id, fill = color, alpha = alpha)
+            ) +
             scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
         }
 
@@ -736,16 +818,18 @@ server <- function(input, output) {
       }
     }
 
-    plot_triangles <- function(layers = c(), execute = TRUE){
-      if(execute == FALSE) {
+    plot_triangles <- function(layers = c(), execute = TRUE) {
+      if (execute == FALSE) {
         return(p)
-      } else{
-        for(i in layers){
+      } else {
+        for (i in layers) {
           p <- p +
             new_scale_fill() +
             new_scale_color() +
-            geom_polygon(data = as.data.frame(triangles_l[[1]][[i]]),
-                         aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+            geom_polygon(
+              data = as.data.frame(triangles_l[[1]][[i]]),
+              aes(x = x, y = y, group = id, fill = color, alpha = alpha)
+            ) +
             scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
         }
 
@@ -753,32 +837,36 @@ server <- function(input, output) {
       }
     }
 
-    plot_lines <- function(layers = c(), execute = TRUE){
-      if(execute == FALSE) {
+    plot_lines <- function(layers = c(), execute = TRUE) {
+      if (execute == FALSE) {
         return(p)
-      } else{
-        for(i in layers){
+      } else {
+        for (i in layers) {
           p <- p +
-            #new_scale_fill() +
-            #new_scale_color() +
-            geom_segment(data = as.data.frame(lines_l[[1]][[i]]),
-                         aes(x = x, xend = xend, y = y, yend = yend, size = thickness ^ 2))
+            # new_scale_fill() +
+            # new_scale_color() +
+            geom_segment(
+              data = as.data.frame(lines_l[[1]][[i]]),
+              aes(x = x, xend = xend, y = y, yend = yend, size = thickness^2)
+            )
         }
 
         return(p)
       }
     }
 
-    plot_semicircle_stroke <- function(layers = c(), execute = TRUE){
-      if(execute == FALSE) {
+    plot_semicircle_stroke <- function(layers = c(), execute = TRUE) {
+      if (execute == FALSE) {
         return(p)
-      } else{
-        for(i in layers){
+      } else {
+        for (i in layers) {
           p <- p +
             new_scale_fill() +
             new_scale_color() +
-            geom_path(data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
-                      aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
+            geom_path(
+              data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
+              aes(x = x, y = y, group = id, color = color, size = thickness^2)
+            ) +
             scale_color_manual(values = unique(semicircle_stroke_l[[2]][[i]][[1]]))
         }
 
@@ -786,16 +874,18 @@ server <- function(input, output) {
       }
     }
 
-    plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE){
-      if(execute == FALSE) {
+    plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE) {
+      if (execute == FALSE) {
         return(p)
-      } else{
-        for(i in layers){
+      } else {
+        for (i in layers) {
           p <- p +
             new_scale_fill() +
             new_scale_color() +
-            geom_path(data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
-                      aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
+            geom_path(
+              data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
+              aes(x = x, y = y, group = id, color = color, size = thickness^2)
+            ) +
             scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[i]][[1]]))
         }
 
@@ -803,23 +893,23 @@ server <- function(input, output) {
       }
     }
 
-    if("Circles" %in% input$checkbox_layers){
+    if ("Circles" %in% input$checkbox_layers) {
       print_circles <- TRUE
     }
 
-    if("Quadrilaterals" %in% input$checkbox_layers){
+    if ("Quadrilaterals" %in% input$checkbox_layers) {
       print_quads <- TRUE
     }
 
-    if("Curved Lines" %in% input$checkbox_layers){
+    if ("Curved Lines" %in% input$checkbox_layers) {
       print_lines_curved <- TRUE
     }
 
-    if("Straight Lines" %in% input$checkbox_layers){
+    if ("Straight Lines" %in% input$checkbox_layers) {
       print_lines_straight <- TRUE
     }
 
-    if("Triangles" %in% input$checkbox_layers){
+    if ("Triangles" %in% input$checkbox_layers) {
       print_triangles <- TRUE
     }
 
@@ -829,9 +919,11 @@ server <- function(input, output) {
       scale_size(range = c(input$linethickness[1], input$linethickness[2])) +
       coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = FALSE) +
       theme_void() +
-      theme(legend.position = "none",
-            panel.background = element_rect(fill = input$background_color),
-            panel.border = element_blank())
+      theme(
+        legend.position = "none",
+        panel.background = element_rect(fill = input$background_color),
+        panel.border = element_blank()
+      )
 
     p <- plot_triangles(c(6:3), execute = print_triangles)
     p <- plot_semicircles(c(3:1), execute = print_circles)
@@ -846,10 +938,13 @@ server <- function(input, output) {
     p
   })
 
-  output$plot_kandinsky <- renderPlot({
-    kplot()
-  },
-  height = 800, width = 900)
+  output$plot_kandinsky <- renderPlot(
+    {
+      kplot()
+    },
+    height = 800,
+    width = 900
+  )
 
   custom_filename_kandinsky <- reactive({
     input$custom_filename_kandinsky

@@ -73,7 +73,7 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           h4("Our Team"),
-          h6(b("Viz Biz"))
+          h6("Viz Biz")
         ),
         mainPanel()
       )

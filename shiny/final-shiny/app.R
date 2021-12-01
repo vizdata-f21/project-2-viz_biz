@@ -705,7 +705,8 @@ server <- function(input, output) {
       custom_filename_piet()
     },
     content = function(file) {
-      ggsave(file, plot = plotInput_piet(), device = "png", dpi = as.double(custom_res_piet()))
+      ggsave(file, plot = plotInput_piet(), device = "png", dpi = as.double(custom_res_piet()),
+             height = 4, width = 3.33)
     }
   )
 

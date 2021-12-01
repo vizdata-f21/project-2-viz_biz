@@ -230,10 +230,10 @@ ui <- fluidPage(
           #             "Thickness of Horizontal Lines:",
           #             min = 0, max = 10, value = 4.5, step = 0.25, ticks = FALSE),
 
-          colourInput(inputId = "grid_color_piet", label = "Grid Color", value = "#3D3D3D"),
+          colourInput(inputId = "grid_color_piet", label = "Grid Color", value = "#000000"),
           h6("Box Colors"),
           fluidRow(
-            column(width = 6, colourInput(inputId = "color_piet_1", label = NULL, value = "#3D3D3D")),
+            column(width = 6, colourInput(inputId = "color_piet_1", label = NULL, value = "#000000")),
             column(width = 6, colourInput(inputId = "color_piet_2", label = NULL, value = "#2A4FE0"))
           ),
           fluidRow(
@@ -587,6 +587,7 @@ server <- function(input, output) {
 
   plotInput_piet <- reactive({
     ggplot() +
+      geom_rect(aes(xmin = 0, xmax = 10, ymin = 0, ymax = 12), fill = "white") + ##MAKE THIS COLOR REACTIVE
       geom_rect(data = piet_geom_rect, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill)) +
       scale_fill_manual(values = c(
         input$color_piet_1, input$color_piet_2,

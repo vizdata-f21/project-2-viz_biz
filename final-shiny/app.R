@@ -53,10 +53,53 @@ library(cowplot)
 library(ggpolypath)
 library(colourpicker)
 library(Cairo)
+library(ggforce)
 options(shiny.usecairo = TRUE)
 library(base64enc)
 
-# Define UI for application that draws a histogram
+## Kandinsky Prep
+# load data
+circles_l <- readRDS("data/circles.rds")
+lines_l <- readRDS("data/lines.rds")
+quads_l <- readRDS("data/quads.rds")
+semicircle_fill_l <- readRDS("data/semicircle-fill.rds")
+semicircle_stroke_l <- readRDS("data/semicircle-stroke.rds")
+semicircle_stroke_color_l <- readRDS("data/semicircle-stroke-color.rds")
+triangles_l <- readRDS("data/triangles.rds")
+
+# write functions
+clip <- function(x, low, high) {
+  x[x < low] <- low
+  x[x > high] <- high
+  return(x)
+}
+
+add_noise <- function(df, layers = c(1), magnitude = 5){
+  for (i in layers){
+    df[[1]][[i]] <- as.data.frame(df[[1]][[i]]) %>%
+      group_by(grouping) %>%
+      mutate(noise_x = rnorm(1, 0, magnitude),
+             noise_y = rnorm(1, 0, magnitude)) %>%
+      ungroup() %>%
+      mutate(across(contains("x"), ~ clip(.x + noise_x, xmin, xmax)),
+             across(contains("y"), ~ clip(.x + noise_y, ymin, ymax)))
+  }
+  return(df)
+}
+
+xmin <- 0
+xmax <- 152
+ymin <- 0
+ymax <- 86
+
+print_circles <- FALSE
+print_quads <- FALSE
+print_lines_curved <- FALSE
+print_lines_straight <- FALSE
+print_triangles <- FALSE
+
+
+# Define UI for application
 ui <- fluidPage(
   theme = bs_theme(
     bootswatch = "cosmo",
@@ -236,7 +279,86 @@ ui <- fluidPage(
           h4(" ")
         )
       )
-    ) # tab 3 panel
+    ),
+    tabPanel(
+      title = "3. Wassily Kandinsky",
+      sidebarLayout(
+        sidebarPanel(
+          h4("Graphics Input"),
+          div(align = "right"),
+          sliderInput("circlesize",
+                      "Circle Size:",
+                      min = 1,
+                      max = 20,
+                      value = 10,
+                      ticks = FALSE),
+          sliderInput("linethickness",
+                      "Line Thickness:",
+                      min = 0.001,
+                      max = 3,
+                      value = c(0.3, 1.3),
+                      ticks = FALSE),
+          sliderInput("alpha",
+                      "Transparency:",
+                      min = 0,
+                      max = 1,
+                      value = c(0.95, 1),
+                      ticks = FALSE
+          ),
+          colourInput(
+            inputId = "background_color",
+            label = "Background Color",
+            value = "#EBE6CE"),
+          checkboxGroupInput(inputId = "checkbox_layers",
+                             label   = "Select layers to display:",
+                             choices = list("Circles", "Quadrilaterals", "Triangles",
+                                            "Straight Lines", "Curved Lines"),
+                             selected = list("Circles", "Quadrilaterals", "Triangles",
+                                             "Straight Lines", "Curved Lines")),
+          h4("Add random noise"),
+          sliderInput("magnitudenoise",
+                      "Magnitude:",
+                      min = 0,
+                      max = 25,
+                      value = 0),
+          actionButton("go", "Apply Changes"),
+          hr(),
+          textInput("custom_filename_kandinsky", "Filename", "wassily_kandinsky.png"),
+          sliderInput(
+            inputId = "res_kandinsky",
+            label = "Resolution (in dpi)",
+            min = 100, max = 2000, value = 600, step = 100, round = TRUE, ticks = FALSE
+          ),
+          div(
+            align = "right",
+            downloadLink("save_kandinsky", strong("Download"))
+          )
+        ),
+        mainPanel(
+          h2(strong("Wassily Kandinsky: Composing Onesself")),
+          h5(em("Composition 8 (1923)")),
+          p(""),
+          p("Modify Wassily Kandinsky's masterpiece to make it your own by adjusting the
+            settings in the", em("Graphics Input"), "sidebar on the left."),
+          p("Change the color, transparency, or add some random noise to the plot to see how
+            much composition really matters blah blah"),
+          div(plotOutput(
+            outputId = "plot_kandinsky", inline = TRUE,
+            height = "100%"
+          ), align = "center"),
+          prettyCheckbox(
+            inputId = "original_artwork_kandinsky",
+            label = "Original Artwork",
+            value = FALSE
+          ),
+          div(imageOutput(outputId = "original_artwork_kandinsky", inline = TRUE), align = "center"),
+          h4(" "),
+          div(textOutput(outputId = "original_artwork_text_kandinsky", inline = TRUE), align = "center"),
+          h4(" ")
+        )
+      )
+
+    )# tab 3 panel
   ) # navbar page
 ) # fluid page
 

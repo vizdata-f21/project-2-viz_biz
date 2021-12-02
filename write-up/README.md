@@ -95,6 +95,8 @@ visualization in ggplot2. 2 distinct
 features sparked our interest to make *adjustable/modifiable* to the preference 
 of each audience:
 
+<img src="shiny_screenshots/Piet_Mondrian.png" style="width:100%"/>
+
 **Horizontal Lines**
 
 In the original painting, there are 4 horizontal lines that seem to be evenly 
@@ -132,4 +134,5 @@ recreating Frank Stella's artwork. As a user modifies the number of layers in th
 dataset will adjust automatically and dynamically, hence our team created a function with the
 number of layers (the reactive input) as one of the parameters of the function.
 
+Another challenge that we encountered was allowing for a user to input an image link of their choice in the Barbara Kruger section of the Shiny app. Not only was the link input reactive, but we encountered an error where the app would crash if an invalid url was used. To address this, we kept the original link variable if the link was valid and updated it to the kruger image link if not. We also added an error message if the link was not valid. 
 

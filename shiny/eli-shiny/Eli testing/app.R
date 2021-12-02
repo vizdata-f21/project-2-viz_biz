@@ -131,10 +131,39 @@ server <- function(input, output) {
     })
 
 
+    x_plot <- reactive({c(img_width()/2, img_width()/2, img_width()/2)})
+    y_plot <- reactive({c(img_height()-30*size(), img_height()/2, 30*size())})
+
+    df <- reactive({
+        data.frame(x_plot(), y_plot())
+    })
 
     observe({output$plot <- renderPlot({
         kruger_plot <- ggplot() +
-            draw_image(magick_plot()) +
+            geom_rect(aes(xmin = 0, xmax = img_width(),
+                          ymin = 0, ymax = img_height()),
+                      color = input$rect_color,
+                      size = input$border_size,
+                      fill = NA) +
+            draw_image(image_modulate(magick_plot(),
+                                      brightness = input$img_brightness,
+                                      saturation = input$img_saturation,
+                                      hue = input$img_hue),
+                       x = 0, y=0, width = img_width(),  height = img_height()) +
+
+            geom_label(data = df(),
+                       mapping = aes(x = x_plot(),
+                                     y = y_plot()
+                       ),
+                       label = c(input$top, input$middle, input$bottom),
+                       size = input$text_size,
+                       fill = input$rect_color,
+                       color = input$text_color,
+                       family = "Times New Roman",
+                       fontface = "bold",
+                       label.size = 0,
+                       label.r = unit(0, "lines")) +
+
             coord_equal() +
             theme_void()
 

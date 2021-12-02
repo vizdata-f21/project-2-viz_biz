@@ -132,4 +132,5 @@ recreating Frank Stella's artwork. As a user modifies the number of layers in th
 dataset will adjust automatically and dynamically, hence our team created a function with the
 number of layers (the reactive input) as one of the parameters of the function.
 
+Another challenge that we encountered was allowing for a user to input an image link of their choice in the Barbara Kruger section of the Shiny app. Not only was the link input reactive, but we encountered an error where the app would crash if an invalid url was used. To address this, we kept the original link variable if the link was valid and updated it to the kruger image link if not. We also added an error message if the link was not valid. 
 

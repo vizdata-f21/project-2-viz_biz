@@ -57,7 +57,7 @@ triangles_l <- readRDS("data/triangles.rds")
 
 # load font
 font_add(family = "Futura",
-         regular = "/home/guest/R/project-2-viz_biz/shiny/final-shiny/data/Futura.ttf")
+         regular = paste0(here::here(), "/shiny/final-shiny/data/Futura.ttf"))
 showtext_auto()
 
 

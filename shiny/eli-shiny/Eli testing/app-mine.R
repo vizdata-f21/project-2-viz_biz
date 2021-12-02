@@ -1,0 +1,141 @@
+# load packages ----------------------------------------------------------------
+
+library(shiny)
+library(tidyverse)
+library(cowplot)
+library(magick)
+library(extrafont)
+library(bslib)
+library(colourpicker)
+
+# ui ---------------------------------------------------------------------------
+
+ui <- fluidPage(
+  theme = bs_theme(
+    bootswatch = "cosmo",
+    bg = "#fff",
+    fg = "#000",
+    primary = "#4060ff",
+    base_font = font_google("Zen Kaku Gothic Antique"),
+    code_font = font_google("Zen Kaku Gothic Antique")
+  ),
+  navbarPage(
+    title = "Viz Biz",
+    tabPanel(
+      title = "Barbara Kruger",
+      sidebarLayout(
+        sidebarPanel(
+          h4("Graphics Input"),
+          textInput("path", "Image address:", "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"),
+          textInput("top", "Top text:", "Your body"),
+          textInput("middle", "Middle text:", "is a"),
+          textInput("bottom", "Bottom text:", "battleground"),
+          sliderInput(
+            inputId = "text_size",
+            label = "Text size",
+            min = 1, max = 20, value = 10, ticks = FALSE
+          ),
+          sliderInput(
+            inputId = "border_size",
+            label = "Border size",
+            min = 0, max = 20, value = 5, ticks = FALSE
+          ),
+          sliderInput(
+            inputId = "img_brightness",
+            label = "Brightness",
+            min = 0, max = 500, value = 100, step = 10, round = TRUE, ticks = FALSE
+          ),
+          sliderInput(
+            inputId = "img_saturation",
+            label = "Saturation",
+            min = 0, max = 200, value = 100, step = 10, round = TRUE, ticks = FALSE
+          ),
+          sliderInput(
+            inputId = "img_hue",
+            label = "Hue",
+            min = 0, max = 200, value = 100, step = 10, round = TRUE, ticks = FALSE
+          ),
+          p("Text Color"),
+          fluidRow(
+            column(width = 6, colourInput(
+              inputId = "text_color",
+              label = NULL, value = "#FCFCFC"
+            ))
+          ),
+          p("Border Color"),
+          fluidRow(
+            column(width = 6, colourInput(
+              inputId = "rect_color",
+              label = NULL, value = "#FF0000"
+            ))
+          ),
+          hr(),
+          textInput("custom_filename", "Filename", "kruger_example.png"),
+          verbatimTextOutput("value"),
+          sliderInput(
+            inputId = "res",
+            label = "Resolution (in dpi)",
+            min = 100, max = 2000, value = 600, step = 100, round = TRUE, ticks = FALSE
+          ),
+          div(
+            align = "right",
+            downloadLink("save", strong("Download"))
+          )
+        ), # sidebar panel
+
+        mainPanel(
+          h2(strong("Barbara Kruger")),
+          h5(em("Untitled (Your body is a battleground)")),
+          p(""),
+          p("Inspired by Kruger's original artwork, we invite you to recreate your
+            own modified image and adjust the
+            settings in the", em("Graphics Input"), "sidebar on the left
+            according to your preference."),
+
+          div(imageOutput(
+            outputId = "img_to_show", inline = TRUE,
+            height = "100%"
+          ), align = "center")
+        ) # main panel
+      ) # sidebar 3 layout
+    ) # tab 1 panel
+  ) # navbar page
+) # fluid page
+
+# server -----------------------------------------------------------------------
+
+server <- function(input, output) {
+
+
+  output$img_to_show <- renderImage({
+
+    magick_image <- image_read(input$path)
+
+    scaler <- if_else(
+      image_info(magick_image)$height >= image_info(magick_image)$width,
+      "x700",
+      "700"
+    )
+
+    border <- paste0(input$border_size, "x", input$border_size)
+
+    tmpfile <- magick_image %>%
+      image_scale(geometry = scaler) %>%
+      image_modulate(brightness = input$img_brightness,
+                     saturation = input$img_saturation,
+                     hue = input$img_hue) %>%
+      image_border(color = input$rect_color, geometry = border) %>%
+      image_annotate(text = input$top, size = input$text_size, color = input$text_color) %>%
+      image_write(tempfile(fileext='jpg'), format = 'jpg')
+
+    # Return a list
+    list(src = tmpfile, contentType = "image/jpeg")
+
+    },
+    deleteFile = TRUE
+    )
+}
+
+# create shiny app -------------------------------------------------------------
+
+shinyApp(ui = ui, server = server)

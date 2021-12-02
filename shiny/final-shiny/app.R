@@ -55,6 +55,7 @@ library(magick)
 library(shinyvalidate)
 library(RCurl)
 
+
 ## Kandinsky Prep
 # load data
 circles_l <- readRDS("data/circles.rds")
@@ -397,7 +398,7 @@ ui <- fluidPage(
             max = 25,
             value = 0
           ),
-          actionButton("go", "Apply Changes"),
+          actionButton("go_kandinsky", "Apply Changes"),
           p(""),
           span(p("Please allow the artwork 10 to 15 seconds to render after applying changes"),
                style = "color:red"),
@@ -418,21 +419,21 @@ ui <- fluidPage(
           h5(em("Composition 8 (1923)")),
           p(""),
           p("After World War I, Wassily Kandinsky returned to his birth city of Moscow to practice art there.
-            However, despite his abstract style, his ideas conflicted with those of the Russian
+            However, despite their shared interest in the abstract, his ideas conflicted with those of the Russian
             avant-garde. Unlike his peers, who preferred systematic, rational abstraction, Kandinsky
             saw geometric forms as expressive and lyrical. Because of this tension, he moved to
             Germany and joined the Weimar Bauhaus faculty. There he found like-minded artists
             and produced Composition 8, an exploration of the psychospiritual influences of shape
             and color in which circles play a dominant role. Nancy Spector wrote of the piece,
-            'In Composition 8, the colorful, interactive geometric forms create a pulsating surface
-            that is alternately dynamic and calm, aggressive and quiet.'"),
+            \"In Composition 8, the colorful, interactive geometric forms create a pulsating surface
+            that is alternately dynamic and calm, aggressive and quiet.\" (1)"),
           p("Modify Composition 8 to make it your own by adjusting the settings in the",
             em("Graphics Input"), "sidebar on the left."),
           p("Change the size of the circles, line thickness, background color, shape transparency,
             or which kinds of geometries to include. You may also add random noise to the piece, generated
             from a normal distribution, and watch Kandinsky's careful composition fall apart. Remember to
             press the", em("Apply Changes"), "button to watch your modifications come to life."),
-          p("Source: Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
+          p("(1) Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
             Museums and Foundation. Accessed December 2, 2021. https://www.guggenheim.org/artwork/1924."),
           div(plotOutput(
             outputId = "plot_kandinsky", inline = FALSE,
@@ -455,48 +456,48 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           h4("Graphics Input"),
-          textInput("path", "Image Link Address",
-                    "https://cdn.thecollector.com/wp-content/uploads/2020/03/image10-20.jpg"),
-          fluidRow(
-            column(width = 6, colourInput(
-              inputId = "text_color",
-              label = "Text Color", value = "#FCFCFC"
-            )),
-            column(width = 6, colourInput(
-              inputId = "rect_color",
-              label = "Border Color", value = "#E3002D"
-            ))
+          textInput("path", "Image address:", "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"),
+          textInput("top", "top text:", "Your body"),
+          textInput("middle", "Middle text:", "is a"),
+          textInput("bottom", "Bottom text:", "battleground"),
+          sliderInput(
+            inputId = "text_size",
+            label = "Text size",
+            min = 1, max = 40, value = 20, ticks = FALSE
           ),
-          fluidRow(
-            column(width = 6, sliderInput(
-              inputId = "text_size",
-              label = "Text size",
-              min = 5, max = 50, value = 25, step = 0.5, ticks = FALSE
-            )),
-            column(width = 6, sliderInput(
-              inputId = "border_size",
-              label = "Border size",
-              min = 0, max = 20, value = 12, step = 0.5, ticks = FALSE
-            ))
-
+          sliderInput(
+            inputId = "border_size",
+            label = "Border size",
+            min = 0, max = 20, value = 10, ticks = FALSE
           ),
-          textInput("top", "Top Text", "If we can,"),
-          textInput("middle", "Middle Text", "they can."),
-          textInput("bottom", "Bottom Text", "Equal is what we are!"),
           sliderInput(
             inputId = "img_brightness",
             label = "Brightness",
-            min = 0, max = 200, value = 100, step = 5, round = TRUE, ticks = FALSE
+            min = 0, max = 500, value = 100, step = 10, round = TRUE, ticks = FALSE
           ),
           sliderInput(
             inputId = "img_saturation",
             label = "Saturation",
-            min = -500, max = 500, value = 100, step = 5, round = TRUE, ticks = FALSE
+            min = 0, max = 200, value = 100, step = 10, round = TRUE, ticks = FALSE
           ),
           sliderInput(
             inputId = "img_hue",
             label = "Hue",
-            min = -500, max = 500, value = 100, step = 5, round = TRUE, ticks = FALSE
+            min = 0, max = 200, value = 100, step = 10, round = TRUE, ticks = FALSE
+          ),
+          p("Text Color"),
+          fluidRow(
+            column(width = 6, colourInput(
+              inputId = "text_color",
+              label = NULL, value = "#FCFCFC"
+            ))
+          ),
+          p("Border Color"),
+          fluidRow(
+            column(width = 6, colourInput(
+              inputId = "rect_color",
+              label = NULL, value = "#FF0000"
+            ))
           ),
           hr(),
           textInput("custom_filename_kruger", "Filename", "barbara_kruger.png"),
@@ -525,13 +526,11 @@ ui <- fluidPage(
             own version of Kruger's
             work and adjust the settings in the", em("Graphics Input"), "sidebar
             on the left. Change various elements of the text, border, and even
-            replace the image from any website link to communicate a message
-            you think is important!"),
+            image to communicate a message you think is important."),
           div(plotOutput(
             outputId = "plot_kruger", inline = FALSE,
             height = "100%"
           ), align = "center"),
-          p(""),
           prettyCheckbox(
             inputId = "original_artwork_kruger",
             label = "Original Artwork",
@@ -850,8 +849,7 @@ server <- function(input, output) {
   })
 
   ## KANDINSKY
-  kplot <- eventReactive(input$go, {
-    input$goButton
+  kplot <- eventReactive(input$go_kandinsky, {
 
     # change circle size based on input$circlesize from ui.R
     for (i in c(1:6)) {
@@ -1001,25 +999,11 @@ server <- function(input, output) {
       }
     }
 
-    if ("Circles" %in% input$checkbox_layers) {
-      print_circles <- TRUE
-    }
-
-    if ("Quadrilaterals" %in% input$checkbox_layers) {
-      print_quads <- TRUE
-    }
-
-    if ("Curved Lines" %in% input$checkbox_layers) {
-      print_lines_curved <- TRUE
-    }
-
-    if ("Straight Lines" %in% input$checkbox_layers) {
-      print_lines_straight <- TRUE
-    }
-
-    if ("Triangles" %in% input$checkbox_layers) {
-      print_triangles <- TRUE
-    }
+    print_circles <- ("Circles" %in% input$checkbox_layers)
+    print_quads <- ("Quadrilaterals" %in% input$checkbox_layers)
+    print_lines_curved <- ("Curved Lines" %in% input$checkbox_layers)
+    print_lines_straight <- ("Straight Lines" %in% input$checkbox_layers)
+    print_triangles <- ("Triangles" %in% input$checkbox_layers)
 
     # plot artwork
     p <- ggplot() +
@@ -1221,8 +1205,8 @@ server <- function(input, output) {
     if (input$original_artwork_kruger == TRUE) {
       return(list(
         src = "./kruger.jpg",
-        width = 300,
-        height = 300,
+        width = 250,
+        height = 333,
         contentType = "image/jpg",
         alt = "Original Artwork",
         deleteFile = FALSE

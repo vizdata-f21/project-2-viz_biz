@@ -5,6 +5,7 @@ library(magick)
 library(extrafont)
 library(bslib)
 library(colourpicker)
+library(shinyvalidate)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -106,8 +107,20 @@ ui <- fluidPage(
 server <- function(input, output) {
 
 
+    # Validation rules are set in the server, start by
+    # making a new instance of an `InputValidator()`
+    iv <- InputValidator$new()
+
+    # Basic usage: `sv_url()` works well with its
+    # defaults; a message will be displayed if the
+    # validation of `input$address` fails
+    iv$add_rule("path", sv_url(message = "Not a valid URL", allow_multiple = FALSE, allow_na = FALSE))
+
+    # Finally, `enable()` the validation rules
+    iv$enable()
+
+
     magick_image <- reactive({image_read(input$path)})
-    #my_image <- image_read("https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg")
 
 
     magick_plot <- reactive({

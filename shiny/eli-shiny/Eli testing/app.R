@@ -92,12 +92,10 @@ ui <- fluidPage(
             settings in the", em("Graphics Input"), "sidebar on the left
             according to your preference."),
 
-          # plotOutput(outputId = "plot", inline = TRUE),
-          div(plotOutput(
-            outputId = "plot", inline = TRUE,
+          div(imageOutput(
+            outputId = "img_to_show", inline = TRUE,
             height = "100%"
-          ), align = "center"),
-          h4(" ")
+          ), align = "center")
         ) # main panel
       ) # sidebar 3 layout
     ) # tab 1 panel
@@ -107,52 +105,35 @@ ui <- fluidPage(
 # server -----------------------------------------------------------------------
 
 server <- function(input, output) {
-  magick_image <- reactive({
-    image_read(input$path)
-  })
-  # my_image <- image_read("https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg")
 
 
-  magick_plot <- reactive({
-    if (image_info(magick_image())$height >= image_info(magick_image())$width) {
-      image_scale(magick_image(), "x700")
-    } else {
-      image_scale(magick_image(), "700")
-    }
-  })
+  output$img_to_show <- renderImage({
 
-  img_height <- reactive({
-    image_info(magick_plot())$height
-  })
-  img_width <- reactive({
-    image_info(magick_plot())$width
-  })
+    magick_image <- image_read(input$path)
 
-
-  size <- reactive({
-    if (img_height() > img_width()) {
-      img_width() / 500
-    } else {
-      img_height() / 500
-    }
-  })
-
-
-
-  observe({
-    output$plot <- renderPlot(
-      {
-        kruger_plot <- ggplot() +
-          draw_image(magick_plot()) +
-          coord_equal() +
-          theme_void()
-
-        kruger_plot
-      },
-      height = img_height(),
-      width = img_width()
+    scaler <- if_else(
+      image_info(magick_image)$height >= image_info(magick_image)$width,
+      "x700",
+      "700"
     )
-  })
+
+    border <- paste0(input$border_size, "x", input$border_size)
+
+    tmpfile <- magick_image %>%
+      image_scale(geometry = scaler) %>%
+      image_modulate(brightness = input$img_brightness,
+                     saturation = input$img_saturation,
+                     hue = input$img_hue) %>%
+      image_border(color = input$rect_color, geometry = border) %>%
+      image_annotate(text = input$top, size = input$text_size, color = input$text_color) %>%
+      image_write(tempfile(fileext='jpg'), format = 'jpg')
+
+    # Return a list
+    list(src = tmpfile, contentType = "image/jpeg")
+
+    },
+    deleteFile = TRUE
+    )
 }
 
 # create shiny app -------------------------------------------------------------

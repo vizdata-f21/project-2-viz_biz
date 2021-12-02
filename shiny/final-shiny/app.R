@@ -1,7 +1,7 @@
 # http://shiny.rstudio.com/
-library(shiny)
+library(shiny) #Eli
 library(shinythemes)
-library(tidyverse)
+library(tidyverse) #Eli
 library(DT)
 library(shinyalert)
 library(shinyWidgets)
@@ -9,13 +9,8 @@ library(ggiraph)
 library(statebins)
 library(gganimate)
 library(colorspace)
-library(patchwork)
-library(usmap)
-library(lubridate)
 library(ggrepel)
 library(scales)
-#library(dsbox)
-library(viridis)
 library(ggridges)
 library(magrittr)
 library(forcats)
@@ -24,36 +19,30 @@ library(janitor)
 library(grid)
 library(gridExtra)
 library(styler)
-library(emojifont)
 library(RColorBrewer)
 library(colorRamps)
 library(glue)
-library(wordcloud)
-library(wordcloud2)
 library(RColorBrewer)
 library(ggwordcloud)
 library(ggtext)
 library(tidytext)
-library(stringr)
-library(stopwords)
 library(tm)
-library(ggwordcloud)
-library(bslib)
+library(bslib) #Eli
 library(Rcpp)
 library(reshape2)
 library(colourlovers)
-library(cowplot)
-# library(generativeart) # https://github.com/cutterkom/generativeart
+library(cowplot) #Eli
 library(ggpolypath)
-library(colourpicker)
+library(colourpicker) #Eli
 library(ggnewscale)
 library(Cairo)
 library(ggforce)
 options(shiny.usecairo = TRUE)
 library(base64enc)
-library(magick)
-library(shinyvalidate)
-library(RCurl)
+library(magick) #Eli
+library(shinyvalidate) #Eli
+library(RCurl) #Eli
+library(showtext) #Eli
 
 
 ## Kandinsky Prep
@@ -65,6 +54,12 @@ semicircle_fill_l <- readRDS("data/semicircle-fill.rds")
 semicircle_stroke_l <- readRDS("data/semicircle-stroke.rds")
 semicircle_stroke_color_l <- readRDS("data/semicircle-stroke-color.rds")
 triangles_l <- readRDS("data/triangles.rds")
+
+# load font
+font_add(family = "Futura",
+         regular = "/home/guest/R/project-2-viz_biz/shiny/final-shiny/data/Futura.ttf")
+showtext_auto()
+
 
 # write functions
 clip <- function(x, low, high) {
@@ -458,48 +453,47 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           h4("Graphics Input"),
-          textInput("path", "Image address:", "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"),
+          textInput("path", "Image address:",
+                    "https://cdn.thecollector.com/wp-content/uploads/2020/03/image10-20.jpg"),
+          fluidRow(
+            column(width = 6, colourInput(
+              inputId = "text_color",
+              label = "Text Color", value = "#FCFCFC"
+            )),
+            column(width = 6, colourInput(
+              inputId = "rect_color",
+              label = "Border Color", value = "#ED1C24"
+            ))
+          ),
+          fluidRow(
+            column(width = 6, sliderInput(
+              inputId = "text_size",
+              label = "Text size",
+              min = 5, max = 50, value = 25, step = 0.5, ticks = FALSE
+            )),
+            column(width = 6, sliderInput(
+              inputId = "border_size",
+              label = "Border size",
+              min = 0, max = 20, value = 12, step = 0.5, ticks = FALSE
+            ))
+            ),
           textInput("top", "top text:", "Your body"),
           textInput("middle", "Middle text:", "is a"),
           textInput("bottom", "Bottom text:", "battleground"),
           sliderInput(
-            inputId = "text_size",
-            label = "Text size",
-            min = 1, max = 40, value = 20, ticks = FALSE
-          ),
-          sliderInput(
-            inputId = "border_size",
-            label = "Border size",
-            min = 0, max = 20, value = 10, ticks = FALSE
-          ),
-          sliderInput(
             inputId = "img_brightness",
             label = "Brightness",
-            min = 0, max = 500, value = 100, step = 10, round = TRUE, ticks = FALSE
+            min = 0, max = 500, value = 100, step = 5, round = TRUE, ticks = FALSE
           ),
           sliderInput(
             inputId = "img_saturation",
             label = "Saturation",
-            min = 0, max = 200, value = 100, step = 10, round = TRUE, ticks = FALSE
+            min = -500, max = 500, value = 100, step = 5, round = TRUE, ticks = FALSE
           ),
           sliderInput(
             inputId = "img_hue",
             label = "Hue",
-            min = 0, max = 200, value = 100, step = 10, round = TRUE, ticks = FALSE
-          ),
-          p("Text Color"),
-          fluidRow(
-            column(width = 6, colourInput(
-              inputId = "text_color",
-              label = NULL, value = "#FCFCFC"
-            ))
-          ),
-          p("Border Color"),
-          fluidRow(
-            column(width = 6, colourInput(
-              inputId = "rect_color",
-              label = NULL, value = "#FF0000"
-            ))
+            min = -500, max = 500, value = 100, step = 5, round = TRUE, ticks = FALSE
           ),
           hr(),
           textInput("custom_filename_kruger", "Filename", "barbara_kruger.png"),
@@ -517,18 +511,23 @@ ui <- fluidPage(
           h2(strong("Barbara Kruger: Cultural Critique")),
           h5(em("Untitled (Your body is a battleground) (1989)")),
           p(""),
-          p("Untitled (Your body is a battleground) was produced by Kruger for
-          the Women’s March on Washington in support of reproductive freedom.
-          This image is simultaneously art and protest."),
-          p(""),
-          p("We invite you to recreate your own modified version of Kruger's
-            work and adjust the settings in the", em("Graphics Input"), "sidebar
-            on the left. Change various elements of the text, border, and even
-            image to communicate a message you think is important."),
+          p("Kruger is most known for her collage style that consists of black-and-white
+            photographs, overlaid with declarative captions, stated in white-on-red
+            text. The phrases in her works often include pronouns such as 'you', 'your',
+            'I', 'we', and 'they', addressing cultural constructions of power, identity,
+            consumerism, and sexuality."),
+          p("Kruger produced her ", em("Untitled (Your body is a battleground)"), " artwork for
+          the Women’s March on Washington in support of reproductive freedom,
+            simultaneously an art and a protest. We invite you to recreate your
+            own version of Kruger's work and adjust the settings in the",
+            em("Graphics Input"), "sidebar on the left. Change various elements
+            of the text, border, and even replace the image from any image address
+            to communicate a message you think is important!"),
           div(plotOutput(
             outputId = "plot_kruger", inline = FALSE,
             height = "100%"
           ), align = "center"),
+          p(""),
           prettyCheckbox(
             inputId = "original_artwork_kruger",
             label = "Original Artwork",
@@ -1107,7 +1106,7 @@ observeEvent(input$go_kandinsky, {
       link()
     }
     else{
-      "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"
+      "https://cdn.thecollector.com/wp-content/uploads/2020/03/image10-20.jpg"
     }
   })
 
@@ -1133,10 +1132,10 @@ observeEvent(input$go_kandinsky, {
 
   magick_plot <- reactive({
     if(image_info(magick_image())$height>=image_info(magick_image())$width) {
-      image_scale(magick_image(), "x700")
+      image_scale(magick_image(), "x550")
     }
     else{
-      image_scale(magick_image(), "700")}
+      image_scale(magick_image(), "550")}
   })
 
   img_height <- reactive({image_info(magick_plot())$height})
@@ -1183,7 +1182,7 @@ observeEvent(input$go_kandinsky, {
                  size = input$text_size,
                  fill = input$rect_color,
                  color = input$text_color,
-                 family = "sans",
+                 family = "Futura",
                  fontface = "bold",
                  label.size = 0,
                  label.r = unit(0, "lines")) +
@@ -1215,8 +1214,8 @@ observeEvent(input$go_kandinsky, {
     if (input$original_artwork_kruger == TRUE) {
       return(list(
         src = "./kruger.jpg",
-        width = 250,
-        height = 333,
+        width = 300,
+        height = 300,
         contentType = "image/jpg",
         alt = "Original Artwork",
         deleteFile = FALSE
@@ -1236,7 +1235,7 @@ observeEvent(input$go_kandinsky, {
 
   output$original_artwork_text_kruger <- renderText({
     if (input$original_artwork_kruger == TRUE) {
-      return(paste("Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Museum of Modern Art (MoMA), New York"))
+      return(paste("The Inaugural Installation, © 1989 The Broad, Los Angeles"))
     }
     if (input$original_artwork_kruger == FALSE) {
       return(NULL)

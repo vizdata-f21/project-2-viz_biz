@@ -21,7 +21,15 @@ Things to alter
 library(tidyverse)
 library(cowplot)
 library(magick)
+library(showtext)
 ```
+```{r}
+font_add(family = "Futura", regular = "/home/guest/R/project-2-viz_biz/shiny/eli-shiny/Futura.ttf")
+
+showtext_auto()
+```
+
+
 
 ```{r inputs}
 path <- "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"
@@ -33,7 +41,7 @@ bottom <- "battleground"
 text_size <- 10
 rect_color <- "red"
 text_color <- "white"
-font <- "times"
+font <- "Futura"
 emphasis <- "bold"
 
 #0 to 5

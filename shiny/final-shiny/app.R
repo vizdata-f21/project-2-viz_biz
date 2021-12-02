@@ -504,7 +504,7 @@ ui <- fluidPage(
           textInput("custom_filename_kruger", "Filename", "barbara_kruger.png"),
           verbatimTextOutput("value"),
           sliderInput(
-            inputId = "res_krugeer",
+            inputId = "res_kruger",
             label = "Resolution (in dpi)",
             min = 100, max = 2000, value = 600, step = 100, round = TRUE, ticks = FALSE
           ),

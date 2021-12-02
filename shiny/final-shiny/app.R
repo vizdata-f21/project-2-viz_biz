@@ -186,7 +186,6 @@ ui <- fluidPage(
             label = "Size (Number of layers):",
             min = 10, max = 30, value = 15, ticks = FALSE
           ),
-          p(""),
           p("Primary Gradient"),
           fluidRow(
             column(width = 6, colourInput(
@@ -198,7 +197,6 @@ ui <- fluidPage(
               label = NULL, value = "#0C0C3B"
             ))
           ),
-          p(""),
           p("Secondary Gradient"),
           fluidRow(
             column(width = 6, colourInput(

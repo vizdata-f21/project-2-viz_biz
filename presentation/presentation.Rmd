@@ -60,10 +60,9 @@ quality level.
 
 **Project Main Question**: Can we recreate famous artworks and make them customizable through computer programming? 
 
-** **
+---
 
-**Our Chosen Artworks:** We are regenerating these artworks in R and will be using Shiny *reactive* 
-features.
+### Our Chosen Artworks
 
 - Frank Stella, *Lettre sur les sourds et muets II* (1974)
 

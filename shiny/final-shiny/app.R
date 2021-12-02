@@ -862,185 +862,190 @@ observeEvent(input$go_kandinsky, {
       plotOutput("plot_kandinsky")
     })
 
+    plotInput_kandinsky <- reactive({
+
+      # change circle size based on input$circlesize from ui.R
+      for (i in c(1:6)) {
+        circles_l[[1]][[i]] <- as.data.frame(circles_l[[1]][[i]]) %>%
+          mutate(radius = radius * input$circlesize / 10)
+      }
+
+      # add random noise based on input$magnitudenoise from ui.R
+      circles_l <- add_noise(circles_l, c(1:6), magnitude = input$magnitudenoise)
+      lines_l <- add_noise(lines_l, c(1:2), magnitude = input$magnitudenoise)
+      quads_l <- add_noise(quads_l, c(1:4), magnitude = input$magnitudenoise)
+      semicircle_fill_l <- add_noise(semicircle_fill_l, magnitude = input$magnitudenoise)
+      semicircle_stroke_l <- add_noise(semicircle_stroke_l, magnitude = input$magnitudenoise)
+      semicircle_stroke_color_l <- add_noise(semicircle_stroke_color_l, magnitude = input$magnitudenoise)
+      triangles_l <- add_noise(triangles_l, c(1:6), magnitude = input$magnitudenoise)
+
+      # plotting functions
+      plot_circles <- function(layers = c(), execute = TRUE) {
+        if (execute == FALSE) {
+          return(p)
+        } else {
+          for (i in layers) {
+            p <- p +
+              new_scale_fill() +
+              new_scale_color() +
+              geom_circle(
+                data = as.data.frame(circles_l[[1]][[i]]),
+                aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)
+              ) +
+              scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
+              scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
+          }
+          return(p)
+        }
+      }
+
+      plot_semicircles <- function(layers = c(), execute = TRUE) {
+        if (execute == FALSE) {
+          return(p)
+        } else {
+          for (i in layers) {
+            p <- p +
+              new_scale_fill() +
+              new_scale_color() +
+              geom_polygon(
+                data = as.data.frame(semicircle_fill_l[[1]][[i]]),
+                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
+              ) +
+              scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]]))
+          }
+
+          return(p)
+        }
+      }
+
+      plot_quads <- function(layers = c(), execute = TRUE) {
+        if (execute == FALSE) {
+          return(p)
+        } else {
+          for (i in layers) {
+            p <- p +
+              new_scale_fill() +
+              new_scale_color() +
+              geom_polygon(
+                data = as.data.frame(quads_l[[1]][[i]]),
+                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
+              ) +
+              scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
+          }
+
+          return(p)
+        }
+      }
+
+      plot_triangles <- function(layers = c(), execute = TRUE) {
+        if (execute == FALSE) {
+          return(p)
+        } else {
+          for (i in layers) {
+            p <- p +
+              new_scale_fill() +
+              new_scale_color() +
+              geom_polygon(
+                data = as.data.frame(triangles_l[[1]][[i]]),
+                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
+              ) +
+              scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
+          }
+
+          return(p)
+        }
+      }
+
+      plot_lines <- function(layers = c(), execute = TRUE) {
+        if (execute == FALSE) {
+          return(p)
+        } else {
+          for (i in layers) {
+            p <- p +
+              # new_scale_fill() +
+              # new_scale_color() +
+              geom_segment(
+                data = as.data.frame(lines_l[[1]][[i]]),
+                aes(x = x, xend = xend, y = y, yend = yend, size = thickness^2)
+              )
+          }
+
+          return(p)
+        }
+      }
+
+      plot_semicircle_stroke <- function(layers = c(), execute = TRUE) {
+        if (execute == FALSE) {
+          return(p)
+        } else {
+          for (i in layers) {
+            p <- p +
+              new_scale_fill() +
+              new_scale_color() +
+              geom_path(
+                data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
+                aes(x = x, y = y, group = id, color = color, size = thickness^2)
+              ) +
+              scale_color_manual(values = unique(semicircle_stroke_l[[2]][[i]][[1]]))
+          }
+
+          return(p)
+        }
+      }
+
+      plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE) {
+        if (execute == FALSE) {
+          return(p)
+        } else {
+          for (i in layers) {
+            p <- p +
+              new_scale_fill() +
+              new_scale_color() +
+              geom_path(
+                data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
+                aes(x = x, y = y, group = id, color = color, size = thickness^2)
+              ) +
+              scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[i]][[1]]))
+          }
+
+          return(p)
+        }
+      }
+
+      print_circles <- ("Circles" %in% input$checkbox_layers)
+      print_quads <- ("Quadrilaterals" %in% input$checkbox_layers)
+      print_lines_curved <- ("Curved Lines" %in% input$checkbox_layers)
+      print_lines_straight <- ("Straight Lines" %in% input$checkbox_layers)
+      print_triangles <- ("Triangles" %in% input$checkbox_layers)
+
+      # plot artwork
+      p <- ggplot() +
+        scale_alpha(range = c(input$alpha[1], input$alpha[2])) +
+        scale_size(range = c(input$linethickness[1], input$linethickness[2])) +
+        coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = FALSE) +
+        theme_void() +
+        theme(
+          legend.position = "none",
+          panel.background = element_rect(fill = input$background_color, color = input$background_color),
+          panel.border = element_blank()
+        )
+
+      p <- plot_triangles(c(6:3), execute = print_triangles)
+      p <- plot_semicircles(c(3:1), execute = print_circles)
+      p <- plot_semicircle_stroke_color(c(1), execute = print_lines_curved)
+      p <- plot_semicircle_stroke(c(1), execute = print_lines_curved)
+      p <- plot_quads(c(4:1), execute = print_quads)
+      p <- plot_circles(c(6:2), execute = print_circles)
+      p <- plot_triangles(c(2:1), execute = print_triangles)
+      p <- plot_circles(c(1), execute = print_circles)
+      p <- plot_lines(c(2:1), execute = print_lines_straight)
+
+      p
+    })
+
     output$plot_kandinsky <- renderPlot(
       {
-        # change circle size based on input$circlesize from ui.R
-        for (i in c(1:6)) {
-          circles_l[[1]][[i]] <- as.data.frame(circles_l[[1]][[i]]) %>%
-            mutate(radius = radius * input$circlesize / 10)
-        }
-
-        # add random noise based on input$magnitudenoise from ui.R
-        circles_l <- add_noise(circles_l, c(1:6), magnitude = input$magnitudenoise)
-        lines_l <- add_noise(lines_l, c(1:2), magnitude = input$magnitudenoise)
-        quads_l <- add_noise(quads_l, c(1:4), magnitude = input$magnitudenoise)
-        semicircle_fill_l <- add_noise(semicircle_fill_l, magnitude = input$magnitudenoise)
-        semicircle_stroke_l <- add_noise(semicircle_stroke_l, magnitude = input$magnitudenoise)
-        semicircle_stroke_color_l <- add_noise(semicircle_stroke_color_l, magnitude = input$magnitudenoise)
-        triangles_l <- add_noise(triangles_l, c(1:6), magnitude = input$magnitudenoise)
-
-        # plotting functions
-        plot_circles <- function(layers = c(), execute = TRUE) {
-          if (execute == FALSE) {
-            return(p)
-          } else {
-            for (i in layers) {
-              p <- p +
-                new_scale_fill() +
-                new_scale_color() +
-                geom_circle(
-                  data = as.data.frame(circles_l[[1]][[i]]),
-                  aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)
-                ) +
-                scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
-                scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
-            }
-            return(p)
-          }
-        }
-
-        plot_semicircles <- function(layers = c(), execute = TRUE) {
-          if (execute == FALSE) {
-            return(p)
-          } else {
-            for (i in layers) {
-              p <- p +
-                new_scale_fill() +
-                new_scale_color() +
-                geom_polygon(
-                  data = as.data.frame(semicircle_fill_l[[1]][[i]]),
-                  aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-                ) +
-                scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]]))
-            }
-
-            return(p)
-          }
-        }
-
-        plot_quads <- function(layers = c(), execute = TRUE) {
-          if (execute == FALSE) {
-            return(p)
-          } else {
-            for (i in layers) {
-              p <- p +
-                new_scale_fill() +
-                new_scale_color() +
-                geom_polygon(
-                  data = as.data.frame(quads_l[[1]][[i]]),
-                  aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-                ) +
-                scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
-            }
-
-            return(p)
-          }
-        }
-
-        plot_triangles <- function(layers = c(), execute = TRUE) {
-          if (execute == FALSE) {
-            return(p)
-          } else {
-            for (i in layers) {
-              p <- p +
-                new_scale_fill() +
-                new_scale_color() +
-                geom_polygon(
-                  data = as.data.frame(triangles_l[[1]][[i]]),
-                  aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-                ) +
-                scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
-            }
-
-            return(p)
-          }
-        }
-
-        plot_lines <- function(layers = c(), execute = TRUE) {
-          if (execute == FALSE) {
-            return(p)
-          } else {
-            for (i in layers) {
-              p <- p +
-                # new_scale_fill() +
-                # new_scale_color() +
-                geom_segment(
-                  data = as.data.frame(lines_l[[1]][[i]]),
-                  aes(x = x, xend = xend, y = y, yend = yend, size = thickness^2)
-                )
-            }
-
-            return(p)
-          }
-        }
-
-        plot_semicircle_stroke <- function(layers = c(), execute = TRUE) {
-          if (execute == FALSE) {
-            return(p)
-          } else {
-            for (i in layers) {
-              p <- p +
-                new_scale_fill() +
-                new_scale_color() +
-                geom_path(
-                  data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
-                  aes(x = x, y = y, group = id, color = color, size = thickness^2)
-                ) +
-                scale_color_manual(values = unique(semicircle_stroke_l[[2]][[i]][[1]]))
-            }
-
-            return(p)
-          }
-        }
-
-        plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE) {
-          if (execute == FALSE) {
-            return(p)
-          } else {
-            for (i in layers) {
-              p <- p +
-                new_scale_fill() +
-                new_scale_color() +
-                geom_path(
-                  data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
-                  aes(x = x, y = y, group = id, color = color, size = thickness^2)
-                ) +
-                scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[i]][[1]]))
-            }
-
-            return(p)
-          }
-        }
-
-        print_circles <- ("Circles" %in% input$checkbox_layers)
-        print_quads <- ("Quadrilaterals" %in% input$checkbox_layers)
-        print_lines_curved <- ("Curved Lines" %in% input$checkbox_layers)
-        print_lines_straight <- ("Straight Lines" %in% input$checkbox_layers)
-        print_triangles <- ("Triangles" %in% input$checkbox_layers)
-
-        # plot artwork
-        p <- ggplot() +
-          scale_alpha(range = c(input$alpha[1], input$alpha[2])) +
-          scale_size(range = c(input$linethickness[1], input$linethickness[2])) +
-          coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = FALSE) +
-          theme_void() +
-          theme(
-            legend.position = "none",
-            panel.background = element_rect(fill = input$background_color, color = input$background_color),
-            panel.border = element_blank()
-          )
-
-        p <- plot_triangles(c(6:3), execute = print_triangles)
-        p <- plot_semicircles(c(3:1), execute = print_circles)
-        p <- plot_semicircle_stroke_color(c(1), execute = print_lines_curved)
-        p <- plot_semicircle_stroke(c(1), execute = print_lines_curved)
-        p <- plot_quads(c(4:1), execute = print_quads)
-        p <- plot_circles(c(6:2), execute = print_circles)
-        p <- plot_triangles(c(2:1), execute = print_triangles)
-        p <- plot_circles(c(1), execute = print_circles)
-        p <- plot_lines(c(2:1), execute = print_lines_straight)
-
-        p
+        plotInput_kandinsky()
       },
       height = 800,
       width = 900
@@ -1060,7 +1065,7 @@ observeEvent(input$go_kandinsky, {
       custom_filename_kandinsky()
     },
     content = function(file) {
-      ggsave(file, plot = kplot(), device = "png", dpi = as.double(custom_res_kandinsky()))
+      ggsave(file, plot = plotInput_kandinsky(), device = "png", dpi = as.double(custom_res_kandinsky()))
     }
   )
 

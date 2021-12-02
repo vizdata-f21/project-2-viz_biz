@@ -34,9 +34,9 @@ library(colourlovers)
 library(cowplot) # Eli
 library(ggpolypath)
 library(colourpicker) # Eli
-library(ggnewscale)
+library(ggnewscale) # Lilly
 library(Cairo)
-library(ggforce)
+library(ggforce) # Lilly
 options(shiny.usecairo = TRUE)
 library(base64enc)
 library(magick) # Eli
@@ -407,7 +407,7 @@ ui <- fluidPage(
           ),
           div(
             align = "right",
-            downloadLink("save_kandinsky", strong("Download"))
+            downloadLink(outputId = "save_kandinsky", label = strong("Download"))
           )
         ),
         mainPanel(
@@ -864,7 +864,7 @@ server <- function(input, output) {
     {
       list(
         src = "./kandinsky_ggplot.png",
-        height = 800,
+        height = 510,
         width = 900,
         contentType = "image/png"
       )
@@ -1062,26 +1062,18 @@ server <- function(input, output) {
       {
         plotInput_kandinsky()
       },
-      height = 800,
+      height = 510,
       width = 900
     )
-  },
-  once = TRUE)
-
-  custom_filename_kandinsky <- reactive({
-    input$custom_filename_kandinsky
   })
 
-  custom_res_kandinsky <- reactive({
-    input$res_kandinsky
-  })
 
   output$save_kandinsky <- downloadHandler(
     filename = function() {
-      custom_filename_kandinsky()
+      input$custom_filename_kandinsky
     },
     content = function(file) {
-      ggsave(file, plot = plotInput_kandinsky(), device = "png", dpi = as.double(custom_res_kandinsky()))
+      ggsave(file, plot = plot_kandinsky(), device = "png", dpi = as.double(input$res_kandinsky))
     }
   )
 

@@ -877,7 +877,7 @@ server <- function(input, output) {
       plotOutput("plot_kandinsky")
     })
 
-    plotInput_kandinsky <- reactive({
+    plotInput_kandinsky <- eventReactive(input$go_kandinsky, {
 
       # change circle size based on input$circlesize from ui.R
       for (i in c(1:6)) {
@@ -1065,7 +1065,8 @@ server <- function(input, output) {
       height = 800,
       width = 900
     )
-  })
+  },
+  once = TRUE)
 
   custom_filename_kandinsky <- reactive({
     input$custom_filename_kandinsky

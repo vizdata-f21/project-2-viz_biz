@@ -110,6 +110,7 @@ server <- function(input, output) {
     #my_image <- image_read("https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg")
 
     plot_image <- reactive({
+<<<<<<< HEAD:eli-shiny/app.R
 
         ifelse(
             image_info(my_image())$height >= image_info(my_image())$width,
@@ -122,6 +123,20 @@ server <- function(input, output) {
     img_height <- reactive(image_info(plot_image())$height)
     img_width <- reactive(image_info(plot_image())$width)
 
+=======
+
+        ifelse(
+            image_info(my_image())$height >= image_info(my_image())$width,
+            image_scale(my_image(), "x700"),
+            image_scale(my_image(), "700")
+        )
+
+    })
+
+    img_height <- reactive(image_info(plot_image())$height)
+    img_width <- reactive(image_info(plot_image())$width)
+
+>>>>>>> 4a21b78b5ae89cd8a3ee43eb789bad03a5e7bba5:shiny/eli-shiny/elitesting/app.R
 
     plot_size <- reactive({tribble(
         ~x, ~y,
@@ -145,8 +160,13 @@ server <- function(input, output) {
         img_width()/2, 30*size())})
 
 
+<<<<<<< HEAD:eli-shiny/app.R
+    output$plot <- renderPlot({
+        kruger_plot <- ggplot() +
+=======
     plotInput <- reactive({
         ggplot() +
+>>>>>>> 4a21b78b5ae89cd8a3ee43eb789bad03a5e7bba5:shiny/eli-shiny/elitesting/app.R
             geom_point(data = plot_size(), aes(x = x, y = y), alpha = 0) +
             geom_rect(aes(xmin = 0, xmax = img_width(),
                           ymin = 0, ymax = img_height()),
@@ -158,7 +178,11 @@ server <- function(input, output) {
                                       saturation = input$img_saturation,
                                       hue = input$img_hue),
                        x = 0, y=0, width = img_width(),  height = img_height()) +
+<<<<<<< HEAD:eli-shiny/app.R
+            geom_label(data = label_maker,
+=======
             geom_label(data = label_maker(),
+>>>>>>> 4a21b78b5ae89cd8a3ee43eb789bad03a5e7bba5:shiny/eli-shiny/elitesting/app.R
                        mapping = aes(x = x,
                                      y = y
                        ),
@@ -172,6 +196,10 @@ server <- function(input, output) {
                        label.r = unit(0, "lines")) +
             coord_equal() +
             theme_void()
+<<<<<<< HEAD:eli-shiny/app.R
+
+        kruger_plot}, height = img_height(), width = img_width())
+=======
     })
 
     output$plot <- renderPlot(
@@ -183,6 +211,7 @@ server <- function(input, output) {
     )
 
 
+>>>>>>> 4a21b78b5ae89cd8a3ee43eb789bad03a5e7bba5:shiny/eli-shiny/elitesting/app.R
 
 }
 

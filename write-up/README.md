@@ -97,19 +97,18 @@ of each audience:
 
 **Horizontal Lines**
 
-In the original painting, there are 4 horizontal lines
-that seem to be evenly distributed within the middle of the painting. We would like the 
-audience to be able to create more horizontal lines between the upper and lower bounds 
-of the original horizontal lines to adjust the abstract feel of the art and 
-to make it more to their liking. 
+In the original painting, there are 4 horizontal lines that seem to be evenly 
+distributed within the middle of the painting. We would like the  audience to be 
+able to create more horizontal lines between the upper and lower bounds of the 
+original horizontal lines to adjust the abstract feel of the art and  to make it 
+more to their liking. 
 
 Specifically to adjust these lines, we will use the ‘slider input’ Shiny widget in the UI interface
-`sliderInput(inputId = "lines", label = "Number of lines:", min = 2, max = 10, value = 4)`
-Because the original four horizontal lines are defined by one specific function (geom_hline()), 
-we were able to pass the input from the UI sliderinput to a parameter in the geom_hline()
+`sliderInput(inputId = "lines", label = "Number of lines:", min = 0, max = 5, value = 4)`
+Because the original four horizontal lines are defined by one specific function `(geom_hline())`, 
+we were able to pass the input from the UI `sliderInput` to a parameter in the `geom_hline()`
 to change the number of horizontal lines between the defined upper and lower bounds. 
     
-
 **Colors**
 
 The original painting uses four distinct colors: blue, black 

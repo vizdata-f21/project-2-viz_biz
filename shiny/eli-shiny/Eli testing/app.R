@@ -6,6 +6,7 @@ library(extrafont)
 library(bslib)
 library(colourpicker)
 library(shinyvalidate)
+library(RCurl)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -107,6 +108,22 @@ ui <- fluidPage(
 server <- function(input, output) {
 
 
+    link <- reactive(input$path)
+
+
+    linker <- reactive({
+    if(url.exists(link()) == TRUE){
+        link()
+    }
+        else{
+            "https://confluence.atlassian.com/confkb/files/722144482/722144470/1/1426818006161/Screen+Shot+2015-03-20+at+12.33.04+pm.png"
+        }
+    })
+
+
+
+
+
     # Validation rules are set in the server, start by
     # making a new instance of an `InputValidator()`
     iv <- InputValidator$new()
@@ -120,7 +137,7 @@ server <- function(input, output) {
     iv$enable()
 
 
-    magick_image <- reactive({image_read(input$path)})
+    magick_image <- reactive({image_read(linker())})
 
 
     magick_plot <- reactive({

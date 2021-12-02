@@ -1,7 +1,7 @@
 # http://shiny.rstudio.com/
-library(shiny) #Eli
+library(shiny) # Eli
 library(shinythemes)
-library(tidyverse) #Eli
+library(tidyverse) # Eli
 library(DT)
 library(shinyalert)
 library(shinyWidgets)
@@ -27,22 +27,22 @@ library(ggwordcloud)
 library(ggtext)
 library(tidytext)
 library(tm)
-library(bslib) #Eli
+library(bslib) # Eli
 library(Rcpp)
 library(reshape2)
 library(colourlovers)
-library(cowplot) #Eli
+library(cowplot) # Eli
 library(ggpolypath)
-library(colourpicker) #Eli
+library(colourpicker) # Eli
 library(ggnewscale)
 library(Cairo)
 library(ggforce)
 options(shiny.usecairo = TRUE)
 library(base64enc)
-library(magick) #Eli
-library(shinyvalidate) #Eli
-library(RCurl) #Eli
-library(showtext) #Eli
+library(magick) # Eli
+library(shinyvalidate) # Eli
+library(RCurl) # Eli
+library(showtext) # Eli
 
 
 ## Kandinsky Prep
@@ -56,8 +56,10 @@ semicircle_stroke_color_l <- readRDS("data/semicircle-stroke-color.rds")
 triangles_l <- readRDS("data/triangles.rds")
 
 # load font
-font_add(family = "Futura",
-         regular = paste0(here::here(), "/shiny/final-shiny/data/Futura.ttf"))
+font_add(
+  family = "Futura",
+  regular = paste0(here::here(), "/shiny/final-shiny/data/Futura.ttf")
+)
 showtext_auto()
 
 
@@ -394,7 +396,8 @@ ui <- fluidPage(
           actionButton("go_kandinsky", "Apply Changes"),
           p(""),
           span(p("Please allow the artwork 10 to 15 seconds to render after applying changes"),
-               style = "color:red"),
+            style = "color:red"
+          ),
           hr(),
           textInput("custom_filename_kandinsky", "Filename", "wassily_kandinsky.png"),
           sliderInput(
@@ -427,18 +430,20 @@ ui <- fluidPage(
             and color in which circles play a dominant role. Nancy Spector wrote of the piece,
             \"In Composition 8, the colorful, interactive geometric forms create a pulsating surface
             that is alternately dynamic and calm, aggressive and quiet.\" (1)"),
-          p("Modify Composition 8 to make it your own by adjusting the settings in the",
-            em("Graphics Input"), "sidebar on the left."),
+          p(
+            "Modify Composition 8 to make it your own by adjusting the settings in the",
+            em("Graphics Input"), "sidebar on the left."
+          ),
           p("Change the size of the circles, line thickness, background color, shape transparency,
             or which kinds of geometries to include. You may also add random noise to the piece, generated
             from a normal distribution, and watch Kandinsky's careful composition fall apart. Remember to
             press the", em("Apply Changes"), "button to watch your modifications come to life."),
           p("(1) Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
             Museums and Foundation. Accessed December 2, 2021. https://www.guggenheim.org/artwork/1924."),
-          #div(plotOutput(
+          # div(plotOutput(
           #  outputId = "plot_kandinsky", inline = FALSE,
           #  height = "100%"
-          #), align = "center"),
+          # ), align = "center"),
           div(uiOutput(
             outputId = "ui_kandinsky",
             height = "100%"
@@ -451,8 +456,10 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           h4("Graphics Input"),
-          textInput("path", "Image URL",
-                    "https://cdn.thecollector.com/wp-content/uploads/2020/03/image10-20.jpg"),
+          textInput(
+            "path", "Image URL",
+            "https://cdn.thecollector.com/wp-content/uploads/2020/03/image10-20.jpg"
+          ),
           fluidRow(
             column(width = 6, colourInput(
               inputId = "text_color",
@@ -474,7 +481,7 @@ ui <- fluidPage(
               label = "Border size",
               min = 0, max = 20, value = 12, step = 0.5, ticks = FALSE
             ))
-            ),
+          ),
           textInput("top", "top text:", "Your body"),
           textInput("middle", "Middle text:", "is a"),
           textInput("bottom", "Bottom text:", "battleground"),
@@ -504,7 +511,8 @@ ui <- fluidPage(
           div(
             align = "right",
             downloadLink("save_kruger", strong("Download"))
-          )), #sidebar panel,
+          )
+        ), # sidebar panel,
         mainPanel(
           h2(strong("Barbara Kruger: Cultural Critique")),
           h5(em("Untitled (Your body is a battleground) (1989)")),
@@ -514,13 +522,15 @@ ui <- fluidPage(
             text. The phrases in her works often include pronouns such as 'you', 'your',
             'I', 'we', and 'they', addressing cultural constructions of power, identity,
             consumerism, and sexuality."),
-          p("Kruger produced her ", em("Untitled (Your body is a battleground)"), " artwork for
+          p(
+            "Kruger produced her ", em("Untitled (Your body is a battleground)"), " artwork for
           the Women’s March on Washington in support of reproductive freedom,
             simultaneously an art and a protest. We invite you to recreate your
             own version of Kruger's work and adjust the settings in the",
             em("Graphics Input"), "sidebar on the left. Change various elements
             of the text, border, and even replace the image from any image address
-            to communicate a message you think is important!"),
+            to communicate a message you think is important!"
+          ),
           div(plotOutput(
             outputId = "plot_kruger", inline = FALSE,
             height = "100%"
@@ -537,7 +547,7 @@ ui <- fluidPage(
           h4(" ")
         )
       )
-    ) #tab 4 panel
+    ) # tab 4 panel
   ) # navbar page
 ) # fluid page
 
@@ -806,8 +816,10 @@ server <- function(input, output) {
       custom_filename_piet()
     },
     content = function(file) {
-      ggsave(file, plot = plotInput_piet(), device = "png", dpi = as.double(custom_res_piet()),
-             height = 4, width = 3.33)
+      ggsave(file,
+        plot = plotInput_piet(), device = "png", dpi = as.double(custom_res_piet()),
+        height = 4, width = 3.33
+      )
     }
   )
 
@@ -848,14 +860,19 @@ server <- function(input, output) {
     imageOutput("static_kandinsky")
   })
 
-  output$static_kandinsky <- renderImage({
-    list(src = "./kandinsky_ggplot.png",
-         height = 800,
-         width = 900,
-         contentType = 'image/png')
-  }, deleteFile = FALSE)
+  output$static_kandinsky <- renderImage(
+    {
+      list(
+        src = "./kandinsky_ggplot.png",
+        height = 800,
+        width = 900,
+        contentType = "image/png"
+      )
+    },
+    deleteFile = FALSE
+  )
 
-observeEvent(input$go_kandinsky, {
+  observeEvent(input$go_kandinsky, {
     output$ui_kandinsky <- renderUI({
       plotOutput("plot_kandinsky")
     })
@@ -1100,10 +1117,9 @@ observeEvent(input$go_kandinsky, {
 
 
   linker <- reactive({
-    if(url.exists(link()) == TRUE){
+    if (url.exists(link()) == TRUE) {
       link()
-    }
-    else{
+    } else {
       "https://cdn.thecollector.com/wp-content/uploads/2020/03/image10-20.jpg"
     }
   })
@@ -1125,70 +1141,99 @@ observeEvent(input$go_kandinsky, {
   iv$enable()
 
 
-  magick_image <- reactive({image_read(linker())})
+  magick_image <- reactive({
+    image_read(linker())
+  })
 
 
   magick_plot <- reactive({
-    if(image_info(magick_image())$height>=image_info(magick_image())$width) {
+    if (image_info(magick_image())$height >= image_info(magick_image())$width) {
       image_scale(magick_image(), "x550")
+    } else {
+      image_scale(magick_image(), "550")
     }
-    else{
-      image_scale(magick_image(), "550")}
   })
 
-  img_height <- reactive({image_info(magick_plot())$height})
-  img_width <- reactive({image_info(magick_plot())$width})
+  img_height <- reactive({
+    image_info(magick_plot())$height
+  })
+  img_width <- reactive({
+    image_info(magick_plot())$width
+  })
 
 
   size_kruger <- reactive({
-    if(img_height()>img_width()) {
-      img_width()/500
+    if (img_height() > img_width()) {
+      img_width() / 500
     } else {
-      img_height()/500
+      img_height() / 500
     }
   })
 
-  top_plot <- reactive({ifelse(nchar(input$top) == 0, NA, input$top)})
-  middle_plot <- reactive({ifelse(nchar(input$middle) == 0, NA, input$middle)})
-  bottom_plot <- reactive({ifelse(nchar(input$bottom) == 0, NA, input$bottom)})
+  top_plot <- reactive({
+    ifelse(nchar(input$top) == 0, NA, input$top)
+  })
+  middle_plot <- reactive({
+    ifelse(nchar(input$middle) == 0, NA, input$middle)
+  })
+  bottom_plot <- reactive({
+    ifelse(nchar(input$bottom) == 0, NA, input$bottom)
+  })
 
-  x_plot <- reactive({c(img_width()/2, img_width()/2, img_width()/2)})
-  y_plot <- reactive({c(img_height()-30*size_kruger(), img_height()/2, 30*size_kruger())})
+  x_plot <- reactive({
+    c(img_width() / 2, img_width() / 2, img_width() / 2)
+  })
+  y_plot <- reactive({
+    c(img_height() - 30 * size_kruger(), img_height() / 2, 30 * size_kruger())
+  })
 
   df_kruger <- reactive({
     data.frame(x_plot(), y_plot())
   })
 
-  observe({output$plot_kruger <- renderPlot({
-    save_kruger <- ggplot() +
-      geom_rect(aes(xmin = 0, xmax = img_width(),
-                    ymin = 0, ymax = img_height()),
-                color = input$rect_color,
-                size = input$border_size,
-                fill = NA) +
-      draw_image(image_modulate(magick_plot(),
-                                brightness = input$img_brightness,
-                                saturation = input$img_saturation,
-                                hue = input$img_hue),
-                 x = 0, y=0, width = img_width(),  height = img_height()) +
+  observe({
+    output$plot_kruger <- renderPlot(
+      {
+        save_kruger <- ggplot() +
+          geom_rect(aes(
+            xmin = 0, xmax = img_width(),
+            ymin = 0, ymax = img_height()
+          ),
+          color = input$rect_color,
+          size = input$border_size,
+          fill = NA
+          ) +
+          draw_image(image_modulate(magick_plot(),
+            brightness = input$img_brightness,
+            saturation = input$img_saturation,
+            hue = input$img_hue
+          ),
+          x = 0, y = 0, width = img_width(), height = img_height()
+          ) +
+          geom_label(
+            data = df_kruger(),
+            mapping = aes(
+              x = x_plot(),
+              y = y_plot()
+            ),
+            label = c(top_plot(), middle_plot(), bottom_plot()),
+            size = input$text_size,
+            fill = input$rect_color,
+            color = input$text_color,
+            family = "Futura",
+            fontface = "bold",
+            label.size = 0,
+            label.r = unit(0, "lines")
+          ) +
+          coord_equal() +
+          theme_void()
 
-      geom_label(data = df_kruger(),
-                 mapping = aes(x = x_plot(),
-                               y = y_plot()
-                 ),
-                 label = c(top_plot(), middle_plot(), bottom_plot()),
-                 size = input$text_size,
-                 fill = input$rect_color,
-                 color = input$text_color,
-                 family = "Futura",
-                 fontface = "bold",
-                 label.size = 0,
-                 label.r = unit(0, "lines")) +
-
-      coord_equal() +
-      theme_void()
-
-    save_kruger}, height = img_height(), width = img_width())})
+        save_kruger
+      },
+      height = img_height(),
+      width = img_width()
+    )
+  })
 
   custom_filename_kruger <- reactive({
     input$custom_filename_kruger
@@ -1203,8 +1248,10 @@ observeEvent(input$go_kandinsky, {
       custom_filename_kruger()
     },
     content = function(file) {
-      ggsave(file, plot = plotInput_kruger(), device = "png", dpi = as.double(custom_res_kruger()),
-             height = 4, width = 3.33)
+      ggsave(file,
+        plot = plotInput_kruger(), device = "png", dpi = as.double(custom_res_kruger()),
+        height = 4, width = 3.33
+      )
     }
   )
 
@@ -1239,11 +1286,6 @@ observeEvent(input$go_kandinsky, {
       return(NULL)
     }
   })
-
-
-
-
-
 }
 
 # Run the application

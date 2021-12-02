@@ -1197,10 +1197,9 @@ server <- function(input, output) {
     data.frame(x_plot(), y_plot())
   })
 
-  observe({
-    output$plot_kruger <- renderPlot(
-      {
-        save_kruger <- ggplot() +
+
+    plotInput_kruger <- reactive({
+         ggplot() +
           geom_rect(aes(
             xmin = 0, xmax = img_width(),
             ymin = 0, ymax = img_height()
@@ -1233,13 +1232,19 @@ server <- function(input, output) {
           ) +
           coord_equal() +
           theme_void()
+  })
 
-        save_kruger
+observe({
+  output$plot_kruger <- renderPlot(
+      {
+        plotInput_kruger()
+
       },
       height = img_height(),
       width = img_width()
-    )
-  })
+    )})
+
+
 
   custom_filename_kruger <- reactive({
     input$custom_filename_kruger
@@ -1255,11 +1260,11 @@ server <- function(input, output) {
     },
     content = function(file) {
       ggsave(file,
-        plot = plotInput_kruger(), device = "png", dpi = as.double(custom_res_kruger()),
-        height = 4, width = 3.33
-      )
+             plot = plotInput_kruger(), device = "png", dpi = as.double(custom_res_kruger()),
+             height = 4/img_height()*img_height(), width = 4/img_height()*img_width())
     }
   )
+
 
   output$original_artwork_kruger <- renderImage({
     if (input$original_artwork_kruger == TRUE) {

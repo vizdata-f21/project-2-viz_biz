@@ -125,11 +125,11 @@ four colors, the boxes corresponding to the missing color will show up blank (i.
 
 Within this project, one challenge all of us faced was learning the nuances of Shiny Apps. Before this project, all of us had little to no experience with Shiny App, and the grammar of the platform and creating the app was an unfamiliar process we had to learn.
 
-We learned a lot about the behavior of Shiny reactive inputs and how we are required to use `reactive({...})`
-whenever we are trying to define a variable that is dependent on reactive input(s). One of the biggest
-challenge we have tackled is to create a non-static dataset when recreating Frank Stella's artwork.
-As a user modifies the number of layers in the artwork, the dataset will adjust automatically and dynamically,
-hence our team created a function with the number of layers (the reactive input) as one of the parameters
-of the function.
+We learned a lot about the behavior of Shiny reactive inputs and how we are required to use
+`reactive({...})` whenever we are trying to define a variable that is dependent on reactive
+input(s). One of the biggest challenge we have tackled is to create a non-static dataset when
+recreating Frank Stella's artwork. As a user modifies the number of layers in the artwork, the
+dataset will adjust automatically and dynamically, hence our team created a function with the
+number of layers (the reactive input) as one of the parameters of the function.
 
 

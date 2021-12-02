@@ -27,7 +27,7 @@ library(magick)
 path <- "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"
 
 #text
-top <- "Your body"
+top <- NA
 middle <- "is a"
 bottom <- "battleground"
 text_size <- 10
@@ -104,4 +104,6 @@ ggplot() +
              label.r = unit(0, "lines")) +
   coord_equal() +
   theme_void()
+
+nchar(top)
 ```

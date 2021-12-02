@@ -7,7 +7,6 @@ library(shinyalert)
 library(shinyWidgets)
 library(ggiraph)
 library(statebins)
-library(tidyverse)
 library(gganimate)
 library(colorspace)
 library(patchwork)
@@ -34,17 +33,12 @@ library(wordcloud2)
 library(RColorBrewer)
 library(ggwordcloud)
 library(ggtext)
-library(glue)
 library(tidytext)
 library(stringr)
 library(stopwords)
 library(tm)
-library(wordcloud)
-library(wordcloud2)
-library(RColorBrewer)
 library(ggwordcloud)
 library(bslib)
-library(tidyverse)
 library(Rcpp)
 library(reshape2)
 library(colourlovers)
@@ -57,6 +51,10 @@ library(Cairo)
 library(ggforce)
 options(shiny.usecairo = TRUE)
 library(base64enc)
+library(magick)
+library(shinyvalidate)
+library(RCurl)
+
 
 ## Kandinsky Prep
 # load data
@@ -436,7 +434,95 @@ ui <- fluidPage(
           h4(" ")
         )
       )
-    ) # tab 3 panel
+    ), # tab 3 panel
+    tabPanel(
+      title = "4. Barbara Kruger",
+      sidebarLayout(
+        sidebarPanel(
+          h4("Graphics Input"),
+          textInput("path", "Image address:", "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"),
+          textInput("top", "top text:", "Your body"),
+          textInput("middle", "Middle text:", "is a"),
+          textInput("bottom", "Bottom text:", "battleground"),
+          sliderInput(
+            inputId = "text_size",
+            label = "Text size",
+            min = 1, max = 40, value = 20, ticks = FALSE
+          ),
+          sliderInput(
+            inputId = "border_size",
+            label = "Border size",
+            min = 0, max = 20, value = 10, ticks = FALSE
+          ),
+          sliderInput(
+            inputId = "img_brightness",
+            label = "Brightness",
+            min = 0, max = 500, value = 100, step = 10, round = TRUE, ticks = FALSE
+          ),
+          sliderInput(
+            inputId = "img_saturation",
+            label = "Saturation",
+            min = 0, max = 200, value = 100, step = 10, round = TRUE, ticks = FALSE
+          ),
+          sliderInput(
+            inputId = "img_hue",
+            label = "Hue",
+            min = 0, max = 200, value = 100, step = 10, round = TRUE, ticks = FALSE
+          ),
+          p("Text Color"),
+          fluidRow(
+            column(width = 6, colourInput(
+              inputId = "text_color",
+              label = NULL, value = "#FCFCFC"
+            ))
+          ),
+          p("Border Color"),
+          fluidRow(
+            column(width = 6, colourInput(
+              inputId = "rect_color",
+              label = NULL, value = "#FF0000"
+            ))
+          ),
+          hr(),
+          textInput("custom_filename_kruger", "Filename", "barbara_kruger.png"),
+          verbatimTextOutput("value"),
+          sliderInput(
+            inputId = "res_krugeer",
+            label = "Resolution (in dpi)",
+            min = 100, max = 2000, value = 600, step = 100, round = TRUE, ticks = FALSE
+          ),
+          div(
+            align = "right",
+            downloadLink("save_kruger", strong("Download"))
+          )), #sidebar panel,
+        mainPanel(
+          h2(strong("Barbara Kruger: Cultural Critique")),
+          h5(em("Untitled (Your body is a battleground) (1989)")),
+          p(""),
+          p("Untitled (Your body is a battleground) was produced by Kruger for
+          the Women’s March on Washington in support of reproductive freedom.
+          This image is simultaneously art and protest."),
+          p(""),
+          p("We invite you to recreate your own modified version of Kruger's
+            work and adjust the settings in the", em("Graphics Input"), "sidebar
+            on the left. Change various elements of the text, border, and even
+            image to communicate a message you think is important."),
+          div(plotOutput(
+            outputId = "plot_kruger", inline = FALSE,
+            height = "100%"
+          ), align = "center"),
+          prettyCheckbox(
+            inputId = "original_artwork_kruger",
+            label = "Original Artwork",
+            value = FALSE
+          ),
+          div(imageOutput(outputId = "original_artwork_kruger", inline = TRUE), align = "center"),
+          h4(" "),
+          div(textOutput(outputId = "original_artwork_text_kruger", inline = TRUE), align = "center"),
+          h4(" ")
+        )
+      )
+    ) #tab 4 panel
   ) # navbar page
 ) # fluid page
 
@@ -995,6 +1081,157 @@ server <- function(input, output) {
       return(NULL)
     }
   })
+
+  # BARBARA KRUGER
+
+  link <- reactive(input$path)
+
+
+  linker <- reactive({
+    if(url.exists(link()) == TRUE){
+      link()
+    }
+    else{
+      "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"
+    }
+  })
+
+
+
+
+
+  # Validation rules are set in the server, start by
+  # making a new instance of an `InputValidator()`
+  iv <- InputValidator$new()
+
+  # Basic usage: `sv_url()` works well with its
+  # defaults; a message will be displayed if the
+  # validation of `input$address` fails
+  iv$add_rule("path", sv_url(message = "Not a valid URL", allow_multiple = FALSE, allow_na = FALSE))
+
+  # Finally, `enable()` the validation rules
+  iv$enable()
+
+
+  magick_image <- reactive({image_read(linker())})
+
+
+  magick_plot <- reactive({
+    if(image_info(magick_image())$height>=image_info(magick_image())$width) {
+      image_scale(magick_image(), "x700")
+    }
+    else{
+      image_scale(magick_image(), "700")}
+  })
+
+  img_height <- reactive({image_info(magick_plot())$height})
+  img_width <- reactive({image_info(magick_plot())$width})
+
+
+  size_kruger <- reactive({
+    if(img_height()>img_width()) {
+      img_width()/500
+    } else {
+      img_height()/500
+    }
+  })
+
+  top_plot <- reactive({ifelse(nchar(input$top) == 0, NA, input$top)})
+  middle_plot <- reactive({ifelse(nchar(input$middle) == 0, NA, input$middle)})
+  bottom_plot <- reactive({ifelse(nchar(input$bottom) == 0, NA, input$bottom)})
+
+  x_plot <- reactive({c(img_width()/2, img_width()/2, img_width()/2)})
+  y_plot <- reactive({c(img_height()-30*size_kruger(), img_height()/2, 30*size_kruger())})
+
+  df_kruger <- reactive({
+    data.frame(x_plot(), y_plot())
+  })
+
+  observe({output$plot_kruger <- renderPlot({
+    save_kruger <- ggplot() +
+      geom_rect(aes(xmin = 0, xmax = img_width(),
+                    ymin = 0, ymax = img_height()),
+                color = input$rect_color,
+                size = input$border_size,
+                fill = NA) +
+      draw_image(image_modulate(magick_plot(),
+                                brightness = input$img_brightness,
+                                saturation = input$img_saturation,
+                                hue = input$img_hue),
+                 x = 0, y=0, width = img_width(),  height = img_height()) +
+
+      geom_label(data = df_kruger(),
+                 mapping = aes(x = x_plot(),
+                               y = y_plot()
+                 ),
+                 label = c(top_plot(), middle_plot(), bottom_plot()),
+                 size = input$text_size,
+                 fill = input$rect_color,
+                 color = input$text_color,
+                 family = "sans",
+                 fontface = "bold",
+                 label.size = 0,
+                 label.r = unit(0, "lines")) +
+
+      coord_equal() +
+      theme_void()
+
+    save_kruger}, height = img_height(), width = img_width())})
+
+  custom_filename_kruger <- reactive({
+    input$custom_filename_kruger
+  })
+
+  custom_res_kruger <- reactive({
+    input$res_kruger
+  })
+
+  output$save_kruger <- downloadHandler(
+    filename = function() {
+      custom_filename_kruger()
+    },
+    content = function(file) {
+      ggsave(file, plot = plotInput_kruger(), device = "png", dpi = as.double(custom_res_kruger()),
+             height = 4, width = 3.33)
+    }
+  )
+
+  output$original_artwork_kruger <- renderImage({
+    if (input$original_artwork_kruger == TRUE) {
+      return(list(
+        src = "./kruger.jpg",
+        width = 250,
+        height = 333,
+        contentType = "image/jpg",
+        alt = "Original Artwork",
+        deleteFile = FALSE
+      ))
+    }
+    if (input$original_artwork_kruger == FALSE) {
+      return(list(
+        src = "./kruger.jpg",
+        width = 0,
+        height = 0,
+        contentType = "image/jpg",
+        alt = "Original Artwork",
+        deleteFile = FALSE
+      ))
+    }
+  })
+
+  output$original_artwork_text_kruger <- renderText({
+    if (input$original_artwork_kruger == TRUE) {
+      return(paste("Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Museum of Modern Art (MoMA), New York"))
+    }
+    if (input$original_artwork_kruger == FALSE) {
+      return(NULL)
+    }
+  })
+
+
+
+
+
 }
 
 # Run the application

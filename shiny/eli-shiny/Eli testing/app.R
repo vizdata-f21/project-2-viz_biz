@@ -4,9 +4,14 @@ library(cowplot)
 library(magick)
 library(extrafont)
 library(bslib)
-library(colourpicker)
 library(shinyvalidate)
 library(RCurl)
+library(shinyjs, exclude = 'colourInput')
+library(colourpicker)
+
+font_import(paths = "/home/guest/R/project-2-viz_biz/shiny/eli-shiny/Futura.tff")
+
+
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -25,6 +30,8 @@ ui <- fluidPage(
             sidebarLayout(
                 sidebarPanel(
                     h4("Graphics Input"),
+                    div(
+                        id = "form",
                     textInput("path", "Image address:", "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"),
                     textInput("top", "Top text:", "Your body"),
                     textInput("middle", "Middle text:", "is a"),
@@ -67,7 +74,8 @@ ui <- fluidPage(
                             inputId = "rect_color",
                             label = NULL, value = "#FF0000"
                         ))
-                    ),
+                    )),
+                    actionButton("resetAll", "Reset"),
                     hr(),
                     textInput("custom_filename", "Filename", "kruger_example.png"),
                     verbatimTextOutput("value"),
@@ -107,6 +115,11 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
+    observeEvent(input$resetAll, {
+        reset("form")
+    })
+
+
 
     link <- reactive(input$path)
 
@@ -116,7 +129,7 @@ server <- function(input, output) {
         link()
     }
         else{
-            "https://confluence.atlassian.com/confkb/files/722144482/722144470/1/1426818006161/Screen+Shot+2015-03-20+at+12.33.04+pm.png"
+            "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"
         }
     })
 
@@ -160,6 +173,9 @@ server <- function(input, output) {
     }
     })
 
+    top_plot <- reactive({ifelse(nchar(input$top) == 0, NA, input$top)})
+    middle_plot <- reactive({ifelse(nchar(input$middle) == 0, NA, input$middle)})
+    bottom_plot <- reactive({ifelse(nchar(input$bottom) == 0, NA, input$bottom)})
 
     x_plot <- reactive({c(img_width()/2, img_width()/2, img_width()/2)})
     y_plot <- reactive({c(img_height()-30*size(), img_height()/2, 30*size())})
@@ -169,7 +185,7 @@ server <- function(input, output) {
     })
 
     observe({output$plot <- renderPlot({
-        kruger_plot <- ggplot() +
+        plot_kruger <- ggplot() +
             geom_rect(aes(xmin = 0, xmax = img_width(),
                           ymin = 0, ymax = img_height()),
                       color = input$rect_color,
@@ -185,7 +201,7 @@ server <- function(input, output) {
                        mapping = aes(x = x_plot(),
                                      y = y_plot()
                        ),
-                       label = c(input$top, input$middle, input$bottom),
+                       label = c(top_plot(), middle_plot(), bottom_plot()),
                        size = input$text_size,
                        fill = input$rect_color,
                        color = input$text_color,
@@ -197,7 +213,7 @@ server <- function(input, output) {
             coord_equal() +
             theme_void()
 
-        kruger_plot}, height = img_height(), width = img_width())})
+        plot_kruger}, height = img_height(), width = img_width())})
 
 }
 

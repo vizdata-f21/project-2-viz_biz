@@ -14,7 +14,7 @@ library(usmap)
 library(lubridate)
 library(ggrepel)
 library(scales)
-library(dsbox)
+#library(dsbox)
 library(viridis)
 library(ggridges)
 library(magrittr)
@@ -154,10 +154,10 @@ ui <- fluidPage(
           p("We see our project as part of the
           move to question empty status designations and push back against institutional
           art gatekeeping. Hence, this Shiny App allow users to access several examples
-          of recreated art pieces and adjust their aesthetics based on one’s personal
-          preference and download them for their personal use with no strings attached."),
+          of recreated art pieces, adjust their aesthetics based on their personal
+          preferences, and download them for their personal use with no conditions or payment."),
           p("", style = "margin-bottom: 24px;"),
-          h5("🖌 Our chosen artworks for you to explore creatively"),
+          h5("🖌 Our chosen artworks for you to explore"),
           p("", style = "margin-bottom: 12px;"),
           p("1. Frank Stella, ", em("Lettre sur les sourds et muets II"), " (1974)",
             style = "margin-bottom: 3px;"
@@ -177,7 +177,7 @@ ui <- fluidPage(
           p("We invite you to recreate your
             own modified piece of famous artworks and adjust their
             settings by using the", em("Graphics Input"), "sidebar on the left bar
-            of each of our dashboard tab according to your preference.")
+            of each of our dashboard tabs according to your preference.")
         )
       )
     ),
@@ -399,6 +399,7 @@ ui <- fluidPage(
             value = 0
           ),
           actionButton("go", "Apply Changes"),
+          p("Please allow the artwork 10 to 15 seconds to render after applying changes"),
           hr(),
           textInput("custom_filename_kandinsky", "Filename", "wassily_kandinsky.png"),
           sliderInput(
@@ -415,10 +416,23 @@ ui <- fluidPage(
           h2(strong("Wassily Kandinsky: Composing Oneself")),
           h5(em("Composition 8 (1923)")),
           p(""),
+          p("After WWI, Wassily Kandinsky returned to his birth city of Moscow to practice art there.
+            However, despite his abstract style, his ideas conflicted with those of the Russian
+            avant-garde. Unlike his peers, who preferred systematic, rational abstraction, Kandinsky
+            saw geometric forms as expressive and lyrical. Because of this tension, he moved to
+            Germany and joined the Weimar Bauhaus faculty. There he found like-minded artists
+            and produced Composition 8, an exploration of the psychospiritual influences of shape
+            and color in which circles play a dominant role. Nancy Spector wrote of the piece,
+            'In Composition 8, the colorful, interactive geometric forms create a pulsating surface
+            that is alternately dynamic and calm, aggressive and quiet.'"),
           p("Modify Wassily Kandinsky's artwork to make it your own by adjusting the
             settings in the", em("Graphics Input"), "sidebar on the left."),
-          p("Change the color, transparency, or add some random noise to the plot to see how
-            much composition really matters blah blah"),
+          p("Change the size of the circles, line thickness, background color, shape transparency,
+            or which kinds of geometries to include. You may also add random noise to the piece, generated
+            from a normal distribution, and watch Kandinsky's careful composition fall apart. Remember to
+            press the", em("Apply Changes"), "button to watch your modifications come to life."),
+          p("Source: Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
+            Museums and Foundation. Accessed December 2, 2021. https://www.guggenheim.org/artwork/1924."),
           div(plotOutput(
             outputId = "plot_kandinsky", inline = FALSE,
             height = "100%"

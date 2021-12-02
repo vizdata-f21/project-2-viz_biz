@@ -123,3 +123,7 @@ more than four colors, only the first four colors will show up. If the user uses
 four colors, the boxes corresponding to the missing color will show up blank (i.e. white). 
 
 ## Discussion
+
+Within this project, one challenge all of us faced was learning the nuances of Shiny Apps. Before this project, all of us had little to no experience with Shiny App, and the grammar of the platform and creating the app was an unfamiliar process we had to learn.
+
+

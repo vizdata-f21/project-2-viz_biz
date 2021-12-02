@@ -55,6 +55,7 @@ library(magick)
 library(shinyvalidate)
 library(RCurl)
 
+
 ## Kandinsky Prep
 # load data
 circles_l <- readRDS("data/circles.rds")
@@ -455,48 +456,48 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           h4("Graphics Input"),
-          textInput("path", "Image Link Address",
-                    "https://cdn.thecollector.com/wp-content/uploads/2020/03/image10-20.jpg"),
-          fluidRow(
-            column(width = 6, colourInput(
-              inputId = "text_color",
-              label = "Text Color", value = "#FCFCFC"
-            )),
-            column(width = 6, colourInput(
-              inputId = "rect_color",
-              label = "Border Color", value = "#E3002D"
-            ))
+          textInput("path", "Image address:", "https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg"),
+          textInput("top", "top text:", "Your body"),
+          textInput("middle", "Middle text:", "is a"),
+          textInput("bottom", "Bottom text:", "battleground"),
+          sliderInput(
+            inputId = "text_size",
+            label = "Text size",
+            min = 1, max = 40, value = 20, ticks = FALSE
           ),
-          fluidRow(
-            column(width = 6, sliderInput(
-              inputId = "text_size",
-              label = "Text size",
-              min = 5, max = 50, value = 25, step = 0.5, ticks = FALSE
-            )),
-            column(width = 6, sliderInput(
-              inputId = "border_size",
-              label = "Border size",
-              min = 0, max = 20, value = 12, step = 0.5, ticks = FALSE
-            ))
-
+          sliderInput(
+            inputId = "border_size",
+            label = "Border size",
+            min = 0, max = 20, value = 10, ticks = FALSE
           ),
-          textInput("top", "Top Text", "If we can,"),
-          textInput("middle", "Middle Text", "they can."),
-          textInput("bottom", "Bottom Text", "Equal is what we are!"),
           sliderInput(
             inputId = "img_brightness",
             label = "Brightness",
-            min = 0, max = 200, value = 100, step = 5, round = TRUE, ticks = FALSE
+            min = 0, max = 500, value = 100, step = 10, round = TRUE, ticks = FALSE
           ),
           sliderInput(
             inputId = "img_saturation",
             label = "Saturation",
-            min = -500, max = 500, value = 100, step = 5, round = TRUE, ticks = FALSE
+            min = 0, max = 200, value = 100, step = 10, round = TRUE, ticks = FALSE
           ),
           sliderInput(
             inputId = "img_hue",
             label = "Hue",
-            min = -500, max = 500, value = 100, step = 5, round = TRUE, ticks = FALSE
+            min = 0, max = 200, value = 100, step = 10, round = TRUE, ticks = FALSE
+          ),
+          p("Text Color"),
+          fluidRow(
+            column(width = 6, colourInput(
+              inputId = "text_color",
+              label = NULL, value = "#FCFCFC"
+            ))
+          ),
+          p("Border Color"),
+          fluidRow(
+            column(width = 6, colourInput(
+              inputId = "rect_color",
+              label = NULL, value = "#FF0000"
+            ))
           ),
           hr(),
           textInput("custom_filename_kruger", "Filename", "barbara_kruger.png"),
@@ -514,24 +515,18 @@ ui <- fluidPage(
           h2(strong("Barbara Kruger: Cultural Critique")),
           h5(em("Untitled (Your body is a battleground) (1989)")),
           p(""),
-          p("Kruger is most known for her collage style that consists of black-and-white
-            photographs, overlaid with declarative captions, stated in white-on-red
-            text. The phrases in her works often include pronouns such as 'you', 'your',
-            'I', 'we', and 'they', addressing cultural constructions of power, identity,
-            consumerism, and sexuality."),
-          p("Kruger produced her ", em("Composition 8"), " artwork for
-          the Women’s March on Washington in support of reproductive freedom,
-            simultaneously an art and a protest. We invite you to recreate your
-            own version of Kruger's
+          p("Untitled (Your body is a battleground) was produced by Kruger for
+          the Women’s March on Washington in support of reproductive freedom.
+          This image is simultaneously art and protest."),
+          p(""),
+          p("We invite you to recreate your own modified version of Kruger's
             work and adjust the settings in the", em("Graphics Input"), "sidebar
             on the left. Change various elements of the text, border, and even
-            replace the image from any website link to communicate a message
-            you think is important!"),
+            image to communicate a message you think is important."),
           div(plotOutput(
             outputId = "plot_kruger", inline = FALSE,
             height = "100%"
           ), align = "center"),
-          p(""),
           prettyCheckbox(
             inputId = "original_artwork_kruger",
             label = "Original Artwork",
@@ -850,7 +845,7 @@ server <- function(input, output) {
   })
 
   ## KANDINSKY
-  kplot <- observeEvent(input$go_kandinsky, {
+  kplot <- eventReactive(input$go_kandinsky, {
 
     # change circle size based on input$circlesize from ui.R
     for (i in c(1:6)) {
@@ -1206,8 +1201,8 @@ server <- function(input, output) {
     if (input$original_artwork_kruger == TRUE) {
       return(list(
         src = "./kruger.jpg",
-        width = 300,
-        height = 300,
+        width = 250,
+        height = 333,
         contentType = "image/jpg",
         alt = "Original Artwork",
         deleteFile = FALSE

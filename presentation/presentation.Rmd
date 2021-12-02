@@ -50,15 +50,20 @@ Class: middle, inverse, center
 
 ### Big Picture
 
-**Goal:** Make expensive, luxury modern artworks that are once accessible only in museum and private
-collections to be accessible to the public mass.
+#### Project Goal
+
+Make expensive, luxury modern artworks that are once accessible only in museum and private
+collections to be **accessible** to the public mass.
 
 - We will make our chosen artworks *customizable* and reproducible using the Shiny App.
 
 - Users will be able to download their own customized artwork with their desired resolution or 
 quality level.
 
-**Project Main Question**: Can we recreate famous artworks and make them customizable through computer programming? 
+
+#### Project Main Question 
+
+Can we recreate famous artworks and make them customizable through computer programming? 
 
 ---
 
@@ -72,10 +77,8 @@ quality level.
 
 - Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
 
----
-
 ### Demo
 
 We will demo you to our final Shiny App with a click [***here***](https://phillipharmadi.shinyapps.io/final-shiny/).
 
-Please raise your hand at **anytime** if you want to be shown specific reactive features during our demonstration.
+Please ask us your question during the **Q&A session** if you want to be shown specific reactive features during our demonstration.

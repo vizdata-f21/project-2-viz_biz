@@ -1,7 +1,7 @@
 # http://shiny.rstudio.com/
-library(shiny)
+library(shiny) #Eli
 library(shinythemes)
-library(tidyverse)
+library(tidyverse) #Eli
 library(DT)
 library(shinyalert)
 library(shinyWidgets)
@@ -9,13 +9,8 @@ library(ggiraph)
 library(statebins)
 library(gganimate)
 library(colorspace)
-library(patchwork)
-library(usmap)
-library(lubridate)
 library(ggrepel)
 library(scales)
-#library(dsbox)
-library(viridis)
 library(ggridges)
 library(magrittr)
 library(forcats)
@@ -24,36 +19,30 @@ library(janitor)
 library(grid)
 library(gridExtra)
 library(styler)
-library(emojifont)
 library(RColorBrewer)
 library(colorRamps)
 library(glue)
-library(wordcloud)
-library(wordcloud2)
 library(RColorBrewer)
 library(ggwordcloud)
 library(ggtext)
 library(tidytext)
-library(stringr)
-library(stopwords)
 library(tm)
-library(ggwordcloud)
-library(bslib)
+library(bslib) #Eli
 library(Rcpp)
 library(reshape2)
 library(colourlovers)
-library(cowplot)
-# library(generativeart) # https://github.com/cutterkom/generativeart
+library(cowplot) #Eli
 library(ggpolypath)
-library(colourpicker)
+library(colourpicker) #Eli
 library(ggnewscale)
 library(Cairo)
 library(ggforce)
 options(shiny.usecairo = TRUE)
 library(base64enc)
-library(magick)
-library(shinyvalidate)
-library(RCurl)
+library(magick) #Eli
+library(shinyvalidate) #Eli
+library(RCurl) #Eli
+library(showtext) #Eli
 
 
 ## Kandinsky Prep
@@ -65,6 +54,12 @@ semicircle_fill_l <- readRDS("data/semicircle-fill.rds")
 semicircle_stroke_l <- readRDS("data/semicircle-stroke.rds")
 semicircle_stroke_color_l <- readRDS("data/semicircle-stroke-color.rds")
 triangles_l <- readRDS("data/triangles.rds")
+
+# load font
+font_add(family = "Futura",
+         regular = "/home/guest/R/project-2-viz_biz/shiny/final-shiny/data/Futura.ttf")
+showtext_auto()
+
 
 # write functions
 clip <- function(x, low, high) {
@@ -1173,7 +1168,7 @@ server <- function(input, output) {
                  size = input$text_size,
                  fill = input$rect_color,
                  color = input$text_color,
-                 family = "sans",
+                 family = "Futura",
                  fontface = "bold",
                  label.size = 0,
                  label.r = unit(0, "lines")) +
@@ -1226,7 +1221,7 @@ server <- function(input, output) {
 
   output$original_artwork_text_kruger <- renderText({
     if (input$original_artwork_kruger == TRUE) {
-      return(paste("Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Broad, Los Angeles"))
+      return(paste("The Inaugural Installation, © 1989 The Broad, Los Angeles"))
     }
     if (input$original_artwork_kruger == FALSE) {
       return(NULL)

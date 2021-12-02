@@ -95,6 +95,8 @@ visualization in ggplot2. 2 distinct
 features sparked our interest to make *adjustable/modifiable* to the preference 
 of each audience:
 
+<img src="shiny_screenshots/Piet_Mondrian.png" style="width:100%"/>
+
 **Horizontal Lines**
 
 In the original painting, there are 4 horizontal lines that seem to be evenly 

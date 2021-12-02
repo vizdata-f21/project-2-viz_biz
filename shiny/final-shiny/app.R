@@ -519,7 +519,7 @@ ui <- fluidPage(
             text. The phrases in her works often include pronouns such as 'you', 'your',
             'I', 'we', and 'they', addressing cultural constructions of power, identity,
             consumerism, and sexuality."),
-          p("Kruger produced her ", em("Composition 8"), " artwork for
+          p("Kruger produced her ", em("Untitled (Your body is a battleground)"), " artwork for
           the Women’s March on Washington in support of reproductive freedom,
             simultaneously an art and a protest. We invite you to recreate your
             own version of Kruger's
@@ -1139,10 +1139,10 @@ server <- function(input, output) {
 
   magick_plot <- reactive({
     if(image_info(magick_image())$height>=image_info(magick_image())$width) {
-      image_scale(magick_image(), "x700")
+      image_scale(magick_image(), "x500")
     }
     else{
-      image_scale(magick_image(), "700")}
+      image_scale(magick_image(), "500")}
   })
 
   img_height <- reactive({image_info(magick_plot())$height})
@@ -1242,7 +1242,7 @@ server <- function(input, output) {
 
   output$original_artwork_text_kruger <- renderText({
     if (input$original_artwork_kruger == TRUE) {
-      return(paste("Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Museum of Modern Art (MoMA), New York"))
+      return(paste("Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Broad, Los Angeles"))
     }
     if (input$original_artwork_kruger == FALSE) {
       return(NULL)

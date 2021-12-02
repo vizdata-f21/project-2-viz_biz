@@ -827,3 +827,4 @@ https://stackoverflow.com/questions/10276092/to-find-whether-a-column-exists-in-
 https://stackoverflow.com/questions/38181744/r-shiny-input-slider-range-values/38181817
 https://stackoverflow.com/questions/34351356/plotting-with-action-button-in-shiny-rmarkdown
 https://stackoverflow.com/questions/15987367/how-to-add-layers-in-ggplot-using-a-for-loop
+https://stackoverflow.com/questions/24049159/change-the-color-and-font-of-text-in-shiny-app

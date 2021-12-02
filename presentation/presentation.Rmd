@@ -58,6 +58,8 @@ collections to be accessible to the public mass.
 - Users will be able to download their own customized artwork with their desired resolution or 
 quality level.
 
+**Project Main Question**: Can we recreate famous artworks and make them customizable through computer programming? 
+
 ** **
 
 **Our Chosen Artworks:** We are regenerating these artworks in R and will be using Shiny *reactive* 

@@ -451,7 +451,7 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           h4("Graphics Input"),
-          textInput("path", "Image address:",
+          textInput("path", "Image URL",
                     "https://cdn.thecollector.com/wp-content/uploads/2020/03/image10-20.jpg"),
           fluidRow(
             column(width = 6, colourInput(

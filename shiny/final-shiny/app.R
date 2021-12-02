@@ -399,7 +399,9 @@ ui <- fluidPage(
             value = 0
           ),
           actionButton("go", "Apply Changes"),
-          p("Please allow the artwork 10 to 15 seconds to render after applying changes"),
+          p(""),
+          span(p("Please allow the artwork 10 to 15 seconds to render after applying changes"),
+               style = "color:red"),
           hr(),
           textInput("custom_filename_kandinsky", "Filename", "wassily_kandinsky.png"),
           sliderInput(
@@ -416,7 +418,7 @@ ui <- fluidPage(
           h2(strong("Wassily Kandinsky: Composing Oneself")),
           h5(em("Composition 8 (1923)")),
           p(""),
-          p("After WWI, Wassily Kandinsky returned to his birth city of Moscow to practice art there.
+          p("After World War I, Wassily Kandinsky returned to his birth city of Moscow to practice art there.
             However, despite his abstract style, his ideas conflicted with those of the Russian
             avant-garde. Unlike his peers, who preferred systematic, rational abstraction, Kandinsky
             saw geometric forms as expressive and lyrical. Because of this tension, he moved to
@@ -425,8 +427,8 @@ ui <- fluidPage(
             and color in which circles play a dominant role. Nancy Spector wrote of the piece,
             'In Composition 8, the colorful, interactive geometric forms create a pulsating surface
             that is alternately dynamic and calm, aggressive and quiet.'"),
-          p("Modify Wassily Kandinsky's artwork to make it your own by adjusting the
-            settings in the", em("Graphics Input"), "sidebar on the left."),
+          p("Modify Composition 8 to make it your own by adjusting the settings in the",
+            em("Graphics Input"), "sidebar on the left."),
           p("Change the size of the circles, line thickness, background color, shape transparency,
             or which kinds of geometries to include. You may also add random noise to the piece, generated
             from a normal distribution, and watch Kandinsky's careful composition fall apart. Remember to

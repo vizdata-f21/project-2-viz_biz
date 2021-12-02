@@ -9,7 +9,7 @@ library(RCurl)
 library(shinyjs, exclude = 'colourInput')
 library(colourpicker)
 
-font_import(paths = "/home/guest/R/project-2-viz_biz/shiny/eli-shiny/Futura.tff")
+
 
 
 
@@ -205,7 +205,7 @@ server <- function(input, output) {
                        size = input$text_size,
                        fill = input$rect_color,
                        color = input$text_color,
-                       family = "Times New Roman",
+                       family = "Futura",
                        fontface = "bold",
                        label.size = 0,
                        label.r = unit(0, "lines")) +

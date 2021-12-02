@@ -105,55 +105,38 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-    pathreact <- reactive({input$path})
 
-
-    magick_image <- reactive({image_read(pathreact())})
+    magick_image <- reactive({image_read(input$path)})
     #my_image <- image_read("https://www.thebroad.org/sites/default/files/art/greenfieldsanders_kruger.jpeg")
 
 
-    magick_image <- reactive({
-        if(image_info(magick_image())$height>=image_info(magick_image())$width){
+    magick_plot <- reactive({
+        if(image_info(magick_image())$height>=image_info(magick_image())$width) {
         image_scale(magick_image(), "x700")
+        }
+        else{
+        image_scale(magick_image(), "700")}
+    })
+
+    img_height <- reactive({image_info(magick_plot())$height})
+    img_width <- reactive({image_info(magick_plot())$width})
+
+
+    size <- reactive({
+        if(img_height()>img_width()) {
+        img_width()/500
     } else {
-        image_scale(magick_image(), "700")
+        img_height()/500
     }
     })
 
-    img_height <- reactive({image_info(magick_image())$height})
-
-    img_width <- reactive({image_info(magick_image())$width})
 
 
-
-    # charnum <- reactive({nchar(pathreact())})
-    #
-    # substring3 <- reactive({substring(pathreact(), charnum()-3, charnum())})
-    # substring2 <- reactive({substring(pathreact(), charnum()-2, charnum())})
-    #
-    # dim_image <- reactive ({if(substring3() == "jpeg" |
-    #                     substring2() == "jpg") {
-    #       readJPEG(pathreact())
-    #  }
-    #      else{
-    #          readPNG(pathreact())
-    #      }})
-    #
-    # dimread <- reactive({dim(dim_image())})
-    #
-    # img_height <- reactive({dimread()[1]})
-    # img_width <- reactive({dimread()[2]})
-
-
-    #width <- dim(dim_image)[2]
-    # width <- dim(dim_image)[2]
-    #
-    #
-    #
-    observe({
-    output$plot <- renderPlot({
+    observe({output$plot <- renderPlot({
         kruger_plot <- ggplot() +
-            draw_image(plot_image())
+            draw_image(magick_plot()) +
+            coord_equal() +
+            theme_void()
 
         kruger_plot}, height = img_height(), width = img_width())})
 

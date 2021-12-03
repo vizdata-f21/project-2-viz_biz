@@ -22,7 +22,8 @@ library(styler)
 library(RColorBrewer)
 library(colorRamps)
 library(glue)
-library(RColorBrewer)
+library(RColorBrewer) # Lilly
+library(dichromat)
 library(ggwordcloud)
 library(ggtext)
 library(tidytext)
@@ -346,6 +347,48 @@ ui <- fluidPage(
             inputId = "background_color",
             label = "Background Color",
             value = "#F1E8DC"
+          ),
+          selectInput(
+            inputId = "brewer_palette",
+            label = "RColorBrewer Palette",
+            choices = c("Original" = "NONE",
+                        "Yellow Orange Red" = "YlOrRd",
+                        "Yellow Orange Brown" = "YlOrBr",
+                        "Yellow Green Blue" = "YlGnBu",
+                        "Yellow Green" = "YlGn",
+                        "Reds",
+                        "Red Purple" = "RdPu",
+                        "Purples",
+                        "Purple Red" = "PuRd",
+                        "Purple Blue Green" = "PuBuGn",
+                        "Purple Blue" = "PuBu",
+                        "Orange Red" = "OrRd",
+                        "Oranges",
+                        "Greys",
+                        "Greens",
+                        "Green Blue" = "GnBu",
+                        "Blue Purple" = "BuPu",
+                        "Blue Green" = "BuGn",
+                        "Blues",
+                        "Qualitative Set 3" = "Set3",
+                        "Qualitative Set 2" = "Set2",
+                        "Qualitative Set 1" = "Set1",
+                        "Pastel Set 2" = "Pastel2",
+                        "Pastel Set 1" = "Pastel1",
+                        "Qualitative Paired" = "Paired",
+                        "Dark" = "Dark2",
+                        "Accent",
+                        "Rainbow" = "Spectral",
+                        "Red Yellow Green" = "RdYlGn",
+                        "Red Yellow Blue" = "RdYlBu",
+                        "Red Grey" = "RdGy",
+                        "Red Blue" = "RdBu",
+                        "Purple Orange" = "PuOr",
+                        "Purple Green" = "PRGn",
+                        "Pink Green" = "PiYG",
+                        "Brown Blue" = "BrBG"
+                        ),
+            selected = NULL,
           ),
           checkboxGroupInput(
             inputId = "checkbox_layers",
@@ -855,135 +898,168 @@ server <- function(input, output) {
       }
 
       # plotting functions
-      plot_circles <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
+      plot_circles <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
           return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_circle(
-                data = as.data.frame(circles_l[[1]][[i]]),
-                aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
-              scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_circle(data = as.data.frame(circles_l[[1]][[i]]),
+                            aes(x0 = x, y0 = y, r = radius, fill = color_cat, color = color_cat, alpha = alpha))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_circle(data = as.data.frame(circles_l[[1]][[i]]),
+                            aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)) +
+                scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
+                scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
+            }
+            return(p)
           }
+        }
+      }
+
+      plot_semicircles <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
+          return(p)
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]]))
+            }
+            return(p)
+          }
+        }
+      }
+
+      plot_quads <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
+          return(p)
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_polygon(data = as.data.frame(quads_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_polygon(data = as.data.frame(quads_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
+            }
+            return(p)
+          }
+        }
+      }
+
+      plot_triangles <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
+          return(p)
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_polygon(data = as.data.frame(triangles_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_polygon(data = as.data.frame(triangles_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
+            }
+            return(p)
+          }
+        }
+      }
+
+      plot_lines <- function(layers = c(), execute = TRUE){
+        if(execute == FALSE) {
+          return(p)
+        } else{
+          for(i in layers){
+            p <- p +
+              geom_segment(data = as.data.frame(lines_l[[1]][[i]]),
+                           aes(x = x, xend = xend, y = y, yend = yend, size = thickness ^ 2))
+          }
+
           return(p)
         }
       }
 
-      plot_semicircles <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
+      plot_semicircle_stroke <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
           return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_polygon(
-                data = as.data.frame(semicircle_fill_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]]))
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_path(data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
+                          aes(x = x, y = y, group = id, color = color_cat, size = thickness ^ 2))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_path(data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
+                          aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
+                scale_color_manual(values = unique(semicircle_stroke_l[[2]][[i]][[1]]))
+            }
+            return(p)
           }
-
-          return(p)
         }
       }
 
-      plot_quads <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
+      plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
           return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_polygon(
-                data = as.data.frame(quads_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_path(data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
+                          aes(x = x, y = y, group = id, color = color_cat, size = thickness ^ 2))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_path(data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
+                          aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
+                scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[i]][[1]]))
+            }
+            return(p)
           }
-
-          return(p)
-        }
-      }
-
-      plot_triangles <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_polygon(
-                data = as.data.frame(triangles_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
-
-      plot_lines <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              # new_scale_fill() +
-              # new_scale_color() +
-              geom_segment(
-                data = as.data.frame(lines_l[[1]][[i]]),
-                aes(x = x, xend = xend, y = y, yend = yend, size = thickness^2)
-              )
-          }
-
-          return(p)
-        }
-      }
-
-      plot_semicircle_stroke <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_path(
-                data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, color = color, size = thickness^2)
-              ) +
-              scale_color_manual(values = unique(semicircle_stroke_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
-
-      plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_path(
-                data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, color = color, size = thickness^2)
-              ) +
-              scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
         }
       }
 
@@ -995,8 +1071,6 @@ server <- function(input, output) {
       semicircle_stroke_l <- add_noise(semicircle_stroke_l, magnitude = input$magnitudenoise)
       semicircle_stroke_color_l <- add_noise(semicircle_stroke_color_l, magnitude = input$magnitudenoise)
       triangles_l <- add_noise(triangles_l, c(1:6), magnitude = input$magnitudenoise)
-
-
 
       print_circles <- ("Circles" %in% input$checkbox_layers)
       print_quads <- ("Quadrilaterals" %in% input$checkbox_layers)
@@ -1017,14 +1091,26 @@ server <- function(input, output) {
           panel.border = element_blank()
         )
 
-      p <- plot_triangles(c(6:3), execute = print_triangles)
-      p <- plot_semicircles(c(3:1), execute = print_circles)
-      p <- plot_semicircle_stroke_color(c(1), execute = print_lines_curved)
-      p <- plot_semicircle_stroke(c(1), execute = print_lines_curved)
-      p <- plot_quads(c(4:1), execute = print_quads)
-      p <- plot_circles(c(6:2), execute = print_circles)
-      p <- plot_triangles(c(2:1), execute = print_triangles)
-      p <- plot_circles(c(1), execute = print_circles)
+      if(input$brewer_palette == "NONE"){
+        override_color <- FALSE
+      } else{
+        override_color <- TRUE
+
+        expanded_colors <- colorRampPalette(brewer.pal(8, input$brewer_palette))(11)
+
+        p <- p +
+        scale_fill_manual(values = expanded_colors) +
+        scale_color_manual(values = expanded_colors)
+        }
+
+      p <- plot_triangles(c(6:3), execute = print_triangles, skip_color = override_color)
+      p <- plot_semicircles(c(3:1), execute = print_circles, skip_color = override_color)
+      p <- plot_semicircle_stroke_color(c(1), execute = print_lines_curved, skip_color = override_color)
+      p <- plot_semicircle_stroke(c(1), execute = print_lines_curved, skip_color = override_color)
+      p <- plot_quads(c(4:1), execute = print_quads, skip_color = override_color)
+      p <- plot_circles(c(6:2), execute = print_circles, skip_color = override_color)
+      p <- plot_triangles(c(2:1), execute = print_triangles, skip_color = override_color)
+      p <- plot_circles(c(1), execute = print_circles, skip_color = override_color)
       p <- plot_lines(c(2:1), execute = print_lines_straight)
 
       p

@@ -30,7 +30,7 @@ throughout.
 
 ## Approaches 
 
-### Frank Stella, *Lettre sur les sourds et muets II* (1974)
+### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974)
 
 <img src="images/stella.jpg" style="width:24%"/>
 
@@ -85,7 +85,7 @@ To do this, we will use the ‘switch input’ Shiny widget in the UI interface 
 turn on/off the borderline.`switchInput(inputId = "borderline", label = "Borderlines", value = FALSE)`. In the server, the reactive input ‘borderline’ will be part of the aesthetic 
 in the ggplot. `geom_polygon(..., size = borderline())`.
 
-### Piet Mondrian, *Trafalgar Square* (1939-1943) 
+### [2] Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
 <img src="images/mondrian.jpg" style="width:15%"/>
 
@@ -121,7 +121,7 @@ to allow users to select four colors out of list of multiple color options. If t
 more than four colors, only the first four colors will show up. If the user uses less than 
 four colors, the boxes corresponding to the missing color will show up blank (i.e. white). 
 
-### Wassily Kandinsky, *Composition 8* (1923)
+### [3] Wassily Kandinsky, *Composition 8* (1923)
 
 <img src="images/kandinsky.jpeg" style="width:28%"/>
 
@@ -179,7 +179,7 @@ with standard deviation set as "magnitude" with a `sliderInput()`) to the coordi
 each element. Certain elements are grouped together and experience the same transformation 
 as a whole in order to retain some visual order.
 
-### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
+### [4] Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
 
 <img src="images/kruger.jpeg" style="width:18%"/>
 

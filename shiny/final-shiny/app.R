@@ -1,91 +1,15 @@
-# http://shiny.rstudio.com/
-library(shiny) # Eli
-library(shinythemes)
-library(tidyverse) # Eli
-library(DT)
-library(shinyalert)
-library(shinyWidgets)
-library(ggiraph)
-library(magrittr)
-library(tibble)
-library(styler)
-library(colorRamps)
-library(RColorBrewer)
-library(tidytext)
-library(tm)
-library(bslib) # Eli
-library(Rcpp)
-library(reshape2)
-library(colourlovers)
-library(cowplot) # Eli
-library(ggpolypath)
-library(colourpicker) # Eli
-library(ggnewscale) # Lilly
-library(Cairo)
-library(ggforce) # Lilly
-options(shiny.usecairo = TRUE)
-library(base64enc)
-library(magick) # Eli
-library(shinyvalidate) # Eli
-library(RCurl) # Eli
-library(showtext) # Eli
+# load data --------------------------------------------------------------------
 
+circles_l <- read_rds("data/circles.rds")
+lines_l <- read_rds("data/lines.rds")
+quads_l <- read_rds("data/quads.rds")
+semicircle_fill_l <- read_rds("data/semicircle-fill.rds")
+semicircle_stroke_l <- read_rds("data/semicircle-stroke.rds")
+semicircle_stroke_color_l <- read_rds("data/semicircle-stroke-color.rds")
+triangles_l <- read_rds("data/triangles.rds")
 
-## Kandinsky Prep
-# load data
-circles_l <- readRDS("data/circles.rds")
-lines_l <- readRDS("data/lines.rds")
-quads_l <- readRDS("data/quads.rds")
-semicircle_fill_l <- readRDS("data/semicircle-fill.rds")
-semicircle_stroke_l <- readRDS("data/semicircle-stroke.rds")
-semicircle_stroke_color_l <- readRDS("data/semicircle-stroke-color.rds")
-triangles_l <- readRDS("data/triangles.rds")
+# UI ---------------------------------------------------------------------------
 
-# load font
-font_add(
-  family = "Futura",
-  regular = paste0(here::here(), "/shiny/final-shiny/data/Futura.ttf")
-)
-showtext_auto()
-
-
-# write functions
-clip <- function(x, low, high) {
-  x[x < low] <- low
-  x[x > high] <- high
-  return(x)
-}
-
-add_noise <- function(df, layers = c(1), magnitude = 5) {
-  for (i in layers) {
-    df[[1]][[i]] <- as.data.frame(df[[1]][[i]]) %>%
-      group_by(grouping) %>%
-      mutate(
-        noise_x = rnorm(1, 0, magnitude),
-        noise_y = rnorm(1, 0, magnitude)
-      ) %>%
-      ungroup() %>%
-      mutate(
-        across(contains("x"), ~ clip(.x + noise_x, xmin, xmax)),
-        across(contains("y"), ~ clip(.x + noise_y, ymin, ymax))
-      )
-  }
-  return(df)
-}
-
-xmin <- 0
-xmax <- 152
-ymin <- 0
-ymax <- 86
-
-print_circles <- FALSE
-print_quads <- FALSE
-print_lines_curved <- FALSE
-print_lines_straight <- FALSE
-print_triangles <- FALSE
-
-
-# Define UI for application
 ui <- fluidPage(
   theme = bs_theme(
     bootswatch = "cosmo",
@@ -196,7 +120,7 @@ ui <- fluidPage(
               label = NULL, value = "#525252"
             ))
           ),
-          p(""),
+          br(),
           prettyCheckbox(
             inputId = "borderline",
             label = "Activate thin borderlines",
@@ -223,7 +147,7 @@ ui <- fluidPage(
         mainPanel(
           h2(strong("Frank Stella: Experiment and Change")),
           h5(em("Lettre Sur Les Et Muets II (1974)")),
-          p(""),
+          br(),
           p("Stella alternates between bands of gray, lightening as they approach
             the center and a rich chromatic scale, which transitions from reds,
             to yellow, to greens and finally dark blue. The painting’s simultaneous
@@ -235,28 +159,30 @@ ui <- fluidPage(
             hacing a smaller number of layers and lower resolution would be more appropriate.
             Feel free to toggle as much as you want and experiment varieties of ways on
             modifying this plot to figure out your desired unique style!"),
-
+          prettyCheckbox(
+            inputId = "original_artwork_check",
+            label = "Show original artwork",
+            value = FALSE
+          ),
+          conditionalPanel(
+            condition = "input.original_artwork_check == true",
+            div(imageOutput(outputId = "original_artwork", inline = TRUE), align = "center"),
+            br(),
+            div(textOutput(outputId = "original_artwork_text", inline = TRUE), align = "center"),
+            br()
+          ),
           # plotOutput(outputId = "plot", inline = TRUE),
           div(plotOutput(
             outputId = "plot", inline = TRUE,
             height = "100%"
           ), align = "center"),
-          h4(" "),
+          br(),
           prettyCheckbox(
             inputId = "table_switch",
             label = "Raw dataframe used to recreate the masterpiece above",
             value = FALSE
           ),
-          DT::dataTableOutput(outputId = "table_switch"),
-          prettyCheckbox(
-            inputId = "original_artwork",
-            label = "Original Artwork",
-            value = FALSE
-          ),
-          div(imageOutput(outputId = "original_artwork", inline = TRUE), align = "center"),
-          h4(" "),
-          div(textOutput(outputId = "original_artwork_text", inline = TRUE), align = "center"),
-          h4(" ")
+          DT::dataTableOutput(outputId = "table_switch")
         ) # main panel
       ) # sidebar layout
     ), # tab 2 panel
@@ -299,7 +225,7 @@ ui <- fluidPage(
         mainPanel(
           h2(strong("Piet Mondrian: Finding Refuge")),
           h5(em("Trafalgar Square (1939-1943)")),
-          p(""),
+          br(),
           p("In September 1938, Mondrian moved from Paris to London to escape the
             threat of a German invasion. There he made Trafalgar Square, the first
             in a series of paintings titled after locations in cities that gave him
@@ -311,20 +237,22 @@ ui <- fluidPage(
             in the artwork and to adjust the color of the boxes pictured. Experiment
             with your own varieties of abstract ways to modify and figure out your
             own custom style!"),
+          prettyCheckbox(
+            inputId = "original_artwork_piet_check",
+            label = "Show original artwork",
+            value = FALSE
+          ),
+          conditionalPanel(
+            condition = "input.original_artwork_piet_check == true",
+            div(imageOutput(outputId = "original_artwork_piet", inline = TRUE), align = "center"),
+            br(),
+            div(textOutput(outputId = "original_artwork_text_piet", inline = TRUE), align = "center"),
+            br()
+          ),
           div(plotOutput(
             outputId = "plot_piet", inline = TRUE,
             height = "100%"
-          ), align = "center"),
-          p(""),
-          prettyCheckbox(
-            inputId = "original_artwork_piet",
-            label = "Original Artwork",
-            value = FALSE
-          ),
-          div(imageOutput(outputId = "original_artwork_piet", inline = TRUE), align = "center"),
-          h4(" "),
-          div(textOutput(outputId = "original_artwork_text_piet", inline = TRUE), align = "center"),
-          h4(" ")
+          ), align = "center")
         )
       )
     ),
@@ -360,6 +288,48 @@ ui <- fluidPage(
             label = "Background Color",
             value = "#F1E8DC"
           ),
+          selectInput(
+            inputId = "brewer_palette",
+            label = "RColorBrewer Palette",
+            choices = c("Original" = "NONE",
+                        "Yellow Orange Red" = "YlOrRd",
+                        "Yellow Orange Brown" = "YlOrBr",
+                        "Yellow Green Blue" = "YlGnBu",
+                        "Yellow Green" = "YlGn",
+                        "Reds",
+                        "Red Purple" = "RdPu",
+                        "Purples",
+                        "Purple Red" = "PuRd",
+                        "Purple Blue Green" = "PuBuGn",
+                        "Purple Blue" = "PuBu",
+                        "Orange Red" = "OrRd",
+                        "Oranges",
+                        "Greys",
+                        "Greens",
+                        "Green Blue" = "GnBu",
+                        "Blue Purple" = "BuPu",
+                        "Blue Green" = "BuGn",
+                        "Blues",
+                        "Qualitative Set 3" = "Set3",
+                        "Qualitative Set 2" = "Set2",
+                        "Qualitative Set 1" = "Set1",
+                        "Pastel Set 2" = "Pastel2",
+                        "Pastel Set 1" = "Pastel1",
+                        "Qualitative Paired" = "Paired",
+                        "Dark" = "Dark2",
+                        "Accent",
+                        "Rainbow" = "Spectral",
+                        "Red Yellow Green" = "RdYlGn",
+                        "Red Yellow Blue" = "RdYlBu",
+                        "Red Grey" = "RdGy",
+                        "Red Blue" = "RdBu",
+                        "Purple Orange" = "PuOr",
+                        "Purple Green" = "PRGn",
+                        "Pink Green" = "PiYG",
+                        "Brown Blue" = "BrBG"
+                        ),
+            selected = NULL,
+          ),
           checkboxGroupInput(
             inputId = "checkbox_layers",
             label = "Select layers to display:",
@@ -380,8 +350,9 @@ ui <- fluidPage(
             value = 0
           ),
           actionButton("go_kandinsky", "Apply Changes"),
-          p(""),
-          span(p("Please allow the artwork 10 to 15 seconds to render after applying changes"),
+          br(),
+          span(p("When using original color palette, please allow the artwork 10 to 15 seconds
+                 to render after applying changes"),
             style = "color:red"
           ),
           hr(),
@@ -399,14 +370,7 @@ ui <- fluidPage(
         mainPanel(
           h2(strong("Wassily Kandinsky: Composing Oneself")),
           h5(em("Composition 8 (1923)")),
-          p(""),
-          prettyCheckbox(
-            inputId = "original_artwork_kandinsky",
-            label = "Show Original Artwork",
-            value = FALSE
-          ),
-          div(imageOutput(outputId = "original_artwork_kandinsky", inline = TRUE), align = "center"),
-          div(textOutput(outputId = "original_artwork_text_kandinsky", inline = TRUE), align = "center"),
+          br(),
           p("After World War I, Wassily Kandinsky returned to his birth city of Moscow to practice art there.
             However, despite their shared interest in the abstract, his ideas conflicted with those of the Russian
             avant-garde. Unlike his peers, who preferred systematic, rational abstraction, Kandinsky
@@ -416,20 +380,27 @@ ui <- fluidPage(
             and color in which circles play a dominant role. Nancy Spector wrote of the piece,
             \"In Composition 8, the colorful, interactive geometric forms create a pulsating surface
             that is alternately dynamic and calm, aggressive and quiet.\" (1)"),
-          p(
-            "Modify Composition 8 to make it your own by adjusting the settings in the",
-            em("Graphics Input"), "sidebar on the left."
-          ),
-          p("Change the size of the circles, line thickness, background color, shape transparency,
-            or which kinds of geometries to include. You may also add random noise to the piece, generated
-            from a normal distribution, and watch Kandinsky's careful composition fall apart. Remember to
-            press the", em("Apply Changes"), "button to watch your modifications come to life."),
+          p("Modify Composition 8 to make it your own by adjusting the settings in the",
+            em("Graphics Input"), "sidebar on the left. Change the size of the circles, line thickness,
+            background color, shape transparency, or select which kinds of geometries to include. You
+            may also add random noise to the piece, generated from a normal distribution, and watch
+            Kandinsky's careful composition fall apart."),
+          span(p("Remember to press the", em("Apply Changes"), "button to watch your modifications
+                 come to life.", style = "color:red:")),
           p("(1) Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
             Museums and Foundation. Accessed December 2, 2021. https://www.guggenheim.org/artwork/1924."),
-          # div(plotOutput(
-          #  outputId = "plot_kandinsky", inline = FALSE,
-          #  height = "100%"
-          # ), align = "center"),
+          prettyCheckbox(
+            inputId = "original_artwork_kandinsky_check",
+            label = "Show original artwork",
+            value = FALSE
+          ),
+          conditionalPanel(
+            condition = "input.original_artwork_kandinsky_check == true",
+            div(imageOutput(outputId = "original_artwork_kandinsky", inline = TRUE), align = "center"),
+            br(),
+            div(textOutput(outputId = "original_artwork_text_kandinsky", inline = TRUE), align = "center"),
+            br()
+          ),
           div(uiOutput(
             outputId = "ui_kandinsky",
             height = "100%"
@@ -502,7 +473,7 @@ ui <- fluidPage(
         mainPanel(
           h2(strong("Barbara Kruger: Cultural Critique")),
           h5(em("Untitled (Your body is a battleground) (1989)")),
-          p(""),
+          br(),
           p("Kruger is most known for her collage style that consists of black-and-white
             photographs, overlaid with declarative captions, stated in white-on-red
             text. The phrases in her works often include pronouns such as 'you', 'your',
@@ -517,27 +488,30 @@ ui <- fluidPage(
             of the text, border, and even replace the image from any image address
             to communicate a message you think is important!"
           ),
+          prettyCheckbox(
+            inputId = "original_artwork_kruger_check",
+            label = "Show original artwork",
+            value = FALSE
+          ),
+          conditionalPanel(
+            condition = "input.original_artwork_kruger_check == true",
+            div(imageOutput(outputId = "original_artwork_kruger", inline = TRUE), align = "center"),
+            br(),
+            div(textOutput(outputId = "original_artwork_text_kruger", inline = TRUE), align = "center"),
+            br()
+          ),
           div(plotOutput(
             outputId = "plot_kruger", inline = FALSE,
             height = "100%"
-          ), align = "center"),
-          p(""),
-          prettyCheckbox(
-            inputId = "original_artwork_kruger",
-            label = "Original Artwork",
-            value = FALSE
-          ),
-          div(imageOutput(outputId = "original_artwork_kruger", inline = TRUE), align = "center"),
-          h4(" "),
-          div(textOutput(outputId = "original_artwork_text_kruger", inline = TRUE), align = "center"),
-          h4(" ")
+          ), align = "center")
         )
       )
     ) # tab 4 panel
   ) # navbar page
 ) # fluid page
 
-# Define server logic required to draw a histogram
+# Server -----------------------------------------------------------------------
+
 server <- function(input, output) {
   n <- reactive({
     input$size * 2
@@ -690,36 +664,21 @@ server <- function(input, output) {
     }
   )
 
-  output$original_artwork <- renderImage({
-    if (input$original_artwork == TRUE) {
-      return(list(
+  output$original_artwork <- renderImage(
+    {
+      list(
         src = "./stella.jpg",
         width = 450,
         height = 325,
         contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-    if (input$original_artwork == FALSE) {
-      return(list(
-        src = "./stella.jpg",
-        width = 0,
-        height = 0,
-        contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-  })
+        alt = "Original Artwork"
+      )
+    },
+    deleteFile = FALSE
+  )
 
   output$original_artwork_text <- renderText({
-    if (input$original_artwork == TRUE) {
-      return(paste("Photo by Christopher Burke, © 2017 Artists Rights Society (ARS), New York"))
-    }
-    if (input$original_artwork == FALSE) {
-      return(NULL)
-    }
+    "Photo by Christopher Burke, © 2017 Artists Rights Society (ARS), New York"
   })
 
   # PIET MONDRIAN
@@ -809,36 +768,21 @@ server <- function(input, output) {
     }
   )
 
-  output$original_artwork_piet <- renderImage({
-    if (input$original_artwork_piet == TRUE) {
-      return(list(
+  output$original_artwork_piet <- renderImage(
+    {
+      list(
         src = "./piet.jpg",
         width = 250,
         height = 333,
         contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-    if (input$original_artwork_piet == FALSE) {
-      return(list(
-        src = "./piet.jpg",
-        width = 0,
-        height = 0,
-        contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-  })
+        alt = "Original Artwork"
+      )
+    },
+    deleteFile = FALSE
+  )
 
   output$original_artwork_text_piet <- renderText({
-    if (input$original_artwork_piet == TRUE) {
-      return(paste("Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Museum of Modern Art (MoMA), New York"))
-    }
-    if (input$original_artwork_piet == FALSE) {
-      return(NULL)
-    }
+    "Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Museum of Modern Art (MoMA), New York"
   })
 
   ## KANDINSKY
@@ -871,6 +815,172 @@ server <- function(input, output) {
           mutate(radius = radius * input$circlesize / 10)
       }
 
+      # plotting functions
+      plot_circles <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
+          return(p)
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_circle(data = as.data.frame(circles_l[[1]][[i]]),
+                            aes(x0 = x, y0 = y, r = radius, fill = color_cat, color = color_cat, alpha = alpha))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_circle(data = as.data.frame(circles_l[[1]][[i]]),
+                            aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)) +
+                scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
+                scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
+            }
+            return(p)
+          }
+        }
+      }
+
+      plot_semicircles <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
+          return(p)
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]]))
+            }
+            return(p)
+          }
+        }
+      }
+
+      plot_quads <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
+          return(p)
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_polygon(data = as.data.frame(quads_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_polygon(data = as.data.frame(quads_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
+            }
+            return(p)
+          }
+        }
+      }
+
+      plot_triangles <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
+          return(p)
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_polygon(data = as.data.frame(triangles_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_polygon(data = as.data.frame(triangles_l[[1]][[i]]),
+                             aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
+            }
+            return(p)
+          }
+        }
+      }
+
+      plot_lines <- function(layers = c(), execute = TRUE){
+        if(execute == FALSE) {
+          return(p)
+        } else{
+          for(i in layers){
+            p <- p +
+              geom_segment(data = as.data.frame(lines_l[[1]][[i]]),
+                           aes(x = x, xend = xend, y = y, yend = yend, size = thickness ^ 2))
+          }
+
+          return(p)
+        }
+      }
+
+      plot_semicircle_stroke <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
+          return(p)
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_path(data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
+                          aes(x = x, y = y, group = id, color = color_cat, size = thickness ^ 2))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_path(data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
+                          aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
+                scale_color_manual(values = unique(semicircle_stroke_l[[2]][[i]][[1]]))
+            }
+            return(p)
+          }
+        }
+      }
+
+      plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE, skip_color = FALSE){
+        if(execute == FALSE) {
+          return(p)
+        } else{
+          if(skip_color == TRUE){
+            for(i in layers){
+              p <- p +
+                geom_path(data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
+                          aes(x = x, y = y, group = id, color = color_cat, size = thickness ^ 2))
+            }
+            return(p)
+          } else{
+            for(i in layers){
+              p <- p +
+                new_scale_fill() +
+                new_scale_color() +
+                geom_path(data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
+                          aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
+                scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[i]][[1]]))
+            }
+            return(p)
+          }
+        }
+      }
+
       # add random noise based on input$magnitudenoise from ui.R
       circles_l <- add_noise(circles_l, c(1:6), magnitude = input$magnitudenoise)
       lines_l <- add_noise(lines_l, c(1:2), magnitude = input$magnitudenoise)
@@ -879,139 +989,6 @@ server <- function(input, output) {
       semicircle_stroke_l <- add_noise(semicircle_stroke_l, magnitude = input$magnitudenoise)
       semicircle_stroke_color_l <- add_noise(semicircle_stroke_color_l, magnitude = input$magnitudenoise)
       triangles_l <- add_noise(triangles_l, c(1:6), magnitude = input$magnitudenoise)
-
-      # plotting functions
-      plot_circles <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_circle(
-                data = as.data.frame(circles_l[[1]][[i]]),
-                aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
-              scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
-          }
-          return(p)
-        }
-      }
-
-      plot_semicircles <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_polygon(
-                data = as.data.frame(semicircle_fill_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
-
-      plot_quads <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_polygon(
-                data = as.data.frame(quads_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
-
-      plot_triangles <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_polygon(
-                data = as.data.frame(triangles_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
-
-      plot_lines <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              # new_scale_fill() +
-              # new_scale_color() +
-              geom_segment(
-                data = as.data.frame(lines_l[[1]][[i]]),
-                aes(x = x, xend = xend, y = y, yend = yend, size = thickness^2)
-              )
-          }
-
-          return(p)
-        }
-      }
-
-      plot_semicircle_stroke <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_path(
-                data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, color = color, size = thickness^2)
-              ) +
-              scale_color_manual(values = unique(semicircle_stroke_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
-
-      plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_path(
-                data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, color = color, size = thickness^2)
-              ) +
-              scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
 
       print_circles <- ("Circles" %in% input$checkbox_layers)
       print_quads <- ("Quadrilaterals" %in% input$checkbox_layers)
@@ -1024,21 +1001,34 @@ server <- function(input, output) {
         scale_alpha(range = c(input$alpha[1], input$alpha[2])) +
         scale_size(range = c(input$linethickness[1], input$linethickness[2])) +
         coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = FALSE) +
-        theme_void() +
+        theme_nothing() +
+        labs(x = NULL, y = NULL) +
         theme(
           legend.position = "none",
           panel.background = element_rect(fill = input$background_color, color = input$background_color),
           panel.border = element_blank()
         )
 
-      p <- plot_triangles(c(6:3), execute = print_triangles)
-      p <- plot_semicircles(c(3:1), execute = print_circles)
-      p <- plot_semicircle_stroke_color(c(1), execute = print_lines_curved)
-      p <- plot_semicircle_stroke(c(1), execute = print_lines_curved)
-      p <- plot_quads(c(4:1), execute = print_quads)
-      p <- plot_circles(c(6:2), execute = print_circles)
-      p <- plot_triangles(c(2:1), execute = print_triangles)
-      p <- plot_circles(c(1), execute = print_circles)
+      if(input$brewer_palette == "NONE"){
+        override_color <- FALSE
+      } else{
+        override_color <- TRUE
+
+        expanded_colors <- colorRampPalette(brewer.pal(8, input$brewer_palette))(11)
+
+        p <- p +
+        scale_fill_manual(values = expanded_colors) +
+        scale_color_manual(values = expanded_colors)
+        }
+
+      p <- plot_triangles(c(6:3), execute = print_triangles, skip_color = override_color)
+      p <- plot_semicircles(c(3:1), execute = print_circles, skip_color = override_color)
+      p <- plot_semicircle_stroke_color(c(1), execute = print_lines_curved, skip_color = override_color)
+      p <- plot_semicircle_stroke(c(1), execute = print_lines_curved, skip_color = override_color)
+      p <- plot_quads(c(4:1), execute = print_quads, skip_color = override_color)
+      p <- plot_circles(c(6:2), execute = print_circles, skip_color = override_color)
+      p <- plot_triangles(c(2:1), execute = print_triangles, skip_color = override_color)
+      p <- plot_circles(c(1), execute = print_circles, skip_color = override_color)
       p <- plot_lines(c(2:1), execute = print_lines_straight)
 
       p
@@ -1063,36 +1053,21 @@ server <- function(input, output) {
     }
   )
 
-  output$original_artwork_kandinsky <- renderImage({
-    if (input$original_artwork_kandinsky == TRUE) {
-      return(list(
+  output$original_artwork_kandinsky <- renderImage(
+    {
+      list(
         src = "./kandinsky.jpg",
         width = 450,
         height = 315,
         contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-    if (input$original_artwork_kandinsky == FALSE) {
-      return(list(
-        src = "./kandinsky.jpg",
-        width = 0,
-        height = 0,
-        contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-  })
+        alt = "Original Artwork"
+      )
+    },
+    deleteFile = FALSE
+  )
 
   output$original_artwork_text_kandinsky <- renderText({
-    if (input$original_artwork_kandinsky == TRUE) {
-      return(paste("Solomon R. Guggenheim Founding Collection, By gift © 2018 Artists Rights Society (ARS), New York/ADAGP, Paris"))
-    }
-    if (input$original_artwork_kandinsky == FALSE) {
-      return(NULL)
-    }
+    "Solomon R. Guggenheim Founding Collection, By gift © 2018 Artists Rights Society (ARS), New York/ADAGP, Paris"
   })
 
   # BARBARA KRUGER
@@ -1243,39 +1218,25 @@ observe({
     }
   )
 
-
-  output$original_artwork_kruger <- renderImage({
-    if (input$original_artwork_kruger == TRUE) {
-      return(list(
+  output$original_artwork_kruger <- renderImage(
+    {
+      list(
         src = "./kruger.jpg",
         width = 300,
         height = 300,
         contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-    if (input$original_artwork_kruger == FALSE) {
-      return(list(
-        src = "./kruger.jpg",
-        width = 0,
-        height = 0,
-        contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-  })
+        alt = "Original Artwork"
+      )
+    },
+    deleteFile = FALSE
+  )
 
   output$original_artwork_text_kruger <- renderText({
-    if (input$original_artwork_kruger == TRUE) {
-      return(paste("The Inaugural Installation, © 1989 The Broad, Los Angeles"))
-    }
-    if (input$original_artwork_kruger == FALSE) {
-      return(NULL)
-    }
+    "The Inaugural Installation, © 1989 The Broad, Los Angeles"
   })
+
 }
 
-# Run the application
+# Create the app ---------------------------------------------------------------
+
 shinyApp(ui = ui, server = server)

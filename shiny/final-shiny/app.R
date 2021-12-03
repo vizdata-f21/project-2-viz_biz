@@ -352,7 +352,8 @@ ui <- fluidPage(
           ),
           actionButton("go_kandinsky", "Apply Changes"),
           br(),
-          span(p("Please allow the artwork 10 to 15 seconds to render after applying changes"),
+          span(p("When using original color palette, please allow the artwork 10 to 15 seconds
+                 to render after applying changes"),
             style = "color:red"
           ),
           hr(),

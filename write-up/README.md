@@ -10,20 +10,9 @@ https://phillip.shinyapps.io/viz_biz/ or tinyurl.art/313
 
 We created a website where the public can navigate and customize famous art pieces recreated in ggplot, modifying the artwork aesthetics to make the masterworks their own. Our goal is to promote digital extensions of modern, abstract paintings and allow users to download personalized versions. We also strive to increase public awareness of the promise of R packages like ggplot for digital art. 
 
-We present the following 4 artworks:
-
-##### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974) 
-
-##### [2] Barbara Kruger, *Untitled (Your body is a battleground)* (1989) 
-
-##### [3] Wassily Kandinsky, *Composition 8* (1923) 
-
-##### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
-
 To recreate our **chosen 4 modern art pieces**, we fabricated dataframes which can incorporate user input to customize ggplot aesthetics. We also utilized mathematical functions and packages like `colourpicker` and `generativeart` to facilitate digitization.
 
-We then these pieces in a Shiny App, where an initial tab provides a brief overview of the site and describes
-how to use it. The four following tabs house each of the pieces. Users
+We then these pieces in a Shiny App, where an initial tab provides a brief overview of the site, and the 4 following tabs house each of the pieces. Users
 may change features such as colors, number and amount of certain shapes, transparency, and more
 throughout. 
 

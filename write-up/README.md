@@ -12,13 +12,13 @@ For this project, we created a convenient website where non-R users and the gene
 
 We plan to recreate and make customizable the following four images:
 
-#### Frank Stella, *Lettre sur les sourds et muets II* (1974) [1]
+#### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974) 
 
-#### Barbara Kruger, *Untitled (Your body is a battleground)* (1989) [2]
+#### [2] Barbara Kruger, *Untitled (Your body is a battleground)* (1989) 
 
-#### Wassily Kandinsky, *Composition 8* (1923) [3]
+#### [3] Wassily Kandinsky, *Composition 8* (1923) 
 
-#### Piet Mondrian, *Trafalgar Square* (1939-1943) [4]
+#### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
 To recreate these modern art pieces, we will be creating our own dataframes, which will incorporate user input to customize certain artistic aspects of each piece. We will also utilize mathematical functions and specific packages such as `library(colourpicker)` and `library(generativeart)` to facilitate the digitization of these art pieces. 
 
@@ -82,19 +82,8 @@ like this feature but not all, hence, we make it an option for the audience to
 preserve or remove the borderlines in their final plot.
 
 To do this, we will use the ‘switch input’ Shiny widget in the UI interface to 
-turn on/off the borderline.`switchInput(inputId = "borderline", label = "Borderlines", value = FALSE)`
-In the server, the reactive input ‘borderline’ will be part of the aesthetic 
-in the ggplot. `geom_polygon(..., size = borderline())`
-
-### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
-
-<img src="images/kruger.jpeg" style="width:18%"/>
-
-<img src="shiny_screenshots/Barbara_Kruger.jpg" style="width:80%"/>
-
-### Wassily Kandinsky, *Composition 8* (1923)
-
-<img src="images/kandinsky.jpeg" style="width:28%"/>
+turn on/off the borderline.`switchInput(inputId = "borderline", label = "Borderlines", value = FALSE)`. In the server, the reactive input ‘borderline’ will be part of the aesthetic 
+in the ggplot. `geom_polygon(..., size = borderline())`.
 
 ### Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
@@ -131,6 +120,16 @@ To do this, we will use the `checkboxGroupInput` in the UI interface
 to allow users to select four colors out of list of multiple color options. If the user picks 
 more than four colors, only the first four colors will show up. If the user uses less than 
 four colors, the boxes corresponding to the missing color will show up blank (i.e. white). 
+
+### Wassily Kandinsky, *Composition 8* (1923)
+
+<img src="images/kandinsky.jpeg" style="width:28%"/>
+
+### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
+
+<img src="images/kruger.jpeg" style="width:18%"/>
+
+<img src="shiny_screenshots/Barbara_Kruger.jpg" style="width:80%"/>
 
 ## Discussion
 

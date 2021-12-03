@@ -516,6 +516,9 @@ ui <- fluidPage(
 # Server -----------------------------------------------------------------------
 
 server <- function(input, output) {
+
+  # 1. FRANK STELLA
+
   n <- reactive({
     input$size * 2
   })
@@ -684,7 +687,7 @@ server <- function(input, output) {
     "Photo by Christopher Burke, © 2017 Artists Rights Society (ARS), New York"
   })
 
-  # PIET MONDRIAN
+  # 2. PIET MONDRIAN
 
   # Static Datasets
 
@@ -788,7 +791,7 @@ server <- function(input, output) {
     "Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Museum of Modern Art (MoMA), New York"
   })
 
-  ## KANDINSKY
+  ## 3. WASSILY KANDINSKY
 
   plotInput_kandinsky <- eventReactive(input$go_kandinsky,
     {
@@ -1080,7 +1083,7 @@ server <- function(input, output) {
     "Solomon R. Guggenheim Founding Collection, By gift © 2018 Artists Rights Society (ARS), New York/ADAGP, Paris"
   })
 
-  # BARBARA KRUGER
+  # 4. BARBARA KRUGER
 
   link <- reactive(input$path)
 
@@ -1092,10 +1095,6 @@ server <- function(input, output) {
       "https://cdn.thecollector.com/wp-content/uploads/2020/03/image10-20.jpg"
     }
   })
-
-
-
-
 
   # Validation rules are set in the server, start by
   # making a new instance of an `InputValidator()`
@@ -1109,11 +1108,9 @@ server <- function(input, output) {
   # Finally, `enable()` the validation rules
   iv$enable()
 
-
   magick_image <- reactive({
     image_read(linker())
   })
-
 
   magick_plot <- reactive({
     if (image_info(magick_image())$height >= image_info(magick_image())$width) {
@@ -1206,8 +1203,6 @@ server <- function(input, output) {
       width = img_width()
     )
   })
-
-
 
   custom_filename_kruger <- reactive({
     input$custom_filename_kruger

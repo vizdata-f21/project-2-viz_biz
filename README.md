@@ -2,6 +2,10 @@
 
 *Author: Eli Feder, Lillian Clark, Phillip Harmadi, Sana Pashankar*
 
+**SHINY APP:**
+
+https://phillip.shinyapps.io/viz_biz/
+
 **TABLE OF CONTENTS:**
 1. Proposal
 2. Eli's Artwork Shiny: *Untitled - Barbara Kruger* (**150-250 words summary and methodology** of the artwork will be on this folder's README.md)

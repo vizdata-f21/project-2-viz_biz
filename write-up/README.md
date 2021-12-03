@@ -2,6 +2,10 @@
 
 *Author: Eli Feder, Lillian Clark, Phillip Harmadi, Sana Pashankar*
 
+## Shiny App
+
+Please explore our final website at https://phillip.shinyapps.io/viz_biz/.
+
 ## Introduction
 
 For this project, we created a convenient website where non-R users and the general public can navigate to and customize several famous modern art pieces recreated in ggplot, modifying some of the artwork aesthetics to make the masterworks their own. Our goal specifically was to promote digital extensions of modern, abstract paintings and to allow users to make art personalized to their taste, which they can download for their own use. Furthermore, in this project, we strived to increase public appreciation and awareness of using digital techniques, such as ggplot, to recreate art or make original digital art. 

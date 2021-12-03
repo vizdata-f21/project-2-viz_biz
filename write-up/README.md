@@ -28,7 +28,6 @@ these art pieces. Then, there will be a separate tab for each of the pieces. We 
 to change features such as colors, number and amount of certain shapes, transparency, etc
 throughout the pieces. 
 
-
 ## Approaches 
 
 ### Frank Stella, *Lettre sur les sourds et muets II* (1974)
@@ -40,7 +39,7 @@ attracts us to recreate a visualization of this masterpiece. 4 distinct
 features spark our interest. We also believe that these features should
 be made *adjustable/modifiable* to the preference of each audience:
 
-<img src="shiny_screenshots/Frank_Stella.png" style="width:100%"/>
+<img src="shiny_screenshots/Frank_Stella.png" style="width:80%"/>
 
 **Number of layers**
 
@@ -91,6 +90,8 @@ in the ggplot. `geom_polygon(..., size = borderline())`
 
 <img src="images/kruger.jpeg" style="width:18%"/>
 
+<img src="shiny_screenshots/Barbara_Kruger.jpg" style="width:80%"/>
+
 ### Wassily Kandinsky, *Composition 8* (1923)
 
 <img src="images/kandinsky.jpeg" style="width:28%"/>
@@ -103,7 +104,7 @@ This painting’s geometric shapes and lines are what allowed us to recreate thi
 visualization in ggplot2. 2 distinct features sparked our interest to make 
 *adjustable/modifiable* to the preference of each audience:
 
-<img src="shiny_screenshots/Piet_Mondrian.png" style="width:100%"/>
+<img src="shiny_screenshots/Piet_Mondrian.png" style="width:80%"/>
 
 **Horizontal Lines**
 
@@ -142,5 +143,14 @@ recreating Frank Stella's artwork. As a user modifies the number of layers in th
 dataset will adjust automatically and dynamically, hence our team created a function with the
 number of layers (the reactive input) as one of the parameters of the function.
 
-Another challenge that we encountered was allowing for a user to input an image link of their choice in the Barbara Kruger section of the Shiny app. Not only was the link input reactive, but we encountered an error where the app would crash if an invalid url was used. To address this, we kept the original link variable if the link was valid and updated it to the kruger image link if not. We also added an error message if the link was not valid. 
+Another challenge that we encountered was allowing for a user to input an image URL of his/her 
+choice into our Barbara Kruger's section of the Shiny app. Not only was the link input reactive, 
+but we also encountered an error where the app would crash if an invalid URL was used. To address 
+this issue, we kept the original link variable if the link was valid and updated it to the Kruger's
+image URL if not. We would also add an error message if the link turns out to be invalid. 
 
+To conclude, we are satisfied with our final result and if we were given more time to do this 
+project, some possibilities we would consider would be to allow users to select more than 2 color 
+checkpoints (e.g. allowing for a rainbow color, not just a single, continuous gradient between 2 
+colors) for the primary gradient and secondary gradient in the modified Stella's artwork, to change the thickness of the gridlines in Mondrian's artwork, to pick their own font type for the modified 
+Kruger's artwork, and many other possibilities.

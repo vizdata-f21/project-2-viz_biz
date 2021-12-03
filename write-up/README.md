@@ -4,21 +4,21 @@
 
 ## Shiny App
 
-Please explore our final website at https://phillip.shinyapps.io/viz_biz/.
+https://phillip.shinyapps.io/viz_biz/ or tinyurl.art/313
 
 ## Introduction
 
-For this project, we created a convenient website where non-R users and the general public can navigate to and customize several famous modern art pieces recreated in ggplot, modifying some of the artwork aesthetics to make the masterworks their own. Our goal specifically was to promote digital extensions of modern, abstract paintings and to allow users to make art personalized to their taste, which they can download for their own use. Furthermore, in this project, we strived to increase public appreciation and awareness of using digital techniques, such as ggplot, to recreate art or make original digital art. 
+We created a convenient website where non-R users and the public can navigate and customize famous modern art pieces recreated in ggplot, modifying some of the artwork aesthetics to make the masterworks their own. Our goal specifically was to promote digital extensions of modern, abstract paintings and to allow users to make personalized art downloadable for their own use. Furthermore, we also strive to increase public appreciation and awareness of using digital techniques, such as ggplot, to recreate/make original digital art. 
 
-We present the following four images:
+We present the following 4 artworks:
 
-#### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974) 
+##### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974) 
 
-#### [2] Barbara Kruger, *Untitled (Your body is a battleground)* (1989) 
+##### [2] Barbara Kruger, *Untitled (Your body is a battleground)* (1989) 
 
-#### [3] Wassily Kandinsky, *Composition 8* (1923) 
+##### [3] Wassily Kandinsky, *Composition 8* (1923) 
 
-#### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
+##### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
 To recreate these modern art pieces, we fabricated our own dataframes which incorporate user input to customize certain aesthetics of each piece. We also utilized mathematical functions and specific packages such as `colourpicker` and `generativeart` to facilitate the digitization of these art pieces -- all are created in `ggplot`. 
 

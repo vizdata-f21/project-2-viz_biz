@@ -9,7 +9,6 @@ https://phillip.shinyapps.io/viz_biz/ or tinyurl.art/313
 ## Introduction
 
 We created a website where the public can navigate and customize famous art pieces recreated in ggplot, modifying the artwork aesthetics to make the masterworks their own. Our goal is to promote digital extensions of modern, abstract paintings and allow users to download personalized versions. We also strive to increase public awareness of the promise of R packages like ggplot for digital art. 
-
 To recreate our **chosen 4 modern art pieces**, we fabricated dataframes which can incorporate user input to customize ggplot aesthetics. We also utilized mathematical functions and packages like `colourpicker` and `generativeart` to facilitate digitization.
 
 We then these pieces in a Shiny App, where an initial tab provides a brief overview of the site, and the 4 following tabs house each of the pieces. Users
@@ -106,59 +105,48 @@ with one another).
 
 <img src="images/kandinsky.jpeg" style="width:28%"/>
 
-We chose to recreate *Composition 8* because of Kandinsky's knack to create such larger than life
-drama from largely simple geometries -- circles, polygons, and straight lines -- which are well-suited to 
-`ggplot`. Only two complex shapes from the original don't appear in the recreation. Unlike his
-Russian contemporaries, who pursued the abstract for its rationality, Kandinsky saw forms and colors as expressive, psychological, and even spiritual. However, his piece is also nearly a century old. Our visual world
-vastly differs from that of Kandinsky's post-World War I Eastern Europe -- colors have different connotations. 
-We associate them with corporate logos, Instagram filters, Tik Tok fashion trends, and more. 
-We made the following aesthetics *adjustable/modifiable* to allow viewers to encode their own taste and psychology 
+We chose to recreate *Composition 8* because of Kandinsky's knack to create
+drama from simple geometries -- circles, polygons, and straight lines -- which are well-suited to 
+`ggplot`. Unlike his Russian contemporaries, Kandinsky saw forms and colors as expressive, psychological, and spiritual. We made the following aesthetics *adjustable/modifiable* to allow viewers to encode their own meaning
 in the piece.
 
 <img src="shiny_screenshots/Wassily_Kandinsky.png" style="width:80%"/>
 
 **Circle Size**
 
-Kandinsky loved circles. He said of the circle, "It combines the concentric and the 
-eccentric in a single form and in equilibrium. Of the three primary forms, it points 
-most clearly to the fourth dimension." Because of these shapes' significance to the 
-artist, a `sliderInput()` in the Shiny UI modifies the radii encoded in the 
+Kandinsky loved circles. Because of these shapes' significance to the 
+artist, a `sliderInput()` modifies the radii encoded in the 
 original data which are then plotted via `geom_circle()` layers.
 
-**Line Thickness, Shape Transparency and Background Color**
+**Thickness, Transparency and Background**
 
-The user can also choose to modify line thickness and transparency via `sliderInput()`.
-Because most of the lines in the original piece are thinner rather than thicker, this 
-option has the most visual impact when the minimum thickness increases -- it makes the 
-piece appear more cartoon and playful. As with previous pieces, `colourInput()` allows 
-user-friendly selection of the background color. All of these user inputs modify the 
-ggplot characteristics, `scale_size_manual()`, `scale_alpha_manual()`, and 
-`theme(panel.background = ...)` respectively, not the data itself. 
+The user can also modify line thickness and fill transparency. The line option has the most impact 
+when the minimum thickness increases -- it gives the piece a cartoon feel. Like previously, `colourInput()` allows 
+selection of the backdrop. All these inputs modify gplot characteristics, `scale_size_manual()`, `scale_alpha_manual()`, and 
+`theme()` respectively, not the data. 
 
-**Shape Palette from RColorBrewer**
+**Palette**
 
-A dropdown list via `selectInput()` offers the user a long list of `RColorBrewer` 
-palettes to choose from to color the shapes and curved lines in the piece. Instead of 
-relying on custom hex codes in the data, `if` statements triggered by user selection 
-in a series of plotting functions use less precise color categories from the data to 
-implement these palettes. When the user implements a palette other than the original, 
-this greatly improves plot rendering speed.
+A dropdown menu offers the user all `RColorBrewer` 
+palettes to choose from to color the shapes and curved lines. Instead of 
+referencing hex codes in the data, `if` statements triggered by user selection 
+in custom plotting functions use broad color categories from the data to 
+implement these palettes. Palettes other than the original decrease rendering speed.
 
-**Layers for Display**
+**Layers**
 
 Sometimes less is more. To simplify the piece, users can opt to remove any of the 
 following elements as a whole: circles, quadrilaterals, triangles, straight lines, 
-or curved lines. The difference is perhaps most striking when filled shapes are stripped 
-away and only straight black lines remain.
+or curved lines.
 
 **Random Noise**
 
 A popular conception of abstract art is that it is random, thoughtlessly or mechanistically 
-constructed and easy to replicate. Users can experiment for themselves with whether this 
-is true by adding random values generated from a normal distribution (centered at 0 and 
-with standard deviation set as "magnitude" with a `sliderInput()`) to the coordinates of 
-each element. Certain elements are grouped together and experience the same transformation 
-as a whole in order to retain some visual order.
+constructed and easy to replicate. Users can see for themselves whether this 
+is true by adding random draws from a normal distribution (centered at 0 and 
+with standard deviation set as "magnitude" with `sliderInput()`) to the coordinates of 
+each element. Certain coordinates experience the same transformation 
+in groups to retain some visual order.
 
 ### [4] Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
 
@@ -214,15 +202,12 @@ led us to adopt a radically different approach in structuring the manually gener
 Kandinsky's piece. We split each dataset of a type of geometry (e.g. circles, semicircles, lines,
 triangles, etc.) into layers and stored each layer as a separate dataframe in a list. (The code 
 to create the original data is visib,e in `create-kandinsky-data.Rmd` in the `data` folder within
-the final Shiny app.) Because of this, we conducted all data modification and plotting through for loops and functions
-which accessed specified data frames within each list. More clear and consistent methods for 
-control of the order in which points are plotted withihn a layer would render this workaround 
-less necessary.
+the final Shiny app.) Because of this, we conducted all data modification and plotting through for loops and functions which accessed specified data frames within each list. More clear and consistent methods for control of the order in which points are plotted withihn a layer would render this workaround less necessary.
 
 Another challenge that we encountered was allowing for a user to input an image URL of their 
-choice into our Barbara Kruger section of the Shiny app. Not only was the link input reactive, 
+choice into the Barbara Kruger section of the Shiny app. Not only was the link input reactive, 
 but we also encountered an error where the app would crash if an invalid URL was used. To address 
-this issue, we kept the original link variable if the link was valid and updated it to the original Kruger image URL if not, that way there was always a valid url being used to read-in the image. We also added an error message if the link turned out to be invalid to notify the user. 
+this issue, we kept the original link variable as is if the link was valid and updated it to the original Kruger image URL if not. That way there was always a valid url being used to read-in the image. We also added an error message if the link turned out to be invalid to notify the user. 
 
 To conclude, we are satisfied with our final result. With more time, possibilities for improvement
 could include allowing users to select more than 2 color checkpoints for the primary gradient and secondary gradient in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.

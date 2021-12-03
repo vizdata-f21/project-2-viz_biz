@@ -106,24 +106,27 @@ with one another).
 <img src="images/kandinsky.jpeg" style="width:28%"/>
 
 We chose to recreate *Composition 8* because of Kandinsky's knack to create
-drama from simple geometries -- circles, polygons, and straight lines -- which are well-suited to 
-`ggplot`. Unlike his Russian contemporaries, Kandinsky saw forms and colors as expressive, psychological, and spiritual. We made the following aesthetics *adjustable/modifiable* to allow viewers to encode their own meaning
-in the piece.
+drama from simple geometries -- circles, polygons, and straight lines -- which 
+are well-suited to `ggplot`. Unlike his Russian contemporaries, Kandinsky saw 
+forms and colors as expressive, psychological, and spiritual. We made the 
+following aesthetics *adjustable/modifiable* to allow viewers to encode their 
+own meaning in the piece.
 
 <img src="shiny_screenshots/Wassily_Kandinsky.png" style="width:80%"/>
 
 **Circle Size**
 
-Kandinsky loved circles. Because of these shapes' significance to the 
-artist, a `sliderInput()` modifies the radii encoded in the 
-original data which are then plotted via `geom_circle()` layers.
+Kandinsky loved circles. Because of these shapes' significance to the artist, a 
+`sliderInput()` modifies the radii encoded in the original data which are then
+plotted via `geom_circle()` layers.
 
 **Thickness, Transparency and Background**
 
-The user can also modify line thickness and fill transparency. The line option has the most impact 
-when the minimum thickness increases -- it gives the piece a cartoon feel. Like previously, `colourInput()` allows 
-selection of the backdrop. All these inputs modify gplot characteristics, `scale_size_manual()`, `scale_alpha_manual()`, and 
-`theme()` respectively, not the data. 
+The user can also modify line thickness and fill transparency. The line option 
+has the most impact when the minimum thickness increases -- it gives the piece a
+cartoon feel. Like previously, `colourInput()` allows selection of the backdrop. 
+All these inputs modify ggplot characteristics, `scale_size_manual()`, 
+`scale_alpha_manual()`, and `theme()` respectively, not the data. 
 
 **Palette**
 
@@ -131,22 +134,23 @@ A dropdown menu offers the user all `RColorBrewer`
 palettes to choose from to color the shapes and curved lines. Instead of 
 referencing hex codes in the data, `if` statements triggered by user selection 
 in custom plotting functions use broad color categories from the data to 
-implement these palettes. Palettes other than the original decrease rendering speed.
+implement these palettes. Palettes other than the original decrease rendering
+speed.
 
 **Layers**
 
-Sometimes less is more. To simplify the piece, users can opt to remove any of the 
-following elements as a whole: circles, quadrilaterals, triangles, straight lines, 
-or curved lines.
+Sometimes less is more. To simplify the piece, users can opt to remove any of 
+the following elements as a whole: circles, quadrilaterals, triangles, straight 
+lines, or curved lines.
 
 **Random Noise**
 
-A popular conception of abstract art is that it is random, thoughtlessly or mechanistically 
-constructed and easy to replicate. Users can see for themselves whether this 
-is true by adding random draws from a normal distribution (centered at 0 and 
-with standard deviation set as "magnitude" with `sliderInput()`) to the coordinates of 
-each element. Certain coordinates experience the same transformation 
-in groups to retain some visual order.
+A popular conception of abstract art is that it is random, thoughtlessly or 
+mechanistically constructed and easy to replicate. Users can see for themselves 
+whether this is true by adding random draws from a normal distribution (centered 
+at 0 and with standard deviation set as "magnitude" with `sliderInput()`) to the
+coordinates of each element. Certain coordinates experience the same 
+transformation in groups to retain some visual order.
 
 ### [4] Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
 
@@ -164,26 +168,41 @@ communicate their own distinct message, just like Barbara Kruger:
 In the original piece, there are three rows of text (top, middle, and bottom). 
 Our goal with this feature of the piece was to allow the user to change what the 
 text displays (the actual words), the size of the text, and the color of the 
-text. We used three `textInput()` Shiny widgets to control what was displayed 
-in the three rows of text, a `sliderInput()` Shiny widget to control 
-the size of the text, and a `colorInput()` Shiny widget to control the color of 
-the text. All three types of inputs were used to set visual properties in the ggplot visualization
-via `geom_label`.
+text. We used three `textInput()`s to control what was displayed in the three 
+rows of text, a `sliderInput()` to control the size of the text, and a 
+`colorInput()` to control the color of the text. All three types of inputs were
+used to set visual properties in the ggplot visualizationnvia `geom_label`.
 
 **Border/Labels**
 
-Kruger's piece, and many other pieces created by Kruger,
-contained a border around the print as well as colored bars behind the text (which make the text standout). For the recreated visualization, we wanted the user to be able to change the 
-color and size of the border, as well as the color of the labels. To accomplish this, we used
-a `sliderInput()` Shiny widget to control the size of the border and a `colorInput()` Shiny 
-widget to control the color of the border and background labels. The input for 
-border color and label color was the same so the two parts of the visualization would be the same color (like in Kruger's original work). Both inputs were used to set visual properties in the ggplot visualization via `geom_rect`. The reactive dimension variables (which were created from the reactive link variable) were integral components in specifying the location of the border around the image, 
-as well as the location of the labels (and text) on the image.
+For the recreated visualization, we wanted the user to be able to change the 
+color and size of the border, and the color of the labels, both elements that 
+help to make Kruger's piece stand out. To accomplish this, we used a 
+`sliderInput()` to control the size of the border and a `colorInput()` to
+control the color of the border and background labels. The input for border 
+color and label color was the same so the two parts of the visualization would 
+be the same color, as they are in Kruger's original work. Both inputs were used 
+to set visual properties in the ggplot visualization via `geom_rect`. The 
+reactive image dimension variables (which were created from the reactive link 
+variable) were integral components in specifying the location of the border 
+around the image, as well as the location of the labels (and text) on the image.
 
 **Background Image/Image Link**
 
-The original piece uses a black-and-white portrait as a backdrop. For the recreated visualization,
-our objective was to allow the user to change this image by pasting an image address into a text input. The visualization would then dynamically change to have the new image be the backdrop, with all elements being scaled to fit the dimensions of the new image. The user would also be able to adjust the brightness, saturation and hue of the image. To go about implementing these aspects of the visualization, we used a `textInput()` Shiny widget to access the user-inputted link. In the server, the reactive input ‘path’ (which is the variable name for the link) was used to create variables for image dimensions (as mentioned above). Additionally, the link input was read and used to display the background image via `draw_image`. Three `sliderInput()` Shiny widgets were utilized to control the brightness, saturation and hue. The three inputs were used to set visual properties in the ggplot visualization via `image_modulate`.
+The original piece uses a black-and-white portrait as a backdrop. For the
+recreated visualization, our objective was to allow the user to change this 
+image by pasting an image address into a text input. The visualization would 
+then dynamically change to have the new image be the backdrop, with all elements
+being scaled to fit the dimensions of the new image. The user would also be able 
+to adjust the brightness, saturation and hue of the image. To go about 
+implementing these aspects of the visualization, we used a `textInput()` to 
+access the user-inputted link. In the server, the reactive input ‘path’ (the
+variable name for the link) was used to create variables for image dimensions
+(as mentioned above). Additionally, the link input was read and used to display 
+the background image via `draw_image`. Three `sliderInput()`s were utilized to 
+control the brightness, saturation and hue. The three inputs were used to set 
+visual properties in the ggplot visualization via `image_modulate`.
+
 
 ## Discussion
 

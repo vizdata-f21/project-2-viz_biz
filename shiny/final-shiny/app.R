@@ -1,80 +1,15 @@
-# http://shiny.rstudio.com/
-library(shiny) # Eli
-library(shinythemes)
-library(tidyverse) # Eli
-library(DT)
-library(shinyalert)
-library(shinyWidgets)
-library(ggiraph)
-library(statebins)
-library(gganimate)
-library(colorspace)
-library(ggrepel)
-library(scales)
-library(ggridges)
-library(magrittr)
-library(forcats)
-library(tibble)
-library(janitor)
-library(grid)
-library(gridExtra)
-library(styler)
-library(RColorBrewer)
-library(colorRamps)
-library(glue)
-library(RColorBrewer)
-library(ggwordcloud)
-library(ggtext)
-library(tidytext)
-library(tm)
-library(bslib) # Eli
-library(Rcpp)
-library(reshape2)
-library(colourlovers)
-library(cowplot) # Eli
-library(ggpolypath)
-library(colourpicker) # Eli
-library(ggnewscale) # Lilly
-library(Cairo)
-library(ggforce) # Lilly
-options(shiny.usecairo = TRUE)
-library(base64enc)
-library(magick) # Eli
-library(shinyvalidate) # Eli
-library(RCurl) # Eli
-library(showtext) # Eli
+# load data --------------------------------------------------------------------
 
+circles_l <- read_rds("data/circles.rds")
+lines_l <- read_rds("data/lines.rds")
+quads_l <- read_rds("data/quads.rds")
+semicircle_fill_l <- read_rds("data/semicircle-fill.rds")
+semicircle_stroke_l <- read_rds("data/semicircle-stroke.rds")
+semicircle_stroke_color_l <- read_rds("data/semicircle-stroke-color.rds")
+triangles_l <- read_rds("data/triangles.rds")
 
-## Kandinsky Prep
-# load data
-circles_l <- readRDS("data/circles.rds")
-lines_l <- readRDS("data/lines.rds")
-quads_l <- readRDS("data/quads.rds")
-semicircle_fill_l <- readRDS("data/semicircle-fill.rds")
-semicircle_stroke_l <- readRDS("data/semicircle-stroke.rds")
-semicircle_stroke_color_l <- readRDS("data/semicircle-stroke-color.rds")
-triangles_l <- readRDS("data/triangles.rds")
+# UI ---------------------------------------------------------------------------
 
-# load font
-font_add(
-  family = "Futura",
-  regular = "data/Futura.ttf"
-)
-showtext_auto()
-
-xmin <- 0
-xmax <- 152
-ymin <- 0
-ymax <- 86
-
-print_circles <- FALSE
-print_quads <- FALSE
-print_lines_curved <- FALSE
-print_lines_straight <- FALSE
-print_triangles <- FALSE
-
-
-# Define UI for application
 ui <- fluidPage(
   theme = bs_theme(
     bootswatch = "cosmo",
@@ -527,7 +462,8 @@ ui <- fluidPage(
   ) # navbar page
 ) # fluid page
 
-# Define server logic required to draw a histogram
+# Server -----------------------------------------------------------------------
+
 server <- function(input, output) {
   n <- reactive({
     input$size * 2
@@ -1270,5 +1206,6 @@ observe({
   })
 }
 
-# Run the application
+# Create the app ---------------------------------------------------------------
+
 shinyApp(ui = ui, server = server)

@@ -63,7 +63,7 @@ The original painting uses a rainbow-gradient color sequence as part of its
 12 layers of colored-gradient rectangles. For the recreated visualization, the
 audience will be able to change this through adjusting the color
 palette and decide whether or not to reverse the direction of the color sequence.
-Using Shiny reactice `colourInput(...)` function, every user is able to pick any hex color
+Using Shiny reactive `colourInput(...)` function, every user is able to pick any hex color
 he/she wish as the starting and ending color of the gradient.
 
 **Secondary Gradient**
@@ -123,11 +123,61 @@ four colors, the boxes corresponding to the missing color will show up blank (i.
 
 ### Wassily Kandinsky, *Composition 8* (1923)
 
-We chose to recreate *Composition 8* because of Kandinsky's knack to create such larger than life
-drama from largely very simple geometries (circles, polygons, and straight lines) well-suited to 
-`ggplot`. Only two complex shapes from the original don't appear in the recreation.
-
 <img src="images/kandinsky.jpeg" style="width:28%"/>
+
+We chose to recreate *Composition 8* because of Kandinsky's knack to create such larger than life
+drama from largely simple geometries -- circles, polygons, and straight lines -- which are well-suited to 
+`ggplot`. Only two complex shapes from the original don't appear in the recreation. Unlike his
+Russian contemporaries, who pursued the abstract for its rationality, Kandinsky saw forms and colors as expressive, psychological, and even spiritual. However, his piece is also nearly a century old. Our visual world
+vastly differs from that of Kandinsky's post-World War I Eastern Europe -- colors have different connotations. 
+We associate them with corporate logos, Instagram filters, Tik Tok fashion trends, and more. 
+We made the following aesthetics *adjustable/modifiable* to allow viewers to encode their own taste and psychology 
+in the piece.
+
+<img src="shiny_screenshots/Wassily_Kandinsky.png" style="width:80%"/>
+
+**Circle Size**
+
+Kandinsky loved circles. He said of the circle, "It combines the concentric and the 
+eccentric in a single form and in equilibrium. Of the three primary forms, it points 
+most clearly to the fourth dimension." Because of these shapes' significance to the 
+artist, a `sliderInput()` in the Shiny UI interface modifies the radii encoded in the 
+original data which are then plotted via `geom_circle()` layers.
+
+**Line Thickness, Shape Transparency and Background Color**
+
+The user can also choose to modify line thickness and transparency via `sliderInput()`.
+Because most of the lines in the original piece are thinner rather than thicker, this 
+option has the most visual impact when the minimum thickness increases -- it makes the 
+piece appear more cartoon and playful. As with previous pieces, `colourInput()` allows 
+user-friendly selection of the background color. All of these user inputs modify the 
+ggplot characteristics, `scale_size_manual()`, `scale_alpha_manual()`, and 
+`theme(panel.background = ...)` respectively, not the data itself. 
+
+**Shape Palette from RColorBrewer**
+
+A dropdown list via `selectInput()` offers the user a long list of `RColorBrewer` 
+palettes to choose from to color the shapes and curved lines in the piece. Instead of 
+relying on custom hex codes in the data, `if` statements triggered by user selection 
+in a series of plotting functions use less precise color categories from the data to 
+implement these palettes. When the user implements a palette other than the original, 
+this greatly improves plot rendering speed.
+
+**Layers for Display**
+
+Sometimes less is more. To simplify the piece, users can opt to remove any of the 
+following elements as a whole: circles, quadrilaterals, triangles, straight lines, 
+or curved lines. The difference is perhaps most striking when filled shapes are stripped 
+away and only straight black lines remain.
+
+**Random Noise**
+
+A popular conception of abstract art is that it is random, thoughtlessly or mechanistically 
+constructed and easy to replicate. Users can experiment for themselves with whether this 
+is true by adding random values generated from a normal distribution (centered at 0 and 
+with standard deviation set as "magnitude" with a `sliderInput()`) to the coordinates of 
+each element. Certain elements are grouped together and experience the same transformation 
+as a whole in order to retain some visual order.
 
 ### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
 
@@ -146,14 +196,25 @@ recreating Frank Stella's artwork. As a user modifies the number of layers in th
 dataset will adjust automatically and dynamically, hence our team created a function with the
 number of layers (the reactive input) as one of the parameters of the function.
 
+Deprecated functionality of the `order` aesthetic in `ggplot()`, an unclear ordering mechanism 
+in `geom_circle()` from `ggforce`, and complex interplay between layers in the original artwork
+led us to adopt a radically different approach in structuring the manually generated data for 
+Kandinsky's piece. We split each dataset of a type of geometry (e.g. circles, semicircles, lines,
+triangles, etc.) into layers and stored each layer as a separate dataframe in a list. (The code 
+to create the original data is visib,e in `create-kandinsky-data.Rmd` in the `data` folder within
+the final Shiny app.)
+Because of this, we conducted all data modification and plotting through for loops and functions
+which accessed specified data frames within each list. More clear and consistent methods for 
+control of the order in which points are plotted withihn a layer would render this workaround 
+less necessary.
+
 Another challenge that we encountered was allowing for a user to input an image URL of his/her 
 choice into our Barbara Kruger's section of the Shiny app. Not only was the link input reactive, 
 but we also encountered an error where the app would crash if an invalid URL was used. To address 
 this issue, we kept the original link variable if the link was valid and updated it to the Kruger's
 image URL if not. We would also add an error message if the link turns out to be invalid. 
 
-To conclude, we are satisfied with our final result and if we were given more time to do this 
-project, some possibilities we would consider would be to allow users to select more than 2 color 
-checkpoints (e.g. allowing for a rainbow color, not just a single, continuous gradient between 2 
-colors) for the primary gradient and secondary gradient in the modified Stella's artwork, to change the thickness of the gridlines in Mondrian's artwork, to pick their own font type for the modified 
-Kruger's artwork, and many other possibilities.
+To conclude, we are satisfied with our final result. With more time, possibilities for improvement
+could include allowing users to select more than 2 color checkpoints (e.g. allowing for a rainbow color, 
+not just a single, continuous gradient between 2 colors) for the primary gradient and secondary gradient 
+in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.

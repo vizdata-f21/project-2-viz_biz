@@ -4,7 +4,7 @@
 
 #### Shiny App
 
-We published the final version of our app in the URL below:
+View the final version of our app at the URL below:
 
 https://phillip.shinyapps.io/viz_biz/
 
@@ -18,6 +18,6 @@ https://phillip.shinyapps.io/viz_biz/
 
 4. **Shiny**
 
-See through the `README.md` inside these 4 folders to see a more detailed description
-of the components within each folder.
+Refer to the `README.md` inside these 4 folders for a more detailed description
+of their contents.
 

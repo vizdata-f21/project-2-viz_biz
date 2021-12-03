@@ -216,9 +216,9 @@ to create the original data is visib,e in `create-kandinsky-data.Rmd` in the `da
 the final Shiny app.) Because of this, we conducted all data modification and plotting through for loops and functions which accessed specified data frames within each list. More clear and consistent methods for control of the order in which points are plotted withihn a layer would render this workaround less necessary.
 
 Another challenge that we encountered was allowing for a user to input an image URL of their 
-choice into our Barbara Kruger section of the Shiny app. Not only was the link input reactive, 
+choice into the Barbara Kruger section of the Shiny app. Not only was the link input reactive, 
 but we also encountered an error where the app would crash if an invalid URL was used. To address 
-this issue, we kept the original link variable if the link was valid and updated it to the original Kruger image URL if not, that way there was always a valid url being used to read-in the image. We also added an error message if the link turned out to be invalid to notify the user. 
+this issue, we kept the original link variable as is if the link was valid and updated it to the original Kruger image URL if not. That way there was always a valid url being used to read-in the image. We also added an error message if the link turned out to be invalid to notify the user. 
 
 To conclude, we are satisfied with our final result. With more time, possibilities for improvement
 could include allowing users to select more than 2 color checkpoints for the primary gradient and secondary gradient in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.

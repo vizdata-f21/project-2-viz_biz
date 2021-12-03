@@ -1,10 +1,10 @@
-# Project 2 Write-up (Viz Biz)
+# Project 2 Write-up
 
 *Author: Eli Feder, Lillian Clark, Phillip Harmadi, Sana Pashankar*
 
 ## Shiny App
 
-https://phillip.shinyapps.io/viz_biz/ or https://tinyurl.art/313
+https://phillip.shinyapps.io/viz_biz/
 
 ## Introduction
 

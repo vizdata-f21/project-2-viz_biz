@@ -98,8 +98,8 @@ The original painting uses 4 distinct colors in different colored boxes.
 We wanted to give users the ability to change 
 these colors and to understand how a new color scheme 
 changes the vision of the art. To do this, we will use 4 `colorInput`s in the UI
-to allow users to select four color hexes (no restriction of the color being same or different
-with one another).
+to allow users to select four color hexes (no restriction of the color being 
+same or different with one another).
 
 ### [3] Wassily Kandinsky, *Composition 8* (1923)
 
@@ -220,10 +220,10 @@ led us to adopt a radically different approach in structuring the manually gener
 Kandinsky's piece. We split each dataset of a type of geometry (e.g. circles, semicircles, lines,
 triangles, etc.) into layers and stored each layer as a separate dataframe in a list. (The code 
 to create the original data is visible in `create-kandinsky-data.Rmd` in the `data` folder within
-the final Shiny app.) Because of this, we conducted all data modification and plotting through `for` loops and functions which accessed specified data frames within each list. More clear and consistent methods for control of the order in which points are plotted withihn a layer would render this workaround less necessary.
+the final Shiny app.) Because of this, we conducted all data modification and plotting through `for` loops and functions which accessed specified data frames within each list. More clear and consistent methods for control of the order in which points are plotted within a layer would render this workaround less necessary.
 
 Another challenge that we encountered was allowing for a user to input an image URL of their 
-choice into the Kruger's section of the Shiny app. Not only was the link input reactive, 
+choice into the Kruger section of the Shiny app. Not only was the link input reactive, 
 but we also encountered an error where the app would crash if an invalid URL was used. To address 
 this issue, we kept the original link variable as is if the link was valid and updated it to the original Kruger image URL if not. Hence, there will always be a valid URL being used to read-in the image. We also added an error message if the link turned out to be invalid. 
 

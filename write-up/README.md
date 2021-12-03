@@ -213,10 +213,7 @@ led us to adopt a radically different approach in structuring the manually gener
 Kandinsky's piece. We split each dataset of a type of geometry (e.g. circles, semicircles, lines,
 triangles, etc.) into layers and stored each layer as a separate dataframe in a list. (The code 
 to create the original data is visib,e in `create-kandinsky-data.Rmd` in the `data` folder within
-the final Shiny app.) Because of this, we conducted all data modification and plotting through for loops and functions
-which accessed specified data frames within each list. More clear and consistent methods for 
-control of the order in which points are plotted withihn a layer would render this workaround 
-less necessary.
+the final Shiny app.) Because of this, we conducted all data modification and plotting through for loops and functions which accessed specified data frames within each list. More clear and consistent methods for control of the order in which points are plotted withihn a layer would render this workaround less necessary.
 
 Another challenge that we encountered was allowing for a user to input an image URL of their 
 choice into our Barbara Kruger section of the Shiny app. Not only was the link input reactive, 

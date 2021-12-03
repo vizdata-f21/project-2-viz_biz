@@ -14,8 +14,8 @@ library(tidyverse)
 library(ggforce)
 library(ggnewscale)
 library(magrittr)
-
-set.seed(54)
+library(cowplot)
+library(ggfx)
 ```
 
 ```{r layer-function}
@@ -775,7 +775,8 @@ p <- ggplot() +
   scale_alpha(range = c(0.999, 1)) +
   scale_size(range = c(0.3, 1.3)) +
   coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = FALSE) +
-  theme_void() +
+  theme_nothing() +
+  labs(x = NULL, y = NULL) +
   theme(legend.position = "none",
         panel.background = element_rect(fill = "#F1E8DC", color = "#F1E8DC"))
 
@@ -790,127 +791,13 @@ p <- plot_triangles(c(2:1))
 p <- plot_circles(c(1))
 p <- plot_lines(c(2:1))
 
-p
+#with_blur(p, sigma = 3)
+
+p +
+  scale_fill_brewer(palette = "Set1")
 ```
 
-```{r plot-long-way-for-shiny}
 
-ggplot() +
-  geom_polygon(data = as.data.frame(triangles_l[[1]][[6]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(triangles_l[[2]][[6]][[1]])) +
-  new_scale_fill() +
-  geom_polygon(data = as.data.frame(triangles_l[[1]][[5]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(triangles_l[[2]][[5]][[1]])) +
-  new_scale_fill() +
-  geom_polygon(data = as.data.frame(triangles_l[[1]][[4]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(triangles_l[[2]][[4]][[1]])) +
-  new_scale_fill() +
-  geom_polygon(data = as.data.frame(triangles_l[[1]][[3]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(triangles_l[[2]][[3]][[1]])) +
-  new_scale_fill() +
-  geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[2]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(semicircle_fill_l[[2]][[2]][[1]])) +
-  new_scale_fill() +
-  geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[1]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(semicircle_fill_l[[2]][[1]][[1]])) +
-  new_scale_color() +
-  geom_path(data = as.data.frame(semicircle_stroke_color_l[[1]][[1]]), 
-            aes(x = x, y = y, group = id, color = color, size = thickness)) +
-  scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[1]][[1]])) +
-  new_scale_color() +
-  geom_path(data = as.data.frame(semicircle_stroke_l[[1]][[1]]), aes(x = x, y = y, group = id, color = color)) +
-  geom_path(data = as.data.frame(semicircle_stroke_l[[1]][[1]]), 
-            aes(x = x, y = y, group = id, color = color, size = thickness)) +
-  scale_color_manual(values = unique(semicircle_stroke_l[[2]][[1]][[1]])) +
-  new_scale_fill() +
-  geom_polygon(data = as.data.frame(quads_l[[1]][[4]]), aes(x = x, y = y, group = id, fill = color)) +
-  geom_polygon(data = as.data.frame(quads_l[[1]][[4]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(quads_l[[2]][[4]][[1]])) +
-  new_scale_fill() +
-  geom_polygon(data = as.data.frame(quads_l[[1]][[3]]), aes(x = x, y = y, group = id, fill = color)) +
-  geom_polygon(data = as.data.frame(quads_l[[1]][[3]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(quads_l[[2]][[3]][[1]])) +
-  new_scale_fill() +
-  geom_polygon(data = as.data.frame(quads_l[[1]][[2]]), aes(x = x, y = y, group = id, fill = color)) +
-  geom_polygon(data = as.data.frame(quads_l[[1]][[2]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(quads_l[[2]][[2]][[1]])) +
-  new_scale_fill() +
-  geom_polygon(data = as.data.frame(quads_l[[1]][[1]]), aes(x = x, y = y, group = id, fill = color)) +
-  geom_polygon(data = as.data.frame(quads_l[[1]][[1]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(quads_l[[2]][[1]][[1]])) +
-  new_scale_fill() +
-  new_scale_color() +
-  geom_circle(data = as.data.frame(circles_l[[1]][[6]]), aes(x0 = x, y0 = y, r = radius, fill = color, color = color)) +
-  geom_circle(data = as.data.frame(circles_l[[1]][[6]]), 
-              aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(circles_l[[2]][[6]][[1]])) +
-  scale_color_manual(values = unique(circles_l[[2]][[6]][[1]])) +
-  new_scale_fill() +
-  new_scale_color() +
-  geom_circle(data = as.data.frame(circles_l[[1]][[5]]), aes(x0 = x, y0 = y, r = radius, fill = color, color = color)) +
-  geom_circle(data = as.data.frame(circles_l[[1]][[5]]), 
-              aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(circles_l[[2]][[5]][[1]])) +
-  scale_color_manual(values = unique(circles_l[[2]][[5]][[1]])) +
-  new_scale_fill() +
-  new_scale_color() +
-  geom_circle(data = as.data.frame(circles_l[[1]][[4]]), aes(x0 = x, y0 = y, r = radius, fill = color, color = color)) +
-  geom_circle(data = as.data.frame(circles_l[[1]][[4]]), 
-              aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(circles_l[[2]][[4]][[1]])) +
-  scale_color_manual(values = unique(circles_l[[2]][[4]][[1]])) +
-  new_scale_fill() +
-  new_scale_color() +
-  geom_circle(data = as.data.frame(circles_l[[1]][[3]]), aes(x0 = x, y0 = y, r = radius, fill = color, color = color)) +
-  geom_circle(data = as.data.frame(circles_l[[1]][[3]]), 
-              aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(circles_l[[2]][[3]][[1]])) +
-  scale_color_manual(values = unique(circles_l[[2]][[3]][[1]])) +
-  new_scale_fill() +
-  new_scale_color() +
-  geom_circle(data = as.data.frame(circles_l[[1]][[2]]), aes(x0 = x, y0 = y, r = radius, fill = color, color = color)) +
-  geom_circle(data = as.data.frame(circles_l[[1]][[2]]), 
-              aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(circles_l[[2]][[2]][[1]])) +
-  scale_color_manual(values = unique(circles_l[[2]][[2]][[1]])) +
-  new_scale_fill() +
-  geom_polygon(data = as.data.frame(triangles_l[[1]][[2]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(triangles_l[[2]][[2]][[1]])) +
-  new_scale_fill() +
-  geom_polygon(data = as.data.frame(triangles_l[[1]][[1]]), 
-               aes(x = x, y = y, group = id, fill = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(triangles_l[[2]][[1]][[1]])) +
-  new_scale_fill() +
-  new_scale_color() +
-  geom_circle(data = as.data.frame(circles_l[[1]][[1]]), aes(x0 = x, y0 = y, r = radius, fill = color, color = color)) +
-  geom_circle(data = as.data.frame(circles_l[[1]][[1]]), 
-              aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = transparency)) +
-  scale_fill_manual(values = unique(circles_l[[2]][[1]][[1]])) +
-  scale_color_manual(values = unique(circles_l[[2]][[1]][[1]])) +
-  geom_segment(data = as.data.frame(lines_l[[1]][[2]]), aes(x = x, xend = xend, y = y, yend = yend)) +
-  geom_segment(data = as.data.frame(lines_l[[1]][[1]]), aes(x = x, xend = xend, y = y, yend = yend)) +
-  geom_segment(data = as.data.frame(lines_l[[1]][[2]]), 
-               aes(x = x, xend = xend, y = y, yend = yend, size = thickness)) +
-  geom_segment(data = as.data.frame(lines_l[[1]][[1]]), 
-               aes(x = x, xend = xend, y = y, yend = yend, size = thickness)) +
-  scale_alpha(range = c(0.8, 1)) +
-  scale_size(range = c(0.3, 1.3)) +
-  coord_fixed(xlim = c(0, 152), ylim = c(0, 86), expand = FALSE) +
-  theme_void() +
-  theme(legend.position = "none",
-        panel.background = element_rect(fill = "#EBE6CE"))
-```
 
 
 ```{r}

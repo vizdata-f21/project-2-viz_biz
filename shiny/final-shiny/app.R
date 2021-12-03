@@ -34,9 +34,9 @@ library(colourlovers)
 library(cowplot) # Eli
 library(ggpolypath)
 library(colourpicker) # Eli
-library(ggnewscale)
+library(ggnewscale) # Lilly
 library(Cairo)
-library(ggforce)
+library(ggforce) # Lilly
 options(shiny.usecairo = TRUE)
 library(base64enc)
 library(magick) # Eli
@@ -61,31 +61,6 @@ font_add(
   regular = "data/Futura.ttf"
 )
 showtext_auto()
-
-
-# write functions
-clip <- function(x, low, high) {
-  x[x < low] <- low
-  x[x > high] <- high
-  return(x)
-}
-
-add_noise <- function(df, layers = c(1), magnitude = 5) {
-  for (i in layers) {
-    df[[1]][[i]] <- as.data.frame(df[[1]][[i]]) %>%
-      group_by(grouping) %>%
-      mutate(
-        noise_x = rnorm(1, 0, magnitude),
-        noise_y = rnorm(1, 0, magnitude)
-      ) %>%
-      ungroup() %>%
-      mutate(
-        across(contains("x"), ~ clip(.x + noise_x, xmin, xmax)),
-        across(contains("y"), ~ clip(.x + noise_y, ymin, ymax))
-      )
-  }
-  return(df)
-}
 
 xmin <- 0
 xmax <- 152
@@ -407,7 +382,7 @@ ui <- fluidPage(
           ),
           div(
             align = "right",
-            downloadLink("save_kandinsky", strong("Download"))
+            downloadLink(outputId = "save_kandinsky", label = strong("Download"))
           )
         ),
         mainPanel(
@@ -436,8 +411,9 @@ ui <- fluidPage(
           ),
           p("Change the size of the circles, line thickness, background color, shape transparency,
             or which kinds of geometries to include. You may also add random noise to the piece, generated
-            from a normal distribution, and watch Kandinsky's careful composition fall apart. Remember to
-            press the", em("Apply Changes"), "button to watch your modifications come to life."),
+            from a normal distribution, and watch Kandinsky's careful composition fall apart. ",
+            span("Remember to press the", em("Apply Changes"), "button to watch your modifications
+                 come to life.", style = "color:red:")),
           p("(1) Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
             Museums and Foundation. Accessed December 2, 2021. https://www.guggenheim.org/artwork/1924."),
           # div(plotOutput(
@@ -864,7 +840,7 @@ server <- function(input, output) {
     {
       list(
         src = "./kandinsky_ggplot.png",
-        height = 800,
+        height = 510,
         width = 900,
         contentType = "image/png"
       )
@@ -894,138 +870,7 @@ server <- function(input, output) {
       semicircle_stroke_color_l <- add_noise(semicircle_stroke_color_l, magnitude = input$magnitudenoise)
       triangles_l <- add_noise(triangles_l, c(1:6), magnitude = input$magnitudenoise)
 
-      # plotting functions
-      plot_circles <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_circle(
-                data = as.data.frame(circles_l[[1]][[i]]),
-                aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
-              scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
-          }
-          return(p)
-        }
-      }
 
-      plot_semicircles <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_polygon(
-                data = as.data.frame(semicircle_fill_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
-
-      plot_quads <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_polygon(
-                data = as.data.frame(quads_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
-
-      plot_triangles <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_polygon(
-                data = as.data.frame(triangles_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, fill = color, alpha = alpha)
-              ) +
-              scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
-
-      plot_lines <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              # new_scale_fill() +
-              # new_scale_color() +
-              geom_segment(
-                data = as.data.frame(lines_l[[1]][[i]]),
-                aes(x = x, xend = xend, y = y, yend = yend, size = thickness^2)
-              )
-          }
-
-          return(p)
-        }
-      }
-
-      plot_semicircle_stroke <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_path(
-                data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, color = color, size = thickness^2)
-              ) +
-              scale_color_manual(values = unique(semicircle_stroke_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
-
-      plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE) {
-        if (execute == FALSE) {
-          return(p)
-        } else {
-          for (i in layers) {
-            p <- p +
-              new_scale_fill() +
-              new_scale_color() +
-              geom_path(
-                data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
-                aes(x = x, y = y, group = id, color = color, size = thickness^2)
-              ) +
-              scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[i]][[1]]))
-          }
-
-          return(p)
-        }
-      }
 
       print_circles <- ("Circles" %in% input$checkbox_layers)
       print_quads <- ("Quadrilaterals" %in% input$checkbox_layers)
@@ -1038,7 +883,8 @@ server <- function(input, output) {
         scale_alpha(range = c(input$alpha[1], input$alpha[2])) +
         scale_size(range = c(input$linethickness[1], input$linethickness[2])) +
         coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = FALSE) +
-        theme_void() +
+        theme_nothing() +
+        labs(x = NULL, y = NULL) +
         theme(
           legend.position = "none",
           panel.background = element_rect(fill = input$background_color, color = input$background_color),
@@ -1062,26 +908,18 @@ server <- function(input, output) {
       {
         plotInput_kandinsky()
       },
-      height = 800,
+      height = 510,
       width = 900
     )
-  },
-  once = TRUE)
-
-  custom_filename_kandinsky <- reactive({
-    input$custom_filename_kandinsky
   })
 
-  custom_res_kandinsky <- reactive({
-    input$res_kandinsky
-  })
 
   output$save_kandinsky <- downloadHandler(
     filename = function() {
-      custom_filename_kandinsky()
+      input$custom_filename_kandinsky
     },
     content = function(file) {
-      ggsave(file, plot = plotInput_kandinsky(), device = "png", dpi = as.double(custom_res_kandinsky()))
+      ggsave(file, plot = plot_kandinsky(), device = "png", dpi = as.double(input$res_kandinsky))
     }
   )
 
@@ -1197,10 +1035,9 @@ server <- function(input, output) {
     data.frame(x_plot(), y_plot())
   })
 
-  observe({
-    output$plot_kruger <- renderPlot(
-      {
-        save_kruger <- ggplot() +
+
+    plotInput_kruger <- reactive({
+         ggplot() +
           geom_rect(aes(
             xmin = 0, xmax = img_width(),
             ymin = 0, ymax = img_height()
@@ -1233,13 +1070,19 @@ server <- function(input, output) {
           ) +
           coord_equal() +
           theme_void()
+  })
 
-        save_kruger
+observe({
+  output$plot_kruger <- renderPlot(
+      {
+        plotInput_kruger()
+
       },
       height = img_height(),
       width = img_width()
-    )
-  })
+    )})
+
+
 
   custom_filename_kruger <- reactive({
     input$custom_filename_kruger
@@ -1255,11 +1098,11 @@ server <- function(input, output) {
     },
     content = function(file) {
       ggsave(file,
-        plot = plotInput_kruger(), device = "png", dpi = as.double(custom_res_kruger()),
-        height = 4, width = 3.33
-      )
+             plot = plotInput_kruger(), device = "png", dpi = as.double(custom_res_kruger()),
+             height = 4/img_height()*img_height(), width = 4/img_height()*img_width())
     }
   )
+
 
   output$original_artwork_kruger <- renderImage({
     if (input$original_artwork_kruger == TRUE) {

@@ -12,13 +12,13 @@ For this project, we created a convenient website where non-R users and the gene
 
 We plan to recreate and make customizable the following four images:
 
-#### Frank Stella, *Lettre sur les sourds et muets II* (1974) [1]
+#### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974) 
 
-#### Barbara Kruger, *Untitled (Your body is a battleground)* (1989) [2]
+#### [2] Barbara Kruger, *Untitled (Your body is a battleground)* (1989) 
 
-#### Wassily Kandinsky, *Composition 8* (1923) [3]
+#### [3] Wassily Kandinsky, *Composition 8* (1923) 
 
-#### Piet Mondrian, *Trafalgar Square* (1939-1943) [4]
+#### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
 To recreate these modern art pieces, we will be creating our own dataframes, which will incorporate user input to customize certain artistic aspects of each piece. We will also utilize mathematical functions and specific packages such as `library(colourpicker)` and `library(generativeart)` to facilitate the digitization of these art pieces. 
 

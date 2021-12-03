@@ -436,8 +436,9 @@ ui <- fluidPage(
           ),
           p("Change the size of the circles, line thickness, background color, shape transparency,
             or which kinds of geometries to include. You may also add random noise to the piece, generated
-            from a normal distribution, and watch Kandinsky's careful composition fall apart. Remember to
-            press the", em("Apply Changes"), "button to watch your modifications come to life."),
+            from a normal distribution, and watch Kandinsky's careful composition fall apart. ",
+            span("Remember to press the", em("Apply Changes"), "button to watch your modifications
+                 come to life.", style = "color:red:")),
           p("(1) Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
             Museums and Foundation. Accessed December 2, 2021. https://www.guggenheim.org/artwork/1924."),
           # div(plotOutput(
@@ -1038,7 +1039,8 @@ server <- function(input, output) {
         scale_alpha(range = c(input$alpha[1], input$alpha[2])) +
         scale_size(range = c(input$linethickness[1], input$linethickness[2])) +
         coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = FALSE) +
-        theme_void() +
+        theme_nothing() +
+        labs(x = NULL, y = NULL) +
         theme(
           legend.position = "none",
           panel.background = element_rect(fill = input$background_color, color = input$background_color),

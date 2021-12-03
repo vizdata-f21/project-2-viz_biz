@@ -149,10 +149,6 @@ ui <- fluidPage(
             press the", em("Apply Changes"), "button to watch your modifications come to life."),
                   p("(1) Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
             Museums and Foundation. Accessed December 2, 2021. https://www.guggenheim.org/artwork/1924."),
-                  # div(plotOutput(
-                  #  outputId = "plot_kandinsky", inline = FALSE,
-                  #  height = "100%"
-                  # ), align = "center"),
                   div(uiOutput(
                       outputId = "ui_kandinsky",
                       height = "100%"

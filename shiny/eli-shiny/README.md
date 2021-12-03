@@ -15,44 +15,39 @@ recreate a it as a visualization. 4 distinct features spark our interest.
 We also believe that these features should be made modifiable to the preference 
 of the user:
 
-1.  **Text**: In the original painting, there are 12 layers
-    of colored-gradient rectangles and 11 layers of
-    black-and-white-gradient rectangles (23 layers in total),
-    alternating against one another. We would like the audience to be
-    able to determine how many layers do they want to have in total in
-    their final piece of art, depending on the purpose of usage
-    (small/nightstand or big/wall decorations).
+1.  **Text**: In the original piece, there are 3 rows of text (top, middle, and bottom). 
+    We would like the audience to be able to determine what the text says,
+    the size of the text, and the color of the text in their visualization.
 
 -   ***Approach:*** We will use the ‘slider input’ Shiny widget in the
-    UI interface.
-    `sliderInput(inputId = "size", label = "Size:", min = 10, max = 50, value = 20)`
-    In the server, the input ‘size’ will and integral component to
-    create the dataframe that will be used in the plotting process.
-    `n <- reactive({input$size * 2})`
+    UI interface to control the size of the text, three 'text input' Shiny widgets
+    to control what is displayed in the three rows of text, and a 'color input'
+    Shiny widget to control the color of the text. All three types of inputs will be 
+    used to set visual properties in the ggplot visualization. 
 
-2.  **Border/Labels**: The original painting uses a
-    rainbow-gradient color sequence as part of its 12 layers of
-    colored-gradient rectangles. For the recreated visualization, the
-    audience will be able to change this through adjusting the color
-    palette and decide whether or not to reverse the direction of the
-    color sequence.
+2.  **Border/Labels**: The original piece contains a border around the print as 
+    well as colored bars behind the text (that make the text standout). 
+    For the recreated visualization, the audience will be able to change the 
+    color and size of the border, as well as the color of the label.
     
 -   ***Approach:*** We will use the ‘slider input’ Shiny widget in the
-    UI interface.
-    `sliderInput(inputId = "size", label = "Size:", min = 10, max = 50, value = 20)`
-    In the server, the input ‘size’ will and integral component to
-    create the dataframe that will be used in the plotting process.
-    `n <- reactive({input$size * 2})`    
+    UI interface to control the size of the border and a 'color input' Shiny 
+    widget to control the color of the border and background labels. The input for 
+    border color and label color will be the same. Both types of inputs will be 
+    used to set visual properties in the ggplot visualization. The reactive dimension
+    variables (which will get created from the reactive link/url variable) will be 
+    integral components in specifying the location of the border around the image 
+    as well as the location of the labels (and text) on the image.
 
-3.  **Background Image/Image Link**: The original painting uses a
-    black-and-white-gradient color sequence as part of its 11 layers of
-    non-colored-gradient rectangles. For the recreated visualization,
-    the audience will be able to change this through adjusting the color
-    palette and decide whether or not to reverse the direction of the
-    color sequence.
+3.  **Background Image/Image Link**: The original piece uses a
+    black-and-white portrait as a backdrop. For the recreated visualization,
+    the audience will be able to change this image by pasting an image address
+    from the web into a text input. The visualization will then dynamically change
+    to have the new image be the backdrop, with all elements being scaled to fit 
+    the dimensions of the updated image. The audience will also beable  to adjust the brightness,         saturation and hue of the image using 'slider input' Shiny widgets.
 
--   ***Approach:*** We will use the ‘switch input’ Shiny widget in the
-    UI interface to turn on/off the borderline.
-    `switchInput(inputId = "borderline", label = "Borderlines", value = FALSE)`
-    In the server, the reactive input ‘borderline’ will be part of the
-    aesthetic in the ggplot. `geom_polygon(..., size = borderline())`
+-   ***Approach:*** We will use a ‘text input’ Shiny widget in the
+    UI interface to access the user-inputted link. In the server, the reactive 
+    input ‘path’ (which is the variable name for the link) will be used to create
+    variables for image dimensions (as mentioned above). Additionally, the link input
+    will be read and used to display the background image.

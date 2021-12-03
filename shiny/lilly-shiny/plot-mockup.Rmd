@@ -15,7 +15,6 @@ library(ggforce)
 library(ggnewscale)
 library(magrittr)
 library(cowplot)
-library(ggfx)
 ```
 
 ```{r layer-function}
@@ -795,28 +794,6 @@ semicircle_stroke_color_l <- readRDS("data/semicircle-stroke-color.rds")
 triangles_l <- readRDS("data/triangles.rds")
 ```
 
-
-circles_l <- add_noise(circles_l, c(1:6))
-lines_l <- add_noise(lines_l, c(1:2))
-quads_l <- add_noise(quads_l, c(1:4))
-semicircle_fill_l <- add_noise(semicircle_fill_l)
-semicircle_stroke_l <- add_noise(semicircle_stroke_l)
-semicircle_stroke_color_l <- add_noise(semicircle_stroke_color_l)
-triangles_l <- add_noise(triangles_l, c(1:6))
-
-
-lapply(c(quads_l, circles_l, lines_l, semicircle_fill_l, semicircle_stroke_color_l, semicircle_stroke_l,
-            triangles_l), add_noise)
-
-map(c(quads_l, circles_l, lines_l, semicircle_fill_l, semicircle_stroke_color_l, semicircle_stroke_l,
-            triangles_l), add_noise)
-
-lines_l <- add_noise(lines_l, c(1:2), 30)
-
-
--other applys and maps
--reduce list hierarchy
-
 ```{r}
 p <- ggplot() +
   scale_alpha(range = c(0.999, 1)) +
@@ -829,7 +806,7 @@ p <- ggplot() +
   scale_fill_brewer(palette = "Set3") +
   scale_color_brewer(palette = "Set3")
 
-new_color <- TRUE
+new_color <- FALSE
 
 p <- plot_triangles(c(6:3), skip_color = new_color)
 p <- plot_semicircles(c(3:1), skip_color = new_color)
@@ -841,46 +818,5 @@ p <- plot_triangles(c(2:1), skip_color = new_color)
 p <- plot_circles(c(1), skip_color = new_color)
 p <- plot_lines(c(2:1))
 
-#with_blur(p, sigma = 3)
-
 p
 ```
-
-
-
-
-```{r}
-
-```
-
-
-To do:
--fix layering
--create background of geom_point
-
-Make Shiny:
--
-
-
-,
-  make_half_circle(18, c(52, 67), 15, start = 0, end = -0.65, color = "#0E0E10", color_cat = "black"),
-  make_half_circle(19, c(51.5, 66), 17, start = 0.05, end = -0.6, color = "#0E0E10", color_cat = "black")
-  
-  ,
-  (bind_rows(make_half_circle(18, c(52, 67), 15, start = 0, end = -0.65, color = "red", color_cat = "black"),
-  make_half_circle(18, c(51.5, 66), 17, start = 0.05, end = -0.6, color = "red", color_cat = "black")) %>%
-    add_row(id = 18, x = 49, y = 58, order = 1, color = "red", color_cat = "black"))
-    
-References
-for ggcircle
-https://datavizpyr.com/annotate-a-plot-with-circle-ggplot2/
-multiple manual color scales
-https://pythonawesome.com/multiple-fill-and-color-scales-in-ggplot2/
-for half circle function
-https://stackoverflow.com/questions/28185743/draw-a-half-circle-with-ggplot2
-https://stackoverflow.com/questions/10276092/to-find-whether-a-column-exists-in-data-frame-or-not
-https://stackoverflow.com/questions/38181744/r-shiny-input-slider-range-values/38181817
-https://stackoverflow.com/questions/34351356/plotting-with-action-button-in-shiny-rmarkdown
-https://stackoverflow.com/questions/15987367/how-to-add-layers-in-ggplot-using-a-for-loop
-https://stackoverflow.com/questions/24049159/change-the-color-and-font-of-text-in-shiny-app
-https://stackoverflow.com/questions/60797216/how-to-display-default-plot-in-www-before-actionbutton-is-clicked-r-shiny

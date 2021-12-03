@@ -8,7 +8,7 @@ https://phillip.shinyapps.io/viz_biz/ or tinyurl.art/313
 
 ## Introduction
 
-We created a Shiny App where the public can navigate and customize famous modern art pieces recreated in ggplot, modifying the artwork aesthetics to make the masterworks their own. Our goal is to promote digital extensions of modern, abstract paintings and allow users to download personalized versions. We also strive to increase public awareness of the promise of R packages like ggplot for digital art. 
+We created a website where the public can navigate and customize famous art pieces recreated in ggplot, modifying the artwork aesthetics to make the masterworks their own. Our goal is to promote digital extensions of modern, abstract paintings and allow users to download personalized versions. We also strive to increase public awareness of the promise of R packages like ggplot for digital art. 
 
 We present the following 4 artworks:
 
@@ -20,7 +20,7 @@ We present the following 4 artworks:
 
 ##### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
-To recreate these pieces, we fabricated dataframes which can incorporate user input to customize ggplot aesthetics. We also utilized mathematical functions and packages like `colourpicker` and `generativeart` to facilitate digitization.
+To recreate our **chosen 4 modern art pieces**, we fabricated dataframes which can incorporate user input to customize ggplot aesthetics. We also utilized mathematical functions and packages like `colourpicker` and `generativeart` to facilitate digitization.
 
 We then these pieces in a Shiny App, where an initial tab provides a brief overview of the site and describes
 how to use it. The four following tabs house each of the pieces. Users
@@ -45,13 +45,12 @@ be made *adjustable/modifiable* to the preference of each audience:
 In the original painting, there are 12 layers
 of colored-gradient rectangles and 11 layers of
 black-and-white-gradient rectangles (23 layers in total),
-alternating against one another. We would like the audience to be
-able to determine how many layers do they want to have in total in
-their final piece of art, depending on the purpose of usage 
+alternating against one another. We would like the audience to adjust the number of layers they want to have in
+their final artwork, depending on the purpose of usage 
 (small/nightstand or big/wall decorations).
 
-To alter the number of alyers, we will use the ‘slider input’ Shiny widget in the
-UI interface.`sliderInput(inputId = "size", label = "Size:", min = 10, max = 50, value = 20)`
+To alter the number of alyers, we used the ‘slider input’ Shiny widget in the
+UI.`sliderInput(inputId = "size", label = "Size:", min = 10, max = 50, value = 20)`
 In the server, the input ‘size’ will and integral component to
 create the dataframe that will be used in the plotting process.
 `n <- reactive({input$size * 2})`
@@ -75,7 +74,8 @@ We’ve noticed that the original artwork contains a thin white borderlines
 between each of the rectangle layers. We believe that some of our audience 
 like this feature but not all, hence, we make it an option preserve or remove them.
 
-We used the ‘switch input’ Shiny widget in the UI interface to 
+We used the ‘switch input’ Shiny widget in the 
+interface to 
 turn on/off the borderline.`switchInput(inputId = "borderline", label = "Borderlines", value = FALSE)`. 
 In the server, the reactive input ‘borderline’ will be part of the aesthetic 
 in the ggplot. `geom_polygon(..., size = borderline())`.
@@ -98,7 +98,7 @@ able to create more/less horizontal lines between the upper and lower bounds of 
 original horizontal lines to adjust the abstract feel of the art and to make it 
 more to their liking. 
 
-Specifically to adjust these lines, we will use the `sliderInput(...)` Shiny widget in the UI interface
+Specifically to adjust these lines, we will use the `sliderInput(...)` Shiny widget in the UI
 `sliderInput(inputId = "lines", label = "Number of lines:", min = 0, max = 5, value = 4)`
 Because the original four horizontal lines are defined by one specific function `(geom_hline())`, 
 we were able to pass the input from the UI `sliderInput` to a parameter in the `geom_hline()`
@@ -109,7 +109,7 @@ to change the number of horizontal lines between the defined upper and lower bou
 The original painting uses 4 distinct colors in different colored boxes. 
 We wanted to give users the ability to change 
 these colors and to understand how a new color scheme 
-changes the vision of the art. To do this, we will use 4 `colorInput`s in the UI interface
+changes the vision of the art. To do this, we will use 4 `colorInput`s in the UI
 to allow users to select four color hexes (no restriction of the color being same or different
 with one another).
 
@@ -133,7 +133,7 @@ in the piece.
 Kandinsky loved circles. He said of the circle, "It combines the concentric and the 
 eccentric in a single form and in equilibrium. Of the three primary forms, it points 
 most clearly to the fourth dimension." Because of these shapes' significance to the 
-artist, a `sliderInput()` in the Shiny UI interface modifies the radii encoded in the 
+artist, a `sliderInput()` in the Shiny UI modifies the radii encoded in the 
 original data which are then plotted via `geom_circle()` layers.
 
 **Line Thickness, Shape Transparency and Background Color**
@@ -212,11 +212,11 @@ our objective was to allow the user to change this image by pasting an image add
 
 Within this project, one challenge all of us faced was learning the nuances of Shiny Apps. Before this project, all of us had little to no experience with Shiny App, and the grammar of the platform and creating the app was an unfamiliar process we had to learn.
 
-We learned a lot about the behavior of Shiny reactive inputs and how we are required to use
+We learned a lot about the behavior of Shiny reactive inputs and using
 `reactive({...})` whenever we are trying to define a variable that is dependent on reactive
-input(s). One of the biggest challenge we have tackled is to create a non-static dataset when
-recreating Frank Stella's artwork. As a user modifies the number of layers in the artwork, the
-dataset will adjust automatically and dynamically, hence our team created a function with the
+input(s). We tackled how to create a non-static dataset when
+recreating Stella's artwork. As a user modifies the number of layers in the artwork, the
+dataset will need to adjust automatically/dynamically, hence, our team created a function with the
 number of layers (the reactive input) as one of the parameters of the function.
 
 Deprecated functionality of the `order` aesthetic in `ggplot()`, an unclear ordering mechanism 
@@ -225,8 +225,7 @@ led us to adopt a radically different approach in structuring the manually gener
 Kandinsky's piece. We split each dataset of a type of geometry (e.g. circles, semicircles, lines,
 triangles, etc.) into layers and stored each layer as a separate dataframe in a list. (The code 
 to create the original data is visib,e in `create-kandinsky-data.Rmd` in the `data` folder within
-the final Shiny app.)
-Because of this, we conducted all data modification and plotting through for loops and functions
+the final Shiny app.) Because of this, we conducted all data modification and plotting through for loops and functions
 which accessed specified data frames within each list. More clear and consistent methods for 
 control of the order in which points are plotted withihn a layer would render this workaround 
 less necessary.
@@ -237,5 +236,4 @@ but we also encountered an error where the app would crash if an invalid URL was
 this issue, we kept the original link variable if the link was valid and updated it to the original Kruger image URL if not, that way there was always a valid url being used to read-in the image. We also added an error message if the link turned out to be invalid to notify the user. 
 
 To conclude, we are satisfied with our final result. With more time, possibilities for improvement
-could include allowing users to select more than 2 color checkpoints (e.g. allowing for a rainbow color, not just a single, continuous gradient between 2 colors) for the primary gradient and secondary gradient in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.
-
+could include allowing users to select more than 2 color checkpoints for the primary gradient and secondary gradient in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.

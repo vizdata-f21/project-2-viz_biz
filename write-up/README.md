@@ -10,17 +10,7 @@ https://phillip.shinyapps.io/viz_biz/ or tinyurl.art/313
 
 We created a convenient website where everyone can navigate and customize famous modern art pieces recreated using `ggplot`. Our goal is to promote digital extensions of modern, abstract paintings and to allow users to make personalized art downloadable for their personal use. We also strive to increase public appreciation and awareness of using digital techniques to recreating and making original digital art. 
 
-We present the following 4 artworks:
-
-##### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974) 
-
-##### [2] Barbara Kruger, *Untitled (Your body is a battleground)* (1989) 
-
-##### [3] Wassily Kandinsky, *Composition 8* (1923) 
-
-##### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
-
-To recreate these modern art pieces, we fabricated our own dataframes which incorporate user input to customize certain aesthetics of each piece. We also utilized mathematical functions and specific packages such as `colourpicker` and `generativeart` to facilitate the digitization of these art pieces -- all are created in `ggplot`. 
+To recreate our **chosen 4 modern art pieces**, we fabricated our own dataframes which incorporate user input to customize certain aesthetics of each piece. We also utilized mathematical functions and specific packages such as `colourpicker` and `generativeart` to facilitate the digitization of these art pieces -- all are created in `ggplot`. 
 
 We then accumulated these interactive art pieces in a Shiny App. Within the app,
 an initial tab provides a brief overview of the project and motivation, as well as describes 
@@ -213,11 +203,11 @@ our objective was to allow the user to change this image by pasting an image add
 
 Within this project, one challenge all of us faced was learning the nuances of Shiny Apps. Before this project, all of us had little to no experience with Shiny App, and the grammar of the platform and creating the app was an unfamiliar process we had to learn.
 
-We learned a lot about the behavior of Shiny reactive inputs and how we are required to use
+We learned a lot about the behavior of Shiny reactive inputs and using
 `reactive({...})` whenever we are trying to define a variable that is dependent on reactive
-input(s). One of the biggest challenge we have tackled is to create a non-static dataset when
-recreating Frank Stella's artwork. As a user modifies the number of layers in the artwork, the
-dataset will adjust automatically and dynamically, hence our team created a function with the
+input(s). We tackled how to create a non-static dataset when
+recreating Stella's artwork. As a user modifies the number of layers in the artwork, the
+dataset will need to adjust automatically/dynamically, hence, our team created a function with the
 number of layers (the reactive input) as one of the parameters of the function.
 
 Deprecated functionality of the `order` aesthetic in `ggplot()`, an unclear ordering mechanism 
@@ -226,8 +216,7 @@ led us to adopt a radically different approach in structuring the manually gener
 Kandinsky's piece. We split each dataset of a type of geometry (e.g. circles, semicircles, lines,
 triangles, etc.) into layers and stored each layer as a separate dataframe in a list. (The code 
 to create the original data is visib,e in `create-kandinsky-data.Rmd` in the `data` folder within
-the final Shiny app.)
-Because of this, we conducted all data modification and plotting through for loops and functions
+the final Shiny app.) Because of this, we conducted all data modification and plotting through for loops and functions
 which accessed specified data frames within each list. More clear and consistent methods for 
 control of the order in which points are plotted withihn a layer would render this workaround 
 less necessary.
@@ -238,5 +227,4 @@ but we also encountered an error where the app would crash if an invalid URL was
 this issue, we kept the original link variable if the link was valid and updated it to the original Kruger image URL if not, that way there was always a valid url being used to read-in the image. We also added an error message if the link turned out to be invalid to notify the user. 
 
 To conclude, we are satisfied with our final result. With more time, possibilities for improvement
-could include allowing users to select more than 2 color checkpoints (e.g. allowing for a rainbow color, not just a single, continuous gradient between 2 colors) for the primary gradient and secondary gradient in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.
-
+could include allowing users to select more than 2 color checkpoints for the primary gradient and secondary gradient in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.

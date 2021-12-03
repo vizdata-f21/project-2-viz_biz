@@ -28,11 +28,11 @@ be made *adjustable/modifiable* to the preference of each audience:
 
 <img src="shiny_screenshots/Frank_Stella.png" style="width:80%"/>
 
-**Number of layers**
+**Number of Layers**
 
 In the original painting, there are 12 layers
 of colored-gradient rectangles and 11 layers of
-black-and-white-gradient rectangles (23 layers in total),
+black-to-white-gradient rectangles (23 in total),
 alternating against one another. We would like the audience to adjust the number of layers they want to have in
 their final artwork, depending on the purpose of usage 
 (small/nightstand or big/wall decorations).
@@ -203,30 +203,29 @@ the background image via `draw_image`. Three `sliderInput()`s were utilized to
 control the brightness, saturation and hue. The three inputs were used to set 
 visual properties in the ggplot visualization via `image_modulate`.
 
-
 ## Discussion
 
-Within this project, one challenge all of us faced was learning the nuances of Shiny Apps. Before this project, all of us had little to no experience with Shiny App, and the grammar of the platform and creating the app was an unfamiliar process we had to learn.
+Within this project, one challenge all of us faced was learning the nuances of Shiny. Before this project, all of us had little to no experience with Shiny App, and the grammar of the platform and creating the app was unfamiliar to us.
 
 We learned a lot about the behavior of Shiny reactive inputs and using
 `reactive({...})` whenever we are trying to define a variable that is dependent on reactive
 input(s). We tackled how to create a non-static dataset when
-recreating Stella's artwork. As a user modifies the number of layers in the artwork, the
-dataset will need to adjust automatically/dynamically, hence, our team created a function with the
-number of layers (the reactive input) as one of the parameters of the function.
+recreating Stella's artwork. As a user modifies the number of layers, the
+dataset will need to adjust dynamically, hence, our team created a function with the
+number of layers (the reactive input) as one of the function's parameters.
 
 Deprecated functionality of the `order` aesthetic in `ggplot()`, an unclear ordering mechanism 
 in `geom_circle()` from `ggforce`, and complex interplay between layers in the original artwork
 led us to adopt a radically different approach in structuring the manually generated data for 
 Kandinsky's piece. We split each dataset of a type of geometry (e.g. circles, semicircles, lines,
 triangles, etc.) into layers and stored each layer as a separate dataframe in a list. (The code 
-to create the original data is visib,e in `create-kandinsky-data.Rmd` in the `data` folder within
-the final Shiny app.) Because of this, we conducted all data modification and plotting through for loops and functions which accessed specified data frames within each list. More clear and consistent methods for control of the order in which points are plotted withihn a layer would render this workaround less necessary.
+to create the original data is visible in `create-kandinsky-data.Rmd` in the `data` folder within
+the final Shiny app.) Because of this, we conducted all data modification and plotting through `for` loops and functions which accessed specified data frames within each list. More clear and consistent methods for control of the order in which points are plotted withihn a layer would render this workaround less necessary.
 
 Another challenge that we encountered was allowing for a user to input an image URL of their 
-choice into the Barbara Kruger section of the Shiny app. Not only was the link input reactive, 
+choice into the Kruger's section of the Shiny app. Not only was the link input reactive, 
 but we also encountered an error where the app would crash if an invalid URL was used. To address 
-this issue, we kept the original link variable as is if the link was valid and updated it to the original Kruger image URL if not. That way there was always a valid url being used to read-in the image. We also added an error message if the link turned out to be invalid to notify the user. 
+this issue, we kept the original link variable as is if the link was valid and updated it to the original Kruger image URL if not. Hence, there will always be a valid URL being used to read-in the image. We also added an error message if the link turned out to be invalid. 
 
 To conclude, we are satisfied with our final result. With more time, possibilities for improvement
-could include allowing users to select more than 2 color checkpoints for the primary gradient and secondary gradient in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.
+could include allowing users to select more than 2 color checkpoints for the primary and secondary gradient in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.

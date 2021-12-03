@@ -10,7 +10,7 @@ Please explore our final website at https://phillip.shinyapps.io/viz_biz/.
 
 For this project, we created a convenient website where non-R users and the general public can navigate to and customize several famous modern art pieces recreated in ggplot, modifying some of the artwork aesthetics to make the masterworks their own. Our goal specifically was to promote digital extensions of modern, abstract paintings and to allow users to make art personalized to their taste, which they can download for their own use. Furthermore, in this project, we strived to increase public appreciation and awareness of using digital techniques, such as ggplot, to recreate art or make original digital art. 
 
-We plan to recreate and make customizable the following four images:
+We present the following four images:
 
 #### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974) 
 
@@ -20,13 +20,13 @@ We plan to recreate and make customizable the following four images:
 
 #### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
-To recreate these modern art pieces, we will be creating our own dataframes, which will incorporate user input to customize certain artistic aspects of each piece. We will also utilize mathematical functions and specific packages such as `library(colourpicker)` and `library(generativeart)` to facilitate the digitization of these art pieces. 
+To recreate these modern art pieces, we fabricated our own dataframes which incorporate user input to customize certain aesthetics of each piece. We also utilized mathematical functions and specific packages such as `colourpicker` and `generativeart` to facilitate the digitization of these art pieces -- all are created in `ggplot`. 
 
-We will accumulate these recreated, customizable art pieces in a Shiny App. Within this Shiny App,
-there will be an initial tab with a description of how to use the app to customize and download 
-these art pieces. Then, there will be a separate tab for each of the pieces. We will allow users 
-to change features such as colors, number and amount of certain shapes, transparency, etc
-throughout the pieces. 
+We then accumulated these interactive art pieces in a Shiny App. Within the app,
+an initial tab provides a brief overview of the project and motivation, as well as describes 
+how to use it to customize and download art. The four following tabs house each of the pieces. Users
+may change features such as colors, number and amount of certain shapes, transparency, and more
+throughout. 
 
 ## Approaches 
 

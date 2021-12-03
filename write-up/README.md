@@ -123,6 +123,10 @@ four colors, the boxes corresponding to the missing color will show up blank (i.
 
 ### Wassily Kandinsky, *Composition 8* (1923)
 
+We chose to recreate *Composition 8* because of Kandinsky's knack to create such larger than life
+drama from largely very simple geometries (circles, polygons, and straight lines) well-suited to 
+`ggplot`. Only two complex shapes from the original don't appear in the recreation.
+
 <img src="images/kandinsky.jpeg" style="width:28%"/>
 
 ### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)

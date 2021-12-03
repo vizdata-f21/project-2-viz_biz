@@ -183,7 +183,38 @@ as a whole in order to retain some visual order.
 
 <img src="images/kruger.jpeg" style="width:18%"/>
 
+The piece’s easily simple, yet eye-catching features are what attracted us to 
+recreate a it as a visualization. Four distinct features sparked our interest
+and were made to be modifiable to the preference of the user so that they could
+communicate their own distinct message, just like Barbara Kruger:
+
 <img src="shiny_screenshots/Barbara_Kruger.jpg" style="width:80%"/>
+
+**Text** 
+
+In the original piece, there are three rows of text (top, middle, and bottom). 
+Our goal with this feature of the piece was to allow the user to change what the 
+text displays (the actual words), the size of the text, and the color of the 
+text. We used three `textInput()` Shiny widgets to control what was displayed 
+in the three rows of text, a `sliderInput()` Shiny widget to control 
+the size of the text, and a `colorInput()` Shiny widget to control the color of 
+the text. All three types of inputs were used to set visual properties in the ggplot visualization
+via `geom_label`.
+
+**Border/Labels**
+
+Kruger's piece, and many other pieces created by Kruger,
+contained a border around the print as well as colored bars behind the text (which make the text standout). For the recreated visualization, we wanted the user to be able to change the 
+color and size of the border, as well as the color of the labels. To accomplish this, we used
+a `sliderInput()` Shiny widget to control the size of the border and a `colorInput()` Shiny 
+widget to control the color of the border and background labels. The input for 
+border color and label color was the same so the two parts of the visualization would be the same color (like in Kruger's original work). Both inputs were used to set visual properties in the ggplot visualization via `geom_rect`. The reactive dimension variables (which were created from the reactive link variable) were integral components in specifying the location of the border around the image, 
+as well as the location of the labels (and text) on the image.
+
+**Background Image/Image Link**
+
+The original piece uses a black-and-white portrait as a backdrop. For the recreated visualization,
+our objective was to allow the user to change this image by pasting an image address into a text input. The visualization would then dynamically change to have the new image be the backdrop, with all elements being scaled to fit the dimensions of the new image. The user would also be able to adjust the brightness, saturation and hue of the image. To go about implementing these aspects of the visualization, we used a `textInput()` Shiny widget to access the user-inputted link. In the server, the reactive input ‘path’ (which is the variable name for the link) was used to create variables for image dimensions (as mentioned above). Additionally, the link input was read and used to display the background image via `draw_image`. Three `sliderInput()` Shiny widgets were utilized to control the brightness, saturation and hue. The three inputs were used to set visual properties in the ggplot visualization via `image_modulate`.
 
 ## Discussion
 
@@ -208,13 +239,11 @@ which accessed specified data frames within each list. More clear and consistent
 control of the order in which points are plotted withihn a layer would render this workaround 
 less necessary.
 
-Another challenge that we encountered was allowing for a user to input an image URL of his/her 
-choice into our Barbara Kruger's section of the Shiny app. Not only was the link input reactive, 
+Another challenge that we encountered was allowing for a user to input an image URL of their 
+choice into our Barbara Kruger section of the Shiny app. Not only was the link input reactive, 
 but we also encountered an error where the app would crash if an invalid URL was used. To address 
-this issue, we kept the original link variable if the link was valid and updated it to the Kruger's
-image URL if not. We would also add an error message if the link turns out to be invalid. 
+this issue, we kept the original link variable if the link was valid and updated it to the original Kruger image URL if not, that way there was always a valid url being used to read-in the image. We also added an error message if the link turned out to be invalid to notify the user. 
 
 To conclude, we are satisfied with our final result. With more time, possibilities for improvement
-could include allowing users to select more than 2 color checkpoints (e.g. allowing for a rainbow color, 
-not just a single, continuous gradient between 2 colors) for the primary gradient and secondary gradient 
-in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.
+could include allowing users to select more than 2 color checkpoints (e.g. allowing for a rainbow color, not just a single, continuous gradient between 2 colors) for the primary gradient and secondary gradient in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.
+

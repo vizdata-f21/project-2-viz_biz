@@ -2,9 +2,11 @@
 
 *Author: Eli Feder, Lillian Clark, Phillip Harmadi, Sana Pashankar*
 
-## Shiny App
+## Shiny App & Presentation
 
 https://phillip.shinyapps.io/viz_biz/
+
+https://www.youtube.com/watch?v=XKLo-fSvngk
 
 ## Introduction
 

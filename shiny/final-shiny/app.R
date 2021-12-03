@@ -185,7 +185,7 @@ ui <- fluidPage(
               label = NULL, value = "#525252"
             ))
           ),
-          p(""),
+          br(),
           prettyCheckbox(
             inputId = "borderline",
             label = "Activate thin borderlines",
@@ -212,7 +212,7 @@ ui <- fluidPage(
         mainPanel(
           h2(strong("Frank Stella: Experiment and Change")),
           h5(em("Lettre Sur Les Et Muets II (1974)")),
-          p(""),
+          br(),
           p("Stella alternates between bands of gray, lightening as they approach
             the center and a rich chromatic scale, which transitions from reds,
             to yellow, to greens and finally dark blue. The painting’s simultaneous
@@ -224,28 +224,27 @@ ui <- fluidPage(
             hacing a smaller number of layers and lower resolution would be more appropriate.
             Feel free to toggle as much as you want and experiment varieties of ways on
             modifying this plot to figure out your desired unique style!"),
-
-          # plotOutput(outputId = "plot", inline = TRUE),
-          div(plotOutput(
-            outputId = "plot", inline = TRUE,
-            height = "100%"
-          ), align = "center"),
-          h4(" "),
-          prettyCheckbox(
-            inputId = "table_switch",
-            label = "Raw dataframe used to recreate the masterpiece above",
-            value = FALSE
-          ),
-          DT::dataTableOutput(outputId = "table_switch"),
           prettyCheckbox(
             inputId = "original_artwork",
             label = "Original Artwork",
             value = FALSE
           ),
           div(imageOutput(outputId = "original_artwork", inline = TRUE), align = "center"),
-          h4(" "),
+          br(),
           div(textOutput(outputId = "original_artwork_text", inline = TRUE), align = "center"),
-          h4(" ")
+          br(),
+          # plotOutput(outputId = "plot", inline = TRUE),
+          div(plotOutput(
+            outputId = "plot", inline = TRUE,
+            height = "100%"
+          ), align = "center"),
+          br(),
+          prettyCheckbox(
+            inputId = "table_switch",
+            label = "Raw dataframe used to recreate the masterpiece above",
+            value = FALSE
+          ),
+          DT::dataTableOutput(outputId = "table_switch")
         ) # main panel
       ) # sidebar layout
     ), # tab 2 panel
@@ -288,7 +287,7 @@ ui <- fluidPage(
         mainPanel(
           h2(strong("Piet Mondrian: Finding Refuge")),
           h5(em("Trafalgar Square (1939-1943)")),
-          p(""),
+          br(),
           p("In September 1938, Mondrian moved from Paris to London to escape the
             threat of a German invasion. There he made Trafalgar Square, the first
             in a series of paintings titled after locations in cities that gave him
@@ -300,20 +299,19 @@ ui <- fluidPage(
             in the artwork and to adjust the color of the boxes pictured. Experiment
             with your own varieties of abstract ways to modify and figure out your
             own custom style!"),
-          div(plotOutput(
-            outputId = "plot_piet", inline = TRUE,
-            height = "100%"
-          ), align = "center"),
-          p(""),
           prettyCheckbox(
             inputId = "original_artwork_piet",
             label = "Original Artwork",
             value = FALSE
           ),
           div(imageOutput(outputId = "original_artwork_piet", inline = TRUE), align = "center"),
-          h4(" "),
+          br(),
           div(textOutput(outputId = "original_artwork_text_piet", inline = TRUE), align = "center"),
-          h4(" ")
+          br(),
+          div(plotOutput(
+            outputId = "plot_piet", inline = TRUE,
+            height = "100%"
+          ), align = "center")
         )
       )
     ),
@@ -369,7 +367,7 @@ ui <- fluidPage(
             value = 0
           ),
           actionButton("go_kandinsky", "Apply Changes"),
-          p(""),
+          br(),
           span(p("Please allow the artwork 10 to 15 seconds to render after applying changes"),
             style = "color:red"
           ),
@@ -388,14 +386,7 @@ ui <- fluidPage(
         mainPanel(
           h2(strong("Wassily Kandinsky: Composing Oneself")),
           h5(em("Composition 8 (1923)")),
-          p(""),
-          prettyCheckbox(
-            inputId = "original_artwork_kandinsky",
-            label = "Show Original Artwork",
-            value = FALSE
-          ),
-          div(imageOutput(outputId = "original_artwork_kandinsky", inline = TRUE), align = "center"),
-          div(textOutput(outputId = "original_artwork_text_kandinsky", inline = TRUE), align = "center"),
+          br(),
           p("After World War I, Wassily Kandinsky returned to his birth city of Moscow to practice art there.
             However, despite their shared interest in the abstract, his ideas conflicted with those of the Russian
             avant-garde. Unlike his peers, who preferred systematic, rational abstraction, Kandinsky
@@ -405,21 +396,24 @@ ui <- fluidPage(
             and color in which circles play a dominant role. Nancy Spector wrote of the piece,
             \"In Composition 8, the colorful, interactive geometric forms create a pulsating surface
             that is alternately dynamic and calm, aggressive and quiet.\" (1)"),
-          p(
-            "Modify Composition 8 to make it your own by adjusting the settings in the",
-            em("Graphics Input"), "sidebar on the left."
-          ),
-          p("Change the size of the circles, line thickness, background color, shape transparency,
-            or which kinds of geometries to include. You may also add random noise to the piece, generated
-            from a normal distribution, and watch Kandinsky's careful composition fall apart. ",
-            span("Remember to press the", em("Apply Changes"), "button to watch your modifications
-                 come to life.", style = "color:red:")),
+          p("Modify Composition 8 to make it your own by adjusting the settings in the",
+            em("Graphics Input"), "sidebar on the left. Change the size of the circles, line thickness,
+            background color, shape transparency, or select which kinds of geometries to include. You
+            may also add random noise to the piece, generated from a normal distribution, and watch
+            Kandinsky's careful composition fall apart."),
+          p("Remember to press the", em("Apply Changes"), "button to watch your modifications
+                 come to life.", style = "color:red:"),
           p("(1) Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
             Museums and Foundation. Accessed December 2, 2021. https://www.guggenheim.org/artwork/1924."),
-          # div(plotOutput(
-          #  outputId = "plot_kandinsky", inline = FALSE,
-          #  height = "100%"
-          # ), align = "center"),
+          prettyCheckbox(
+            inputId = "original_artwork_kandinsky",
+            label = "Show Original Artwork",
+            value = FALSE
+          ),
+          div(imageOutput(outputId = "original_artwork_kandinsky", inline = TRUE), align = "center"),
+          br(),
+          div(textOutput(outputId = "original_artwork_text_kandinsky", inline = TRUE), align = "center"),
+          br(),
           div(uiOutput(
             outputId = "ui_kandinsky",
             height = "100%"
@@ -492,7 +486,7 @@ ui <- fluidPage(
         mainPanel(
           h2(strong("Barbara Kruger: Cultural Critique")),
           h5(em("Untitled (Your body is a battleground) (1989)")),
-          p(""),
+          br(),
           p("Kruger is most known for her collage style that consists of black-and-white
             photographs, overlaid with declarative captions, stated in white-on-red
             text. The phrases in her works often include pronouns such as 'you', 'your',
@@ -507,20 +501,19 @@ ui <- fluidPage(
             of the text, border, and even replace the image from any image address
             to communicate a message you think is important!"
           ),
-          div(plotOutput(
-            outputId = "plot_kruger", inline = FALSE,
-            height = "100%"
-          ), align = "center"),
-          p(""),
           prettyCheckbox(
             inputId = "original_artwork_kruger",
             label = "Original Artwork",
             value = FALSE
           ),
           div(imageOutput(outputId = "original_artwork_kruger", inline = TRUE), align = "center"),
-          h4(" "),
+          br(),
           div(textOutput(outputId = "original_artwork_text_kruger", inline = TRUE), align = "center"),
-          h4(" ")
+          br(),
+          div(plotOutput(
+            outputId = "plot_kruger", inline = FALSE,
+            height = "100%"
+          ), align = "center")
         )
       )
     ) # tab 4 panel

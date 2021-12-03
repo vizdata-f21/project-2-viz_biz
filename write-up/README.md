@@ -8,7 +8,7 @@ https://phillip.shinyapps.io/viz_biz/ or tinyurl.art/313
 
 ## Introduction
 
-We created a convenient website where non-R users and the public can navigate and customize famous modern art pieces recreated in ggplot, modifying some of the artwork aesthetics to make the masterworks their own. Our goal specifically was to promote digital extensions of modern, abstract paintings and to allow users to make personalized art downloadable for their own use. Furthermore, we also strive to increase public appreciation and awareness of using digital techniques, such as ggplot, to recreate/make original digital art. 
+We created a Shiny App where the public can navigate and customize famous modern art pieces recreated in ggplot, modifying the artwork aesthetics to make the masterworks their own. Our goal is to promote digital extensions of modern, abstract paintings and allow users to download personalized versions. We also strive to increase public awareness of the promise of R packages like ggplot for digital art. 
 
 We present the following 4 artworks:
 
@@ -20,11 +20,10 @@ We present the following 4 artworks:
 
 ##### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
-To recreate these modern art pieces, we fabricated our own dataframes which incorporate user input to customize certain aesthetics of each piece. We also utilized mathematical functions and specific packages such as `colourpicker` and `generativeart` to facilitate the digitization of these art pieces -- all are created in `ggplot`. 
+To recreate these pieces, we fabricated dataframes which can incorporate user input to customize ggplot aesthetics. We also utilized mathematical functions and packages like `colourpicker` and `generativeart` to facilitate digitization.
 
-We then accumulated these interactive art pieces in a Shiny App. Within the app,
-an initial tab provides a brief overview of the project and motivation, as well as describes 
-how to use it to customize and download art. The four following tabs house each of the pieces. Users
+We then these pieces in a Shiny App, where an initial tab provides a brief overview of the site and describes
+how to use it. The four following tabs house each of the pieces. Users
 may change features such as colors, number and amount of certain shapes, transparency, and more
 throughout. 
 

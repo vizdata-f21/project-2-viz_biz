@@ -1,4 +1,76 @@
-# functions for Shiny
+# load packages ----------------------------------------------------------------
+
+# http://shiny.rstudio.com/
+library(shiny) # Eli
+library(shinythemes)
+library(tidyverse) # Eli
+library(DT)
+library(shinyalert)
+library(shinyWidgets)
+library(ggiraph)
+library(statebins)
+library(gganimate)
+library(colorspace)
+library(ggrepel)
+library(scales)
+library(ggridges)
+library(magrittr)
+library(forcats)
+library(tibble)
+library(janitor)
+library(grid)
+library(gridExtra)
+library(styler)
+library(RColorBrewer)
+library(colorRamps)
+library(glue)
+library(RColorBrewer)
+library(ggwordcloud)
+library(ggtext)
+library(tidytext)
+library(tm)
+library(bslib) # Eli
+library(Rcpp)
+library(reshape2)
+library(colourlovers)
+library(cowplot) # Eli
+library(ggpolypath)
+library(colourpicker) # Eli
+library(ggnewscale) # Lilly
+library(Cairo)
+library(ggforce) # Lilly
+options(shiny.usecairo = TRUE)
+library(base64enc)
+library(magick) # Eli
+library(shinyvalidate) # Eli
+library(RCurl) # Eli
+library(showtext) # Eli
+
+# set limits -------------------------------------------------------------------
+
+xmin <- 0
+xmax <- 152
+ymin <- 0
+ymax <- 86
+
+# load font --------------------------------------------------------------------
+
+font_add(
+  family = "Futura",
+  regular = "data/Futura.ttf"
+)
+showtext_auto()
+
+# kandinsky prep ---------------------------------------------------------------
+
+print_circles <- FALSE
+print_quads <- FALSE
+print_lines_curved <- FALSE
+print_lines_straight <- FALSE
+print_triangles <- FALSE
+
+# functions: add noise ---------------------------------------------------------
+
 clip <- function(x, low, high) {
   x[x < low] <- low
   x[x > high] <- high
@@ -22,7 +94,8 @@ add_noise <- function(df, layers = c(1), magnitude = 5) {
   return(df)
 }
 
-# plotting functions
+# functions: plotting ----------------------------------------------------------
+
 plot_circles <- function(layers = c(), execute = TRUE, skip_color = FALSE){
   if(execute == FALSE) {
     return(p)

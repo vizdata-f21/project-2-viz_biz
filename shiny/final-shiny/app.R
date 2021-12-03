@@ -1,81 +1,16 @@
-# http://shiny.rstudio.com/
-library(shiny) # Eli
-library(shinythemes)
-library(tidyverse) # Eli
-library(DT)
-library(shinyalert)
-library(shinyWidgets)
-library(ggiraph)
-library(statebins)
-library(gganimate)
-library(colorspace)
-library(ggrepel)
-library(scales)
-library(ggridges)
-library(magrittr)
-library(forcats)
-library(tibble)
-library(janitor)
-library(grid)
-library(gridExtra)
-library(styler)
-library(RColorBrewer)
-library(colorRamps)
-library(glue)
-library(RColorBrewer) # Lilly
-library(dichromat)
-library(ggwordcloud)
-library(ggtext)
-library(tidytext)
-library(tm)
-library(bslib) # Eli
-library(Rcpp)
-library(reshape2)
-library(colourlovers)
-library(cowplot) # Eli
-library(ggpolypath)
-library(colourpicker) # Eli
-library(ggnewscale) # Lilly
-library(Cairo)
-library(ggforce) # Lilly
-options(shiny.usecairo = TRUE)
-library(base64enc)
-library(magick) # Eli
-library(shinyvalidate) # Eli
-library(RCurl) # Eli
-library(showtext) # Eli
 
+# load data --------------------------------------------------------------------
 
-## Kandinsky Prep
-# load data
-circles_l <- readRDS("data/circles.rds")
-lines_l <- readRDS("data/lines.rds")
-quads_l <- readRDS("data/quads.rds")
-semicircle_fill_l <- readRDS("data/semicircle-fill.rds")
-semicircle_stroke_l <- readRDS("data/semicircle-stroke.rds")
-semicircle_stroke_color_l <- readRDS("data/semicircle-stroke-color.rds")
-triangles_l <- readRDS("data/triangles.rds")
+circles_l <- read_rds("data/circles.rds")
+lines_l <- read_rds("data/lines.rds")
+quads_l <- read_rds("data/quads.rds")
+semicircle_fill_l <- read_rds("data/semicircle-fill.rds")
+semicircle_stroke_l <- read_rds("data/semicircle-stroke.rds")
+semicircle_stroke_color_l <- read_rds("data/semicircle-stroke-color.rds")
+triangles_l <- read_rds("data/triangles.rds")
 
-# load font
-font_add(
-  family = "Futura",
-  regular = "data/Futura.ttf"
-)
-showtext_auto()
+# UI ---------------------------------------------------------------------------
 
-xmin <- 0
-xmax <- 152
-ymin <- 0
-ymax <- 86
-
-print_circles <- FALSE
-print_quads <- FALSE
-print_lines_curved <- FALSE
-print_lines_straight <- FALSE
-print_triangles <- FALSE
-
-
-# Define UI for application
 ui <- fluidPage(
   theme = bs_theme(
     bootswatch = "cosmo",
@@ -226,14 +161,17 @@ ui <- fluidPage(
             Feel free to toggle as much as you want and experiment varieties of ways on
             modifying this plot to figure out your desired unique style!"),
           prettyCheckbox(
-            inputId = "original_artwork",
-            label = "Original Artwork",
+            inputId = "original_artwork_check",
+            label = "Show original artwork",
             value = FALSE
           ),
-          div(imageOutput(outputId = "original_artwork", inline = TRUE), align = "center"),
-          br(),
-          div(textOutput(outputId = "original_artwork_text", inline = TRUE), align = "center"),
-          br(),
+          conditionalPanel(
+            condition = "input.original_artwork_check == true",
+            div(imageOutput(outputId = "original_artwork", inline = TRUE), align = "center"),
+            br(),
+            div(textOutput(outputId = "original_artwork_text", inline = TRUE), align = "center"),
+            br()
+          ),
           # plotOutput(outputId = "plot", inline = TRUE),
           div(plotOutput(
             outputId = "plot", inline = TRUE,
@@ -301,14 +239,17 @@ ui <- fluidPage(
             with your own varieties of abstract ways to modify and figure out your
             own custom style!"),
           prettyCheckbox(
-            inputId = "original_artwork_piet",
-            label = "Original Artwork",
+            inputId = "original_artwork_piet_check",
+            label = "Show original artwork",
             value = FALSE
           ),
-          div(imageOutput(outputId = "original_artwork_piet", inline = TRUE), align = "center"),
-          br(),
-          div(textOutput(outputId = "original_artwork_text_piet", inline = TRUE), align = "center"),
-          br(),
+          conditionalPanel(
+            condition = "input.original_artwork_piet_check == true",
+            div(imageOutput(outputId = "original_artwork_piet", inline = TRUE), align = "center"),
+            br(),
+            div(textOutput(outputId = "original_artwork_text_piet", inline = TRUE), align = "center"),
+            br()
+          ),
           div(plotOutput(
             outputId = "plot_piet", inline = TRUE,
             height = "100%"
@@ -449,14 +390,17 @@ ui <- fluidPage(
           p("(1) Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
             Museums and Foundation. Accessed December 2, 2021. https://www.guggenheim.org/artwork/1924."),
           prettyCheckbox(
-            inputId = "original_artwork_kandinsky",
-            label = "Show Original Artwork",
+            inputId = "original_artwork_kandinsky_check",
+            label = "Show original artwork",
             value = FALSE
           ),
-          div(imageOutput(outputId = "original_artwork_kandinsky", inline = TRUE), align = "center"),
-          br(),
-          div(textOutput(outputId = "original_artwork_text_kandinsky", inline = TRUE), align = "center"),
-          br(),
+          conditionalPanel(
+            condition = "input.original_artwork_kandinsky_check == true",
+            div(imageOutput(outputId = "original_artwork_kandinsky", inline = TRUE), align = "center"),
+            br(),
+            div(textOutput(outputId = "original_artwork_text_kandinsky", inline = TRUE), align = "center"),
+            br()
+          ),
           div(uiOutput(
             outputId = "ui_kandinsky",
             height = "100%"
@@ -545,14 +489,17 @@ ui <- fluidPage(
             to communicate a message you think is important!"
           ),
           prettyCheckbox(
-            inputId = "original_artwork_kruger",
-            label = "Original Artwork",
+            inputId = "original_artwork_kruger_check",
+            label = "Show original artwork",
             value = FALSE
           ),
-          div(imageOutput(outputId = "original_artwork_kruger", inline = TRUE), align = "center"),
-          br(),
-          div(textOutput(outputId = "original_artwork_text_kruger", inline = TRUE), align = "center"),
-          br(),
+          conditionalPanel(
+            condition = "input.original_artwork_kruger_check == true",
+            div(imageOutput(outputId = "original_artwork_kruger", inline = TRUE), align = "center"),
+            br(),
+            div(textOutput(outputId = "original_artwork_text_kruger", inline = TRUE), align = "center"),
+            br()
+          ),
           div(plotOutput(
             outputId = "plot_kruger", inline = FALSE,
             height = "100%"
@@ -563,7 +510,8 @@ ui <- fluidPage(
   ) # navbar page
 ) # fluid page
 
-# Define server logic required to draw a histogram
+# Server -----------------------------------------------------------------------
+
 server <- function(input, output) {
   n <- reactive({
     input$size * 2
@@ -716,36 +664,21 @@ server <- function(input, output) {
     }
   )
 
-  output$original_artwork <- renderImage({
-    if (input$original_artwork == TRUE) {
-      return(list(
+  output$original_artwork <- renderImage(
+    {
+      list(
         src = "./stella.jpg",
         width = 450,
         height = 325,
         contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-    if (input$original_artwork == FALSE) {
-      return(list(
-        src = "./stella.jpg",
-        width = 0,
-        height = 0,
-        contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-  })
+        alt = "Original Artwork"
+      )
+    },
+    deleteFile = FALSE
+  )
 
   output$original_artwork_text <- renderText({
-    if (input$original_artwork == TRUE) {
-      return(paste("Photo by Christopher Burke, © 2017 Artists Rights Society (ARS), New York"))
-    }
-    if (input$original_artwork == FALSE) {
-      return(NULL)
-    }
+    "Photo by Christopher Burke, © 2017 Artists Rights Society (ARS), New York"
   })
 
   # PIET MONDRIAN
@@ -835,36 +768,21 @@ server <- function(input, output) {
     }
   )
 
-  output$original_artwork_piet <- renderImage({
-    if (input$original_artwork_piet == TRUE) {
-      return(list(
+  output$original_artwork_piet <- renderImage(
+    {
+      list(
         src = "./piet.jpg",
         width = 250,
         height = 333,
         contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-    if (input$original_artwork_piet == FALSE) {
-      return(list(
-        src = "./piet.jpg",
-        width = 0,
-        height = 0,
-        contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-  })
+        alt = "Original Artwork"
+      )
+    },
+    deleteFile = FALSE
+  )
 
   output$original_artwork_text_piet <- renderText({
-    if (input$original_artwork_piet == TRUE) {
-      return(paste("Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Museum of Modern Art (MoMA), New York"))
-    }
-    if (input$original_artwork_piet == FALSE) {
-      return(NULL)
-    }
+    "Gift of Mr. and Mrs. William A. M. Burden, © 2010 The Museum of Modern Art (MoMA), New York"
   })
 
   ## KANDINSKY
@@ -1135,36 +1053,21 @@ server <- function(input, output) {
     }
   )
 
-  output$original_artwork_kandinsky <- renderImage({
-    if (input$original_artwork_kandinsky == TRUE) {
-      return(list(
+  output$original_artwork_kandinsky <- renderImage(
+    {
+      list(
         src = "./kandinsky.jpg",
         width = 450,
         height = 315,
         contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-    if (input$original_artwork_kandinsky == FALSE) {
-      return(list(
-        src = "./kandinsky.jpg",
-        width = 0,
-        height = 0,
-        contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-  })
+        alt = "Original Artwork"
+      )
+    },
+    deleteFile = FALSE
+  )
 
   output$original_artwork_text_kandinsky <- renderText({
-    if (input$original_artwork_kandinsky == TRUE) {
-      return(paste("Solomon R. Guggenheim Founding Collection, By gift © 2018 Artists Rights Society (ARS), New York/ADAGP, Paris"))
-    }
-    if (input$original_artwork_kandinsky == FALSE) {
-      return(NULL)
-    }
+    "Solomon R. Guggenheim Founding Collection, By gift © 2018 Artists Rights Society (ARS), New York/ADAGP, Paris"
   })
 
   # BARBARA KRUGER
@@ -1315,39 +1218,25 @@ observe({
     }
   )
 
-
-  output$original_artwork_kruger <- renderImage({
-    if (input$original_artwork_kruger == TRUE) {
-      return(list(
+  output$original_artwork_kruger <- renderImage(
+    {
+      list(
         src = "./kruger.jpg",
         width = 300,
         height = 300,
         contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-    if (input$original_artwork_kruger == FALSE) {
-      return(list(
-        src = "./kruger.jpg",
-        width = 0,
-        height = 0,
-        contentType = "image/jpg",
-        alt = "Original Artwork",
-        deleteFile = FALSE
-      ))
-    }
-  })
+        alt = "Original Artwork"
+      )
+    },
+    deleteFile = FALSE
+  )
 
   output$original_artwork_text_kruger <- renderText({
-    if (input$original_artwork_kruger == TRUE) {
-      return(paste("The Inaugural Installation, © 1989 The Broad, Los Angeles"))
-    }
-    if (input$original_artwork_kruger == FALSE) {
-      return(NULL)
-    }
+    "The Inaugural Installation, © 1989 The Broad, Los Angeles"
   })
+
 }
 
-# Run the application
+# Create the app ---------------------------------------------------------------
+
 shinyApp(ui = ui, server = server)

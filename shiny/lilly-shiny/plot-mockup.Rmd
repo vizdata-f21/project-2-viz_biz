@@ -792,7 +792,9 @@ p <- plot_circles(c(1))
 p <- plot_lines(c(2:1))
 
 #with_blur(p, sigma = 3)
-p
+
+p +
+  scale_fill_brewer(palette = "Set1")
 ```
 
 

@@ -6,6 +6,7 @@ library(shinythemes)
 library(tidyverse) # Eli
 library(DT)
 library(shinyalert)
+library(ggiraph)
 library(shinyWidgets)
 library(magrittr)
 library(tibble)

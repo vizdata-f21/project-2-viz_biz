@@ -789,21 +789,6 @@ server <- function(input, output) {
   })
 
   ## KANDINSKY
-  output$ui_kandinsky <- renderUI({
-    imageOutput("static_kandinsky")
-  })
-
-  output$static_kandinsky <- renderImage(
-    {
-      list(
-        src = "./kandinsky_ggplot.png",
-        height = 510,
-        width = 900,
-        contentType = "image/png"
-      )
-    },
-    deleteFile = FALSE
-  )
 
   plotInput_kandinsky <- eventReactive(input$go_kandinsky,
     {

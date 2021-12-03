@@ -40,6 +40,8 @@ attracts us to recreate a visualization of this masterpiece. 4 distinct
 features spark our interest. We also believe that these features should
 be made *adjustable/modifiable* to the preference of each audience:
 
+<img src="shiny_screenshots/Frank_Stella.png" style="width:100%"/>
+
 **Number of layers**
 
 In the original painting, there are 12 layers
@@ -56,19 +58,22 @@ In the server, the input ‘size’ will and integral component to
 create the dataframe that will be used in the plotting process.
 `n <- reactive({input$size * 2})`
 
-**Primary color sequence**
+**Primary Gradient**
 
 The original painting uses a rainbow-gradient color sequence as part of its 
 12 layers of colored-gradient rectangles. For the recreated visualization, the
 audience will be able to change this through adjusting the color
 palette and decide whether or not to reverse the direction of the color sequence.
+Using Shiny reactice `colourInput(...)` function, every user is able to pick any hex color
+he/she wish as the starting and ending color of the gradient.
 
-**Secondary color sequence**
+**Secondary Gradient**
 
 The original painting uses a black-and-white-gradient color sequence as part 
 of its 11 layers of non-colored-gradient rectangles. For the recreated visualization,
 the audience will be able to change this through adjusting the color palette and
-decide whether or not to reverse the direction of the color sequence.
+decide whether or not to reverse the direction of the color sequence. The same approach
+of using the `colourInput(...)` function is used.
 
 **Borderline**
 
@@ -95,9 +100,8 @@ in the ggplot. `geom_polygon(..., size = borderline())`
 <img src="images/mondrian.jpg" style="width:15%"/>
 
 This painting’s geometric shapes and lines are what allowed us to recreate this 
-visualization in ggplot2. 2 distinct
-features sparked our interest to make *adjustable/modifiable* to the preference 
-of each audience:
+visualization in ggplot2. 2 distinct features sparked our interest to make 
+*adjustable/modifiable* to the preference of each audience:
 
 <img src="shiny_screenshots/Piet_Mondrian.png" style="width:100%"/>
 

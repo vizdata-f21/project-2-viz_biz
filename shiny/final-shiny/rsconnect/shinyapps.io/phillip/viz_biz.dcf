@@ -5,9 +5,9 @@ account: phillip
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5255643
-bundleId: 5322260
+bundleId: 5322399
 url: https://phillip.shinyapps.io/viz_biz/
-when: 1638511068.60473
-lastSyncTime: 1638511068.60474
+when: 1638514535.44908
+lastSyncTime: 1638514535.44909
 asMultiple: FALSE
 asStatic: FALSE

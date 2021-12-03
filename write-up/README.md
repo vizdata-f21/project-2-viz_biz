@@ -4,7 +4,7 @@
 
 **Shiny App**: https://phillip.shinyapps.io/viz_biz/
 
-**Presentation:** https://www.youtube.com/watch?v=XKLo-fSvngk
+**Presentation**: https://www.youtube.com/watch?v=XKLo-fSvngk
 
 ## Introduction
 

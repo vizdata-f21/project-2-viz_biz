@@ -8,7 +8,7 @@ https://phillip.shinyapps.io/viz_biz/ or tinyurl.art/313
 
 ## Introduction
 
-We created a convenient website where non-R users and the public can navigate and customize famous modern art pieces recreated in ggplot, modifying some of the artwork aesthetics to make the masterworks their own. Our goal specifically was to promote digital extensions of modern, abstract paintings and to allow users to make personalized art downloadable for their own use. Furthermore, we also strive to increase public appreciation and awareness of using digital techniques, such as ggplot, to recreate/make original digital art. 
+We created a convenient website where everyone can navigate and customize famous modern art pieces recreated using `ggplot`. Our goal is to promote digital extensions of modern, abstract paintings and to allow users to make personalized art downloadable for their personal use. We also strive to increase public appreciation and awareness of using digital techniques to recreating and making original digital art. 
 
 We present the following 4 artworks:
 
@@ -46,13 +46,12 @@ be made *adjustable/modifiable* to the preference of each audience:
 In the original painting, there are 12 layers
 of colored-gradient rectangles and 11 layers of
 black-and-white-gradient rectangles (23 layers in total),
-alternating against one another. We would like the audience to be
-able to determine how many layers do they want to have in total in
-their final piece of art, depending on the purpose of usage 
+alternating against one another. We would like the audience to adjust the number of layers they want to have in
+their final artwork, depending on the purpose of usage 
 (small/nightstand or big/wall decorations).
 
-To alter the number of alyers, we will use the ‘slider input’ Shiny widget in the
-UI interface.`sliderInput(inputId = "size", label = "Size:", min = 10, max = 50, value = 20)`
+To alter the number of alyers, we used the ‘slider input’ Shiny widget in the
+UI.`sliderInput(inputId = "size", label = "Size:", min = 10, max = 50, value = 20)`
 In the server, the input ‘size’ will and integral component to
 create the dataframe that will be used in the plotting process.
 `n <- reactive({input$size * 2})`
@@ -76,7 +75,8 @@ We’ve noticed that the original artwork contains a thin white borderlines
 between each of the rectangle layers. We believe that some of our audience 
 like this feature but not all, hence, we make it an option preserve or remove them.
 
-We used the ‘switch input’ Shiny widget in the UI interface to 
+We used the ‘switch input’ Shiny widget in the 
+interface to 
 turn on/off the borderline.`switchInput(inputId = "borderline", label = "Borderlines", value = FALSE)`. 
 In the server, the reactive input ‘borderline’ will be part of the aesthetic 
 in the ggplot. `geom_polygon(..., size = borderline())`.
@@ -99,7 +99,7 @@ able to create more/less horizontal lines between the upper and lower bounds of 
 original horizontal lines to adjust the abstract feel of the art and to make it 
 more to their liking. 
 
-Specifically to adjust these lines, we will use the `sliderInput(...)` Shiny widget in the UI interface
+Specifically to adjust these lines, we will use the `sliderInput(...)` Shiny widget in the UI
 `sliderInput(inputId = "lines", label = "Number of lines:", min = 0, max = 5, value = 4)`
 Because the original four horizontal lines are defined by one specific function `(geom_hline())`, 
 we were able to pass the input from the UI `sliderInput` to a parameter in the `geom_hline()`
@@ -110,7 +110,7 @@ to change the number of horizontal lines between the defined upper and lower bou
 The original painting uses 4 distinct colors in different colored boxes. 
 We wanted to give users the ability to change 
 these colors and to understand how a new color scheme 
-changes the vision of the art. To do this, we will use 4 `colorInput`s in the UI interface
+changes the vision of the art. To do this, we will use 4 `colorInput`s in the UI
 to allow users to select four color hexes (no restriction of the color being same or different
 with one another).
 
@@ -134,7 +134,7 @@ in the piece.
 Kandinsky loved circles. He said of the circle, "It combines the concentric and the 
 eccentric in a single form and in equilibrium. Of the three primary forms, it points 
 most clearly to the fourth dimension." Because of these shapes' significance to the 
-artist, a `sliderInput()` in the Shiny UI interface modifies the radii encoded in the 
+artist, a `sliderInput()` in the Shiny UI modifies the radii encoded in the 
 original data which are then plotted via `geom_circle()` layers.
 
 **Line Thickness, Shape Transparency and Background Color**

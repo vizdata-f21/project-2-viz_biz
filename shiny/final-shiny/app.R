@@ -401,8 +401,8 @@ ui <- fluidPage(
             background color, shape transparency, or select which kinds of geometries to include. You
             may also add random noise to the piece, generated from a normal distribution, and watch
             Kandinsky's careful composition fall apart."),
-          p("Remember to press the", em("Apply Changes"), "button to watch your modifications
-                 come to life.", style = "color:red:"),
+          span(p("Remember to press the", em("Apply Changes"), "button to watch your modifications
+                 come to life.", style = "color:red:")),
           p("(1) Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
             Museums and Foundation. Accessed December 2, 2021. https://www.guggenheim.org/artwork/1924."),
           prettyCheckbox(

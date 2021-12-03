@@ -4,21 +4,21 @@
 
 ## Shiny App
 
-Please explore our final website at https://phillip.shinyapps.io/viz_biz/.
+https://phillip.shinyapps.io/viz_biz/ or tinyurl.art/313
 
 ## Introduction
 
-For this project, we created a convenient website where non-R users and the general public can navigate to and customize several famous modern art pieces recreated in ggplot, modifying some of the artwork aesthetics to make the masterworks their own. Our goal specifically was to promote digital extensions of modern, abstract paintings and to allow users to make art personalized to their taste, which they can download for their own use. Furthermore, in this project, we strived to increase public appreciation and awareness of using digital techniques, such as ggplot, to recreate art or make original digital art. 
+We created a convenient website where non-R users and the public can navigate and customize famous modern art pieces recreated in ggplot, modifying some of the artwork aesthetics to make the masterworks their own. Our goal specifically was to promote digital extensions of modern, abstract paintings and to allow users to make personalized art downloadable for their own use. Furthermore, we also strive to increase public appreciation and awareness of using digital techniques, such as ggplot, to recreate/make original digital art. 
 
-We present the following four images:
+We present the following 4 artworks:
 
-#### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974) 
+##### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974) 
 
-#### [2] Barbara Kruger, *Untitled (Your body is a battleground)* (1989) 
+##### [2] Barbara Kruger, *Untitled (Your body is a battleground)* (1989) 
 
-#### [3] Wassily Kandinsky, *Composition 8* (1923) 
+##### [3] Wassily Kandinsky, *Composition 8* (1923) 
 
-#### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
+##### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
 To recreate these modern art pieces, we fabricated our own dataframes which incorporate user input to customize certain aesthetics of each piece. We also utilized mathematical functions and specific packages such as `colourpicker` and `generativeart` to facilitate the digitization of these art pieces -- all are created in `ggplot`. 
 
@@ -30,7 +30,7 @@ throughout.
 
 ## Approaches 
 
-### Frank Stella, *Lettre sur les sourds et muets II* (1974)
+### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974)
 
 <img src="images/stella.jpg" style="width:24%"/>
 
@@ -68,28 +68,24 @@ he/she wish as the starting and ending color of the gradient.
 
 **Secondary Gradient**
 
-The original painting uses a black-and-white-gradient color sequence as part 
-of its 11 layers of non-colored-gradient rectangles. For the recreated visualization,
-the audience will be able to change this through adjusting the color palette and
-decide whether or not to reverse the direction of the color sequence. The same approach
-of using the `colourInput(...)` function is used.
+Similar to *primary gradient* above.
 
 **Borderline**
 
 We’ve noticed that the original artwork contains a thin white borderlines 
 between each of the rectangle layers. We believe that some of our audience 
-like this feature but not all, hence, we make it an option for the audience to 
-preserve or remove the borderlines in their final plot.
+like this feature but not all, hence, we make it an option preserve or remove them.
 
-To do this, we will use the ‘switch input’ Shiny widget in the UI interface to 
-turn on/off the borderline.`switchInput(inputId = "borderline", label = "Borderlines", value = FALSE)`. In the server, the reactive input ‘borderline’ will be part of the aesthetic 
+We used the ‘switch input’ Shiny widget in the UI interface to 
+turn on/off the borderline.`switchInput(inputId = "borderline", label = "Borderlines", value = FALSE)`. 
+In the server, the reactive input ‘borderline’ will be part of the aesthetic 
 in the ggplot. `geom_polygon(..., size = borderline())`.
 
-### Piet Mondrian, *Trafalgar Square* (1939-1943) 
+### [2] Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
 <img src="images/mondrian.jpg" style="width:15%"/>
 
-This painting’s geometric shapes and lines are what allowed us to recreate this 
+This painting’s geometric shapes and lines allow us to recreate this 
 visualization in ggplot2. 2 distinct features sparked our interest to make 
 *adjustable/modifiable* to the preference of each audience:
 
@@ -97,13 +93,13 @@ visualization in ggplot2. 2 distinct features sparked our interest to make
 
 **Horizontal Lines**
 
-In the original painting, there are 4 horizontal lines that seem to be evenly 
-distributed within the middle of the painting. We would like the  audience to be 
-able to create more horizontal lines between the upper and lower bounds of the 
-original horizontal lines to adjust the abstract feel of the art and  to make it 
+There are 4 horizontal lines that seem to be evenly 
+distributed within the middle of the original painting. We would like the  audience to be 
+able to create more/less horizontal lines between the upper and lower bounds of the 
+original horizontal lines to adjust the abstract feel of the art and to make it 
 more to their liking. 
 
-Specifically to adjust these lines, we will use the ‘slider input’ Shiny widget in the UI interface
+Specifically to adjust these lines, we will use the `sliderInput(...)` Shiny widget in the UI interface
 `sliderInput(inputId = "lines", label = "Number of lines:", min = 0, max = 5, value = 4)`
 Because the original four horizontal lines are defined by one specific function `(geom_hline())`, 
 we were able to pass the input from the UI `sliderInput` to a parameter in the `geom_hline()`
@@ -111,17 +107,14 @@ to change the number of horizontal lines between the defined upper and lower bou
     
 **Colors**
 
-The original painting uses four distinct colors: blue, black 
-red and yellow in different colored boxes. We wanted to give users the ability to change 
-these colors based on their likings and to understand how a new color scheme 
-changes the vision of the art. 
+The original painting uses 4 distinct colors in different colored boxes. 
+We wanted to give users the ability to change 
+these colors and to understand how a new color scheme 
+changes the vision of the art. To do this, we will use 4 `colorInput`s in the UI interface
+to allow users to select four color hexes (no restriction of the color being same or different
+with one another).
 
-To do this, we will use the `checkboxGroupInput` in the UI interface
-to allow users to select four colors out of list of multiple color options. If the user picks 
-more than four colors, only the first four colors will show up. If the user uses less than 
-four colors, the boxes corresponding to the missing color will show up blank (i.e. white). 
-
-### Wassily Kandinsky, *Composition 8* (1923)
+### [3] Wassily Kandinsky, *Composition 8* (1923)
 
 <img src="images/kandinsky.jpeg" style="width:28%"/>
 
@@ -179,7 +172,7 @@ with standard deviation set as "magnitude" with a `sliderInput()`) to the coordi
 each element. Certain elements are grouped together and experience the same transformation 
 as a whole in order to retain some visual order.
 
-### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
+### [4] Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
 
 <img src="images/kruger.jpeg" style="width:18%"/>
 

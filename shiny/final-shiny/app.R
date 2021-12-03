@@ -291,43 +291,44 @@ ui <- fluidPage(
           selectInput(
             inputId = "brewer_palette",
             label = "RColorBrewer Palette",
-            choices = c("Original" = "NONE",
-                        "Yellow Orange Red" = "YlOrRd",
-                        "Yellow Orange Brown" = "YlOrBr",
-                        "Yellow Green Blue" = "YlGnBu",
-                        "Yellow Green" = "YlGn",
-                        "Reds",
-                        "Red Purple" = "RdPu",
-                        "Purples",
-                        "Purple Red" = "PuRd",
-                        "Purple Blue Green" = "PuBuGn",
-                        "Purple Blue" = "PuBu",
-                        "Orange Red" = "OrRd",
-                        "Oranges",
-                        "Greys",
-                        "Greens",
-                        "Green Blue" = "GnBu",
-                        "Blue Purple" = "BuPu",
-                        "Blue Green" = "BuGn",
-                        "Blues",
-                        "Qualitative Set 3" = "Set3",
-                        "Qualitative Set 2" = "Set2",
-                        "Qualitative Set 1" = "Set1",
-                        "Pastel Set 2" = "Pastel2",
-                        "Pastel Set 1" = "Pastel1",
-                        "Qualitative Paired" = "Paired",
-                        "Dark" = "Dark2",
-                        "Accent",
-                        "Rainbow" = "Spectral",
-                        "Red Yellow Green" = "RdYlGn",
-                        "Red Yellow Blue" = "RdYlBu",
-                        "Red Grey" = "RdGy",
-                        "Red Blue" = "RdBu",
-                        "Purple Orange" = "PuOr",
-                        "Purple Green" = "PRGn",
-                        "Pink Green" = "PiYG",
-                        "Brown Blue" = "BrBG"
-                        ),
+            choices = c(
+              "Original" = "NONE",
+              "Yellow Orange Red" = "YlOrRd",
+              "Yellow Orange Brown" = "YlOrBr",
+              "Yellow Green Blue" = "YlGnBu",
+              "Yellow Green" = "YlGn",
+              "Reds",
+              "Red Purple" = "RdPu",
+              "Purples",
+              "Purple Red" = "PuRd",
+              "Purple Blue Green" = "PuBuGn",
+              "Purple Blue" = "PuBu",
+              "Orange Red" = "OrRd",
+              "Oranges",
+              "Greys",
+              "Greens",
+              "Green Blue" = "GnBu",
+              "Blue Purple" = "BuPu",
+              "Blue Green" = "BuGn",
+              "Blues",
+              "Qualitative Set 3" = "Set3",
+              "Qualitative Set 2" = "Set2",
+              "Qualitative Set 1" = "Set1",
+              "Pastel Set 2" = "Pastel2",
+              "Pastel Set 1" = "Pastel1",
+              "Qualitative Paired" = "Paired",
+              "Dark" = "Dark2",
+              "Accent",
+              "Rainbow" = "Spectral",
+              "Red Yellow Green" = "RdYlGn",
+              "Red Yellow Blue" = "RdYlBu",
+              "Red Grey" = "RdGy",
+              "Red Blue" = "RdBu",
+              "Purple Orange" = "PuOr",
+              "Purple Green" = "PRGn",
+              "Pink Green" = "PiYG",
+              "Brown Blue" = "BrBG"
+            ),
             selected = NULL,
           ),
           checkboxGroupInput(
@@ -380,11 +381,13 @@ ui <- fluidPage(
             and color in which circles play a dominant role. Nancy Spector wrote of the piece,
             \"In Composition 8, the colorful, interactive geometric forms create a pulsating surface
             that is alternately dynamic and calm, aggressive and quiet.\" (1)"),
-          p("Modify Composition 8 to make it your own by adjusting the settings in the",
+          p(
+            "Modify Composition 8 to make it your own by adjusting the settings in the",
             em("Graphics Input"), "sidebar on the left. Change the size of the circles, line thickness,
             background color, shape transparency, or select which kinds of geometries to include. You
             may also add random noise to the piece, generated from a normal distribution, and watch
-            Kandinsky's careful composition fall apart."),
+            Kandinsky's careful composition fall apart."
+          ),
           span(p("Remember to press the", em("Apply Changes"), "button to watch your modifications
                  come to life.", style = "color:red:")),
           p("(1) Spector, Nancy. “Vasily Kandinsky, Composition 8 (Komposition 8).” The Guggenheim
@@ -401,10 +404,10 @@ ui <- fluidPage(
             div(textOutput(outputId = "original_artwork_text_kandinsky", inline = TRUE), align = "center"),
             br()
           ),
-          div(uiOutput(
-            outputId = "ui_kandinsky",
-            height = "100%"
-          ), align = "center")
+          div(plotOutput(
+            outputId = "plot_kandinsky" # ,
+            # height = "100%"
+          ) %>% withSpinner(color = "#95b2c7"), align = "center")
         )
       )
     ), # tab 3 panel
@@ -786,28 +789,9 @@ server <- function(input, output) {
   })
 
   ## KANDINSKY
-  output$ui_kandinsky <- renderUI({
-    imageOutput("static_kandinsky")
-  })
 
-  output$static_kandinsky <- renderImage(
+  plotInput_kandinsky <- eventReactive(input$go_kandinsky,
     {
-      list(
-        src = "./kandinsky_ggplot.png",
-        height = 510,
-        width = 900,
-        contentType = "image/png"
-      )
-    },
-    deleteFile = FALSE
-  )
-
-  observeEvent(input$go_kandinsky, {
-    output$ui_kandinsky <- renderUI({
-      plotOutput("plot_kandinsky")
-    })
-
-    plotInput_kandinsky <- eventReactive(input$go_kandinsky, {
 
       # change circle size based on input$circlesize from ui.R
       for (i in c(1:6)) {
@@ -816,24 +800,28 @@ server <- function(input, output) {
       }
 
       # plotting functions
-      plot_circles <- function(layers = c(), execute = TRUE, skip_color = FALSE){
-        if(execute == FALSE) {
+      plot_circles <- function(layers = c(), execute = TRUE, skip_color = FALSE) {
+        if (execute == FALSE) {
           return(p)
-        } else{
-          if(skip_color == TRUE){
-            for(i in layers){
+        } else {
+          if (skip_color == TRUE) {
+            for (i in layers) {
               p <- p +
-                geom_circle(data = as.data.frame(circles_l[[1]][[i]]),
-                            aes(x0 = x, y0 = y, r = radius, fill = color_cat, color = color_cat, alpha = alpha))
+                geom_circle(
+                  data = as.data.frame(circles_l[[1]][[i]]),
+                  aes(x0 = x, y0 = y, r = radius, fill = color_cat, color = color_cat, alpha = alpha)
+                )
             }
             return(p)
-          } else{
-            for(i in layers){
+          } else {
+            for (i in layers) {
               p <- p +
                 new_scale_fill() +
                 new_scale_color() +
-                geom_circle(data = as.data.frame(circles_l[[1]][[i]]),
-                            aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)) +
+                geom_circle(
+                  data = as.data.frame(circles_l[[1]][[i]]),
+                  aes(x0 = x, y0 = y, r = radius, fill = color, color = color, alpha = alpha)
+                ) +
                 scale_fill_manual(values = unique(circles_l[[2]][[i]][[1]])) +
                 scale_color_manual(values = unique(circles_l[[2]][[i]][[1]]))
             }
@@ -842,24 +830,28 @@ server <- function(input, output) {
         }
       }
 
-      plot_semicircles <- function(layers = c(), execute = TRUE, skip_color = FALSE){
-        if(execute == FALSE) {
+      plot_semicircles <- function(layers = c(), execute = TRUE, skip_color = FALSE) {
+        if (execute == FALSE) {
           return(p)
-        } else{
-          if(skip_color == TRUE){
-            for(i in layers){
+        } else {
+          if (skip_color == TRUE) {
+            for (i in layers) {
               p <- p +
-                geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[i]]),
-                             aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha))
+                geom_polygon(
+                  data = as.data.frame(semicircle_fill_l[[1]][[i]]),
+                  aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha)
+                )
             }
             return(p)
-          } else{
-            for(i in layers){
+          } else {
+            for (i in layers) {
               p <- p +
                 new_scale_fill() +
                 new_scale_color() +
-                geom_polygon(data = as.data.frame(semicircle_fill_l[[1]][[i]]),
-                             aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                geom_polygon(
+                  data = as.data.frame(semicircle_fill_l[[1]][[i]]),
+                  aes(x = x, y = y, group = id, fill = color, alpha = alpha)
+                ) +
                 scale_fill_manual(values = unique(semicircle_fill_l[[2]][[i]][[1]]))
             }
             return(p)
@@ -867,24 +859,28 @@ server <- function(input, output) {
         }
       }
 
-      plot_quads <- function(layers = c(), execute = TRUE, skip_color = FALSE){
-        if(execute == FALSE) {
+      plot_quads <- function(layers = c(), execute = TRUE, skip_color = FALSE) {
+        if (execute == FALSE) {
           return(p)
-        } else{
-          if(skip_color == TRUE){
-            for(i in layers){
+        } else {
+          if (skip_color == TRUE) {
+            for (i in layers) {
               p <- p +
-                geom_polygon(data = as.data.frame(quads_l[[1]][[i]]),
-                             aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha))
+                geom_polygon(
+                  data = as.data.frame(quads_l[[1]][[i]]),
+                  aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha)
+                )
             }
             return(p)
-          } else{
-            for(i in layers){
+          } else {
+            for (i in layers) {
               p <- p +
                 new_scale_fill() +
                 new_scale_color() +
-                geom_polygon(data = as.data.frame(quads_l[[1]][[i]]),
-                             aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                geom_polygon(
+                  data = as.data.frame(quads_l[[1]][[i]]),
+                  aes(x = x, y = y, group = id, fill = color, alpha = alpha)
+                ) +
                 scale_fill_manual(values = unique(quads_l[[2]][[i]][[1]]))
             }
             return(p)
@@ -892,24 +888,28 @@ server <- function(input, output) {
         }
       }
 
-      plot_triangles <- function(layers = c(), execute = TRUE, skip_color = FALSE){
-        if(execute == FALSE) {
+      plot_triangles <- function(layers = c(), execute = TRUE, skip_color = FALSE) {
+        if (execute == FALSE) {
           return(p)
-        } else{
-          if(skip_color == TRUE){
-            for(i in layers){
+        } else {
+          if (skip_color == TRUE) {
+            for (i in layers) {
               p <- p +
-                geom_polygon(data = as.data.frame(triangles_l[[1]][[i]]),
-                             aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha))
+                geom_polygon(
+                  data = as.data.frame(triangles_l[[1]][[i]]),
+                  aes(x = x, y = y, group = id, fill = color_cat, alpha = alpha)
+                )
             }
             return(p)
-          } else{
-            for(i in layers){
+          } else {
+            for (i in layers) {
               p <- p +
                 new_scale_fill() +
                 new_scale_color() +
-                geom_polygon(data = as.data.frame(triangles_l[[1]][[i]]),
-                             aes(x = x, y = y, group = id, fill = color, alpha = alpha)) +
+                geom_polygon(
+                  data = as.data.frame(triangles_l[[1]][[i]]),
+                  aes(x = x, y = y, group = id, fill = color, alpha = alpha)
+                ) +
                 scale_fill_manual(values = unique(triangles_l[[2]][[i]][[1]]))
             }
             return(p)
@@ -917,38 +917,44 @@ server <- function(input, output) {
         }
       }
 
-      plot_lines <- function(layers = c(), execute = TRUE){
-        if(execute == FALSE) {
+      plot_lines <- function(layers = c(), execute = TRUE) {
+        if (execute == FALSE) {
           return(p)
-        } else{
-          for(i in layers){
+        } else {
+          for (i in layers) {
             p <- p +
-              geom_segment(data = as.data.frame(lines_l[[1]][[i]]),
-                           aes(x = x, xend = xend, y = y, yend = yend, size = thickness ^ 2))
+              geom_segment(
+                data = as.data.frame(lines_l[[1]][[i]]),
+                aes(x = x, xend = xend, y = y, yend = yend, size = thickness^2)
+              )
           }
 
           return(p)
         }
       }
 
-      plot_semicircle_stroke <- function(layers = c(), execute = TRUE, skip_color = FALSE){
-        if(execute == FALSE) {
+      plot_semicircle_stroke <- function(layers = c(), execute = TRUE, skip_color = FALSE) {
+        if (execute == FALSE) {
           return(p)
-        } else{
-          if(skip_color == TRUE){
-            for(i in layers){
+        } else {
+          if (skip_color == TRUE) {
+            for (i in layers) {
               p <- p +
-                geom_path(data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
-                          aes(x = x, y = y, group = id, color = color_cat, size = thickness ^ 2))
+                geom_path(
+                  data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
+                  aes(x = x, y = y, group = id, color = color_cat, size = thickness^2)
+                )
             }
             return(p)
-          } else{
-            for(i in layers){
+          } else {
+            for (i in layers) {
               p <- p +
                 new_scale_fill() +
                 new_scale_color() +
-                geom_path(data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
-                          aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
+                geom_path(
+                  data = as.data.frame(semicircle_stroke_l[[1]][[i]]),
+                  aes(x = x, y = y, group = id, color = color, size = thickness^2)
+                ) +
                 scale_color_manual(values = unique(semicircle_stroke_l[[2]][[i]][[1]]))
             }
             return(p)
@@ -956,24 +962,28 @@ server <- function(input, output) {
         }
       }
 
-      plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE, skip_color = FALSE){
-        if(execute == FALSE) {
+      plot_semicircle_stroke_color <- function(layers = c(), execute = TRUE, skip_color = FALSE) {
+        if (execute == FALSE) {
           return(p)
-        } else{
-          if(skip_color == TRUE){
-            for(i in layers){
+        } else {
+          if (skip_color == TRUE) {
+            for (i in layers) {
               p <- p +
-                geom_path(data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
-                          aes(x = x, y = y, group = id, color = color_cat, size = thickness ^ 2))
+                geom_path(
+                  data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
+                  aes(x = x, y = y, group = id, color = color_cat, size = thickness^2)
+                )
             }
             return(p)
-          } else{
-            for(i in layers){
+          } else {
+            for (i in layers) {
               p <- p +
                 new_scale_fill() +
                 new_scale_color() +
-                geom_path(data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
-                          aes(x = x, y = y, group = id, color = color, size = thickness ^ 2)) +
+                geom_path(
+                  data = as.data.frame(semicircle_stroke_color_l[[1]][[i]]),
+                  aes(x = x, y = y, group = id, color = color, size = thickness^2)
+                ) +
                 scale_color_manual(values = unique(semicircle_stroke_color_l[[2]][[i]][[1]]))
             }
             return(p)
@@ -1009,17 +1019,17 @@ server <- function(input, output) {
           panel.border = element_blank()
         )
 
-      if(input$brewer_palette == "NONE"){
+      if (input$brewer_palette == "NONE") {
         override_color <- FALSE
-      } else{
+      } else {
         override_color <- TRUE
 
         expanded_colors <- colorRampPalette(brewer.pal(8, input$brewer_palette))(11)
 
         p <- p +
-        scale_fill_manual(values = expanded_colors) +
-        scale_color_manual(values = expanded_colors)
-        }
+          scale_fill_manual(values = expanded_colors) +
+          scale_color_manual(values = expanded_colors)
+      }
 
       p <- plot_triangles(c(6:3), execute = print_triangles, skip_color = override_color)
       p <- plot_semicircles(c(3:1), execute = print_circles, skip_color = override_color)
@@ -1032,24 +1042,24 @@ server <- function(input, output) {
       p <- plot_lines(c(2:1), execute = print_lines_straight)
 
       p
-    })
+    },
+    ignoreNULL = FALSE
+  )
 
-    output$plot_kandinsky <- renderPlot(
-      {
-        plotInput_kandinsky()
-      },
-      height = 510,
-      width = 900
-    )
-  })
-
+  output$plot_kandinsky <- renderPlot(
+    {
+      plotInput_kandinsky()
+    },
+    height = 510,
+    width = 900
+  )
 
   output$save_kandinsky <- downloadHandler(
     filename = function() {
       input$custom_filename_kandinsky
     },
     content = function(file) {
-      ggsave(file, plot = plot_kandinsky(), device = "png", dpi = as.double(input$res_kandinsky))
+      ggsave(file, plot = plotInput_kandinsky(), device = "png", dpi = as.double(input$res_kandinsky))
     }
   )
 
@@ -1151,51 +1161,51 @@ server <- function(input, output) {
   })
 
 
-    plotInput_kruger <- reactive({
-         ggplot() +
-          geom_rect(aes(
-            xmin = 0, xmax = img_width(),
-            ymin = 0, ymax = img_height()
-          ),
-          color = input$rect_color,
-          size = input$border_size,
-          fill = NA
-          ) +
-          draw_image(image_modulate(magick_plot(),
-            brightness = input$img_brightness,
-            saturation = input$img_saturation,
-            hue = input$img_hue
-          ),
-          x = 0, y = 0, width = img_width(), height = img_height()
-          ) +
-          geom_label(
-            data = df_kruger(),
-            mapping = aes(
-              x = x_plot(),
-              y = y_plot()
-            ),
-            label = c(top_plot(), middle_plot(), bottom_plot()),
-            size = input$text_size,
-            fill = input$rect_color,
-            color = input$text_color,
-            family = "Futura",
-            fontface = "bold",
-            label.size = 0,
-            label.r = unit(0, "lines")
-          ) +
-          coord_equal() +
-          theme_void()
+  plotInput_kruger <- reactive({
+    ggplot() +
+      geom_rect(aes(
+        xmin = 0, xmax = img_width(),
+        ymin = 0, ymax = img_height()
+      ),
+      color = input$rect_color,
+      size = input$border_size,
+      fill = NA
+      ) +
+      draw_image(image_modulate(magick_plot(),
+        brightness = input$img_brightness,
+        saturation = input$img_saturation,
+        hue = input$img_hue
+      ),
+      x = 0, y = 0, width = img_width(), height = img_height()
+      ) +
+      geom_label(
+        data = df_kruger(),
+        mapping = aes(
+          x = x_plot(),
+          y = y_plot()
+        ),
+        label = c(top_plot(), middle_plot(), bottom_plot()),
+        size = input$text_size,
+        fill = input$rect_color,
+        color = input$text_color,
+        family = "Futura",
+        fontface = "bold",
+        label.size = 0,
+        label.r = unit(0, "lines")
+      ) +
+      coord_equal() +
+      theme_void()
   })
 
-observe({
-  output$plot_kruger <- renderPlot(
+  observe({
+    output$plot_kruger <- renderPlot(
       {
         plotInput_kruger()
-
       },
       height = img_height(),
       width = img_width()
-    )})
+    )
+  })
 
 
 
@@ -1213,8 +1223,9 @@ observe({
     },
     content = function(file) {
       ggsave(file,
-             plot = plotInput_kruger(), device = "png", dpi = as.double(custom_res_kruger()),
-             height = 4/img_height()*img_height(), width = 4/img_height()*img_width())
+        plot = plotInput_kruger(), device = "png", dpi = as.double(custom_res_kruger()),
+        height = 4 / img_height() * img_height(), width = 4 / img_height() * img_width()
+      )
     }
   )
 
@@ -1234,7 +1245,6 @@ observe({
   output$original_artwork_text_kruger <- renderText({
     "The Inaugural Installation, © 1989 The Broad, Los Angeles"
   })
-
 }
 
 # Create the app ---------------------------------------------------------------

@@ -4,7 +4,7 @@
 
 ## Shiny App
 
-https://phillip.shinyapps.io/viz_biz/ or tinyurl.art/313
+https://phillip.shinyapps.io/viz_biz/ or https://tinyurl.art/313
 
 ## Introduction
 

@@ -82,19 +82,8 @@ like this feature but not all, hence, we make it an option for the audience to
 preserve or remove the borderlines in their final plot.
 
 To do this, we will use the ‘switch input’ Shiny widget in the UI interface to 
-turn on/off the borderline.`switchInput(inputId = "borderline", label = "Borderlines", value = FALSE)`
-In the server, the reactive input ‘borderline’ will be part of the aesthetic 
-in the ggplot. `geom_polygon(..., size = borderline())`
-
-### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
-
-<img src="images/kruger.jpeg" style="width:18%"/>
-
-<img src="shiny_screenshots/Barbara_Kruger.jpg" style="width:80%"/>
-
-### Wassily Kandinsky, *Composition 8* (1923)
-
-<img src="images/kandinsky.jpeg" style="width:28%"/>
+turn on/off the borderline.`switchInput(inputId = "borderline", label = "Borderlines", value = FALSE)`. In the server, the reactive input ‘borderline’ will be part of the aesthetic 
+in the ggplot. `geom_polygon(..., size = borderline())`.
 
 ### Piet Mondrian, *Trafalgar Square* (1939-1943) 
 
@@ -131,6 +120,16 @@ To do this, we will use the `checkboxGroupInput` in the UI interface
 to allow users to select four colors out of list of multiple color options. If the user picks 
 more than four colors, only the first four colors will show up. If the user uses less than 
 four colors, the boxes corresponding to the missing color will show up blank (i.e. white). 
+
+### Wassily Kandinsky, *Composition 8* (1923)
+
+<img src="images/kandinsky.jpeg" style="width:28%"/>
+
+### Barbara Kruger, *Untitled (Your body is a battleground)* (1989)
+
+<img src="images/kruger.jpeg" style="width:18%"/>
+
+<img src="shiny_screenshots/Barbara_Kruger.jpg" style="width:80%"/>
 
 ## Discussion
 

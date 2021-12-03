@@ -9,21 +9,9 @@ https://phillip.shinyapps.io/viz_biz/ or tinyurl.art/313
 ## Introduction
 
 We created a website where the public can navigate and customize famous art pieces recreated in ggplot, modifying the artwork aesthetics to make the masterworks their own. Our goal is to promote digital extensions of modern, abstract paintings and allow users to download personalized versions. We also strive to increase public awareness of the promise of R packages like ggplot for digital art. 
-
-We present the following 4 artworks:
-
-##### [1] Frank Stella, *Lettre sur les sourds et muets II* (1974) 
-
-##### [2] Barbara Kruger, *Untitled (Your body is a battleground)* (1989) 
-
-##### [3] Wassily Kandinsky, *Composition 8* (1923) 
-
-##### [4] Piet Mondrian, *Trafalgar Square* (1939-1943) 
-
 To recreate our **chosen 4 modern art pieces**, we fabricated dataframes which can incorporate user input to customize ggplot aesthetics. We also utilized mathematical functions and packages like `colourpicker` and `generativeart` to facilitate digitization.
 
-We then these pieces in a Shiny App, where an initial tab provides a brief overview of the site and describes
-how to use it. The four following tabs house each of the pieces. Users
+We then these pieces in a Shiny App, where an initial tab provides a brief overview of the site, and the 4 following tabs house each of the pieces. Users
 may change features such as colors, number and amount of certain shapes, transparency, and more
 throughout. 
 
@@ -214,15 +202,12 @@ led us to adopt a radically different approach in structuring the manually gener
 Kandinsky's piece. We split each dataset of a type of geometry (e.g. circles, semicircles, lines,
 triangles, etc.) into layers and stored each layer as a separate dataframe in a list. (The code 
 to create the original data is visib,e in `create-kandinsky-data.Rmd` in the `data` folder within
-the final Shiny app.) Because of this, we conducted all data modification and plotting through for loops and functions
-which accessed specified data frames within each list. More clear and consistent methods for 
-control of the order in which points are plotted withihn a layer would render this workaround 
-less necessary.
+the final Shiny app.) Because of this, we conducted all data modification and plotting through for loops and functions which accessed specified data frames within each list. More clear and consistent methods for control of the order in which points are plotted withihn a layer would render this workaround less necessary.
 
 Another challenge that we encountered was allowing for a user to input an image URL of their 
-choice into our Barbara Kruger section of the Shiny app. Not only was the link input reactive, 
+choice into the Barbara Kruger section of the Shiny app. Not only was the link input reactive, 
 but we also encountered an error where the app would crash if an invalid URL was used. To address 
-this issue, we kept the original link variable if the link was valid and updated it to the original Kruger image URL if not, that way there was always a valid url being used to read-in the image. We also added an error message if the link turned out to be invalid to notify the user. 
+this issue, we kept the original link variable as is if the link was valid and updated it to the original Kruger image URL if not. That way there was always a valid url being used to read-in the image. We also added an error message if the link turned out to be invalid to notify the user. 
 
 To conclude, we are satisfied with our final result. With more time, possibilities for improvement
 could include allowing users to select more than 2 color checkpoints for the primary gradient and secondary gradient in the modified Stella, to change the thickness of the grid lines in the Mondrian, to create an animation of their custom Kandinsky devolving into random noise, to pick their own font type for the modified Kruger, and more.
